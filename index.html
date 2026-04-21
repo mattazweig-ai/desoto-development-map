@@ -243,6 +243,21 @@
     .cmppin:hover{transform:scale(1.3)}
 
     .pb{padding-bottom:14px}
+
+    /* HIGHLIGHT / FOCUS MARKER */
+    .hpin{width:22px;height:22px;border-radius:50%;border:3px solid white;box-shadow:0 0 0 3px currentColor,0 4px 14px rgba(0,0,0,.3);animation:hpulse 1.6s ease-in-out infinite;}
+    @keyframes hpulse{0%,100%{box-shadow:0 0 0 3px currentColor,0 0 0 6px rgba(255,255,255,.15),0 4px 14px rgba(0,0,0,.3)}50%{box-shadow:0 0 0 3px currentColor,0 0 0 14px rgba(255,255,255,.0),0 4px 14px rgba(0,0,0,.3)}}
+    /* MAP FOCUS BUTTON inside timeline */
+    .tl-mapbtn{display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:5px 10px;background:var(--navy);color:white;border:none;border-radius:6px;font-size:9.5px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.02em;transition:background .15s}
+    .tl-mapbtn:hover{background:var(--navy2)}
+    .tl-mapbtn svg{flex-shrink:0}
+    /* PROPERTY CARD inside timeline */
+    .tl-propcard{background:var(--bg);border:1.5px solid var(--bdr);border-radius:7px;padding:9px 10px;margin-top:8px;font-size:9.5px;color:var(--slm);line-height:1.55}
+    .tl-propcard-title{font-size:10.5px;font-weight:700;color:var(--sl);margin-bottom:5px}
+    .tl-propcard-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px}
+    .tl-pkv{background:white;border-radius:4px;padding:5px 7px}
+    .tl-pk{font-size:8px;color:var(--sll);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+    .tl-pv{font-size:10px;color:var(--sl);font-weight:600;margin-top:1px}
   </style>
 </head>
 <body>
@@ -1197,17 +1212,17 @@ const tlData = [
   {section:'buyer-activity', date:'Feb 2, 2026', sortKey:20260202, color:'#0F766E',
    title:'3rd ZVL — 2400 Bolton Boone (ZVL0020-2026)',
    desc:'ZVL0020-2026 filed Feb 2, 2026. Third zoning verification letter in 3 months at same address.',
-   extra:'<strong>What is a ZVL?</strong> A Zoning Verification Letter is formal written confirmation from DeSoto\'s planning department of: (1) current zoning, (2) permitted uses, (3) any active variances. Developers and lenders require them during due diligence.<br><br><strong>Three ZVLs in 3 months is highly unusual.</strong> Typical pattern: 1 ZVL per buyer per site. Multiple suggest either: (a) multiple parties independently evaluating the same parcel, or (b) one party re-filing as deal structure evolved (e.g. different entity for a fund or JV partner).<br><br><strong>Timing:</strong> All three filed after Danieldale widening design hit 90%, after Red Sea MU-R approval, and as Parc moved through amendment. Filer almost certainly tracking these catalysts.<br><br><strong>Action item:</strong> File a Texas Public Information Act (PIA) request to cityclerk@desototx.gov for applicant name and correspondence on ZVL0007-2025, ZVL0015-2026, and ZVL0020-2026. Response required within 10 business days.'},
+   extra:'<strong>What is a ZVL?</strong> A Zoning Verification Letter is formal written confirmation from DeSoto\'s planning department of: (1) current zoning, (2) permitted uses, (3) any active variances. Developers and lenders require them during due diligence.<br><br><strong>Three ZVLs in 3 months is highly unusual.</strong> Typical pattern: 1 ZVL per buyer per site. Multiple suggest either: (a) multiple parties independently evaluating the same parcel, or (b) one party re-filing as deal structure evolved (e.g. different entity for a fund or JV partner).<br><br><strong>Timing:</strong> All three filed after Danieldale widening design hit 90%, after Red Sea MU-R approval, and as Parc moved through amendment. Filer almost certainly tracking these catalysts.<br><br><strong>Action item:</strong> File a Texas Public Information Act (PIA) request to cityclerk@desototx.gov for applicant name and correspondence on ZVL0007-2025, ZVL0015-2026, and ZVL0020-2026. Response required within 10 business days.<div class="tl-propcard"><div class="tl-propcard-title">📍 Park at Rolling Hills Apartments — 2400 Bolton Boone Dr</div>A 250-unit, 2-story affordable/income-restricted apartment complex built in 2001. Aging stock with low-to-middle income options, scheduled transportation, and pool. DCAD assessed at <strong>$25.5M</strong> total (2025) on land valued at only <strong>$732,940</strong> — suggesting the land is significantly undervalued relative to its future MU entitlement potential. This is precisely the type of aging affordable complex that attracts redevelopment buyers.<div class="tl-propcard-grid"><div class="tl-pkv"><div class="tl-pk">Built</div><div class="tl-pv">2001</div></div><div class="tl-pkv"><div class="tl-pk">Units</div><div class="tl-pv">250 · 2-story</div></div><div class="tl-pkv"><div class="tl-pk">Type</div><div class="tl-pv">Affordable MF</div></div><div class="tl-pkv"><div class="tl-pk">DCAD Value</div><div class="tl-pv">$25.5M</div></div><div class="tl-pkv"><div class="tl-pk">Land Value</div><div class="tl-pv">$733K (DCAD)</div></div><div class="tl-pkv"><div class="tl-pk">Distance</div><div class="tl-pv">~1.5 mi N of subject</div></div></div></div><button class="tl-mapbtn" onclick="focusLocation([-96.8787,32.6405],16.2,'<div><div class=\"pub\" style=\"background:#0F766E;\"></div><div class=\"puh\"><div class=\"put\">Park at Rolling Hills Apts</div><div class=\"pus\">2400 Bolton Boone Dr · 3 ZVLs filed Nov 2025–Feb 2026</div><div class=\"pust\" style=\"background:#CCFBF1;color:#134E4A;\">Active Buyer DD</div></div><div class=\"pub2\"><div class=\"pur\"><span class=\"puk\">Built</span><span class=\"puv\">2001</span></div><div class=\"pur\"><span class=\"puk\">Units</span><span class=\"puv\">250 units · 2-story</span></div><div class=\"pur\"><span class=\"puk\">Type</span><span class=\"puv\">Affordable MF · Income-restricted</span></div><div class=\"pur\"><span class=\"puk\">DCAD Value</span><span class=\"puv\">$25.5M (2025)</span></div><div class=\"pur\"><span class=\"puk\">Land Value</span><span class=\"puv\">$732,940 (18.87 ac per DCAD)</span></div></div></div>','#0F766E')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>Show on map</button>'},
 
   {section:'buyer-activity', date:'Jan 21, 2026', sortKey:20260121, color:'#0F766E',
    title:'2nd ZVL — 2400 Bolton Boone (ZVL0015-2026)',
    desc:'ZVL0015-2026 filed Jan 21, 2026. Second ZVL in 2 months at same address.',
-   extra:'Second ZVL at 2400 Bolton Boone within a 2-month window following the first in November 2025. Rapid succession suggests an active deal process. Timing coincides with Red Sea MU-R P&Z approval (Dec 9) and scheduled council vote (Jan 6). The filer was almost certainly watching those proceedings.'},
+   extra:'Second ZVL at 2400 Bolton Boone within a 2-month window following the first in November 2025. Rapid succession suggests an active deal process. Timing coincides with Red Sea MU-R P&Z approval (Dec 9) and scheduled council vote (Jan 6). The filer was almost certainly watching those proceedings.<div class="tl-propcard"><div class="tl-propcard-title">📍 Park at Rolling Hills Apartments — 2400 Bolton Boone Dr</div>A 250-unit, 2-story affordable/income-restricted apartment complex built in 2001. Aging stock with low-to-middle income options, scheduled transportation, and pool. DCAD assessed at <strong>$25.5M</strong> total (2025) on land valued at only <strong>$732,940</strong> — suggesting the land is significantly undervalued relative to its future MU entitlement potential. This is precisely the type of aging affordable complex that attracts redevelopment buyers.<div class="tl-propcard-grid"><div class="tl-pkv"><div class="tl-pk">Built</div><div class="tl-pv">2001</div></div><div class="tl-pkv"><div class="tl-pk">Units</div><div class="tl-pv">250 · 2-story</div></div><div class="tl-pkv"><div class="tl-pk">Type</div><div class="tl-pv">Affordable MF</div></div><div class="tl-pkv"><div class="tl-pk">DCAD Value</div><div class="tl-pv">$25.5M</div></div><div class="tl-pkv"><div class="tl-pk">Land Value</div><div class="tl-pv">$733K (DCAD)</div></div><div class="tl-pkv"><div class="tl-pk">Distance</div><div class="tl-pv">~1.5 mi N of subject</div></div></div></div><button class="tl-mapbtn" onclick="focusLocation([-96.8787,32.6405],16.2,'<div><div class=\"pub\" style=\"background:#0F766E;\"></div><div class=\"puh\"><div class=\"put\">Park at Rolling Hills Apts</div><div class=\"pus\">2400 Bolton Boone Dr · 3 ZVLs filed Nov 2025–Feb 2026</div><div class=\"pust\" style=\"background:#CCFBF1;color:#134E4A;\">Active Buyer DD</div></div><div class=\"pub2\"><div class=\"pur\"><span class=\"puk\">Built</span><span class=\"puv\">2001</span></div><div class=\"pur\"><span class=\"puk\">Units</span><span class=\"puv\">250 units · 2-story</span></div><div class=\"pur\"><span class=\"puk\">Type</span><span class=\"puv\">Affordable MF · Income-restricted</span></div><div class=\"pur\"><span class=\"puk\">DCAD Value</span><span class=\"puv\">$25.5M (2025)</span></div><div class=\"pur\"><span class=\"puk\">Land Value</span><span class=\"puv\">$732,940 (18.87 ac per DCAD)</span></div></div></div>','#0F766E')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>Show on map</button>'},
 
   {section:'buyer-activity', date:'Nov 17, 2025', sortKey:20251117, color:'#0F766E',
    title:'1st ZVL — 2400 Bolton Boone (ZVL0007-2025)',
    desc:'ZVL0007-2025 filed Nov 17, 2025. First buyer due diligence signal on the Bolton Boone corridor.',
-   extra:'First recorded signal of developer or buyer interest at 2400 Bolton Boone Dr. Timing — November 2025 — coincides precisely with Red Sea site plan submission (which triggered the MU-1 error discovery) and Danieldale widening design near completion. Highly likely the ZVL filer was tracking these developments as catalysts.'},
+   extra:'First recorded signal of developer or buyer interest at 2400 Bolton Boone Dr. Timing — November 2025 — coincides precisely with Red Sea site plan submission (which triggered the MU-1 error discovery) and Danieldale widening design near completion. Highly likely the ZVL filer was tracking these developments as catalysts.<div class="tl-propcard"><div class="tl-propcard-title">📍 Park at Rolling Hills Apartments — 2400 Bolton Boone Dr</div>A 250-unit, 2-story affordable/income-restricted apartment complex built in 2001. Aging stock with low-to-middle income options, scheduled transportation, and pool. DCAD assessed at <strong>$25.5M</strong> total (2025) on land valued at only <strong>$732,940</strong> — suggesting the land is significantly undervalued relative to its future MU entitlement potential. This is precisely the type of aging affordable complex that attracts redevelopment buyers.<div class="tl-propcard-grid"><div class="tl-pkv"><div class="tl-pk">Built</div><div class="tl-pv">2001</div></div><div class="tl-pkv"><div class="tl-pk">Units</div><div class="tl-pv">250 · 2-story</div></div><div class="tl-pkv"><div class="tl-pk">Type</div><div class="tl-pv">Affordable MF</div></div><div class="tl-pkv"><div class="tl-pk">DCAD Value</div><div class="tl-pv">$25.5M</div></div><div class="tl-pkv"><div class="tl-pk">Land Value</div><div class="tl-pv">$733K (DCAD)</div></div><div class="tl-pkv"><div class="tl-pk">Distance</div><div class="tl-pv">~1.5 mi N of subject</div></div></div></div><button class="tl-mapbtn" onclick="focusLocation([-96.8787,32.6405],16.2,'<div><div class=\"pub\" style=\"background:#0F766E;\"></div><div class=\"puh\"><div class=\"put\">Park at Rolling Hills Apts</div><div class=\"pus\">2400 Bolton Boone Dr · 3 ZVLs filed Nov 2025–Feb 2026</div><div class=\"pust\" style=\"background:#CCFBF1;color:#134E4A;\">Active Buyer DD</div></div><div class=\"pub2\"><div class=\"pur\"><span class=\"puk\">Built</span><span class=\"puv\">2001</span></div><div class=\"pur\"><span class=\"puk\">Units</span><span class=\"puv\">250 units · 2-story</span></div><div class=\"pur\"><span class=\"puk\">Type</span><span class=\"puv\">Affordable MF · Income-restricted</span></div><div class=\"pur\"><span class=\"puk\">DCAD Value</span><span class=\"puv\">$25.5M (2025)</span></div><div class=\"pur\"><span class=\"puk\">Land Value</span><span class=\"puv\">$732,940 (18.87 ac per DCAD)</span></div></div></div>','#0F766E')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>Show on map</button>'},
 
   // ── INFRASTRUCTURE (newest → oldest) ──
   {section:'infrastructure', date:'Nov 2025', sortKey:20251101, color:'#D97706',
@@ -1330,6 +1345,43 @@ document.querySelectorAll('.tab').forEach(t => {
 
 // Resize observer — whenever sidebar transition ends, tell map to recalculate
 sidebar.addEventListener('transitionend', () => { if (map) map.resize(); });
+
+// ── FOCUS LOCATION (timeline → map) ──
+let _hlMarker = null;
+function focusLocation(coords, zoom, popupHtml, color) {
+  color = color || '#0F766E';
+  zoom = zoom || 16.0;
+
+  // Close any existing highlight marker
+  if (_hlMarker) { _hlMarker.remove(); _hlMarker = null; }
+
+  // Fly map to location
+  map.flyTo({ center: coords, zoom: zoom, duration: 900, essential: true });
+
+  // Build pulsing highlight element
+  const el = document.createElement('div');
+  el.className = 'hpin';
+  el.style.color = color;
+  el.style.background = color;
+
+  // Build popup
+  const popup = new maplibregl.Popup({ offset: 18, maxWidth: '280px' })
+    .setHTML(popupHtml);
+
+  _hlMarker = new maplibregl.Marker({ element: el })
+    .setLngLat(coords)
+    .setPopup(popup)
+    .addTo(map);
+
+  setTimeout(() => {
+    if (_hlMarker) _hlMarker.getPopup().addTo(map);
+  }, 600);
+
+  // On mobile, close sidebar so map is visible
+  if (window.innerWidth <= 700) {
+    closeSidebar();
+  }
+}
 
 // ── GLOSSARY TOGGLE ──
 function toggleGlossary() {
