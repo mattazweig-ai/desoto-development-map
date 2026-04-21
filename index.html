@@ -5,222 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DeSoto Development Map</title>
   <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
-  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js">
-// ── PERSON DATA ──────────────────────────────────────────────────────────────
-const PEOPLE = {
-  proctor: {
-    name: 'Rachel Proctor',
-    role: 'Mayor, City of DeSoto',
-    badge: 'neutral', badgeText: 'Pro-Growth · Mayor',
-    sections: [
-      { h: 'Overview', p: 'Re-elected May 2025. Term runs through 2027. Generally supportive of growth and new development. Not the loudest voice on economic development, but consistently votes with the pro-development bloc.' },
-      { h: 'Key Facts', kv: [
-        ['Term', 'Through 2027'],
-        ['Re-elected', 'May 2025'],
-        ['Up for election', 'No — 2027'],
-        ['Stance', 'Broadly pro-growth'],
-      ]},
-      { h: 'Notable', p: 'Was the subject of a failed recall attempt in 2024 alongside Councilmember Byrd — an organized opposition faction that did not have enough support to go to a vote. The failure of the recall reinforced her political standing in the city.' },
-      { h: 'Tags', tags: [
-        {t:'Stable through 2027', c:'green'},
-        {t:'Pro-growth', c:'green'},
-        {t:'Survived recall 2024', c:'blue'},
-      ]},
-    ]
-  },
-  chisholm: {
-    name: 'Crystal Chisholm',
-    role: 'Mayor Pro Tem · Place 6',
-    badge: 'pro', badgeText: 'Pro-Development',
-    sections: [
-      { h: 'Overview', p: 'Current Mayor Pro Tem. Chairs the economic development committee — arguably the most directly relevant council role for land and development deals. Received a national appointment in January 2026, signaling rising profile beyond DeSoto.' },
-      { h: 'Key Facts', kv: [
-        ['Role', 'Mayor Pro Tem'],
-        ['Committee', 'Economic Development Chair'],
-        ['Up for election', 'No — stable'],
-        ['Stance', 'Pro-development'],
-      ]},
-      { h: 'Notable', p: 'Voted against a CIP bond issuance at one point — not because she is anti-development, but she watches the city's fiscal exposure carefully. A pragmatic voice, not a rubber stamp.' },
-      { h: 'Tags', tags: [
-        {t:'Mayor Pro Tem', c:'blue'},
-        {t:'Econ Dev Chair', c:'green'},
-        {t:'Stable', c:'green'},
-        {t:'Fiscally cautious', c:'orange'},
-      ]},
-    ]
-  },
-  byrd: {
-    name: 'Andre Byrd',
-    role: 'Councilmember · Place 4',
-    badge: 'pro', badgeText: '★ Most Pro-Development',
-    sections: [
-      { h: 'Overview', p: 'The most vocal and active pro-development voice on council. Elected 2019, served as Mayor Pro Tem. Hosted the April 2026 Economic Development Symposium where he said "big things are happening in DeSoto." Deeply embedded in regional economic development networks — currently President of Leadership Southwest Class of 2026.' },
-      { h: 'Key Facts', kv: [
-        ['Elected', '2019'],
-        ['Former role', 'Mayor Pro Tem'],
-        ['Up for election', 'No — seat stable'],
-        ['Stance', 'Strongest pro-dev voice'],
-      ]},
-      { h: 'Notable', p: 'Voted to deny a hotel development in July 2024 — showing he has opinions about what type of development fits DeSoto, not just a yes-vote on everything. Also survived a recall attempt in 2024 alongside Mayor Proctor.' },
-      { h: 'Why He Matters for Bolton Boone', p: 'The city conversation about a water tower or police station on the subject parcel is most likely to re-engage through Byrd. He is the council member your family is positioned to work with.' },
-      { h: 'Tags', tags: [
-        {t:'Longest-serving pro-dev', c:'green'},
-        {t:'Seat stable', c:'green'},
-        {t:'Your key contact', c:'green'},
-        {t:'Not a rubber stamp', c:'orange'},
-      ]},
-    ]
-  },
-  parker: {
-    name: 'Pierette Parker',
-    role: 'Councilmember · Place 2',
-    badge: 'caution', badgeText: 'Cautious on Development',
-    sections: [
-      { h: 'Overview', p: 'The most cautious voice on development on the current council. Not opposed to all growth, but tends to pump the brakes and ask more questions. Running for re-election May 2, 2026 against two challengers — Cora Garner and Tymerian Oluwole.' },
-      { h: 'Key Facts', kv: [
-        ['Seat', 'Place 2'],
-        ['Election', 'May 2, 2026'],
-        ['Challengers', 'Cora Garner, Tymerian Oluwole'],
-        ['Campaign', '@pparker4place2'],
-      ]},
-      { h: 'Why It Matters', p: 'If Parker wins re-election, the council dynamic stays roughly the same — she remains the cautious counterweight to Byrd and Chisholm. If she loses, the council likely becomes more uniformly pro-development, which would be a real opening for re-engaging on Bolton Boone.' },
-      { h: 'Tags', tags: [
-        {t:'Up for election May 2', c:'orange'},
-        {t:'Development skeptic', c:'red'},
-        {t:'Watch this race', c:'orange'},
-      ]},
-    ]
-  },
-  garner: {
-    name: 'Cora Garner',
-    role: 'Place 2 Candidate (May 2, 2026)',
-    badge: 'unknown', badgeText: 'Challenger — Stance TBD',
-    sections: [
-      { h: 'Overview', p: 'Running against incumbent Pierette Parker for the Place 2 seat. Limited public stance information available — has not made development policy a centerpiece of public comments found to date.' },
-      { h: 'Key Facts', kv: [
-        ['Race', 'Place 2 — May 2, 2026'],
-        ['Incumbent', 'Pierette Parker'],
-        ['Status', 'Challenger'],
-        ['Stance', 'Unknown'],
-      ]},
-      { h: 'Tags', tags: [
-        {t:'Election May 2', c:'orange'},
-        {t:'Stance unclear', c:''},
-      ]},
-    ]
-  },
-  oluwole: {
-    name: 'Tymerian Oluwole',
-    role: 'Place 2 Candidate (May 2, 2026)',
-    badge: 'unknown', badgeText: 'Challenger — Younger Candidate',
-    sections: [
-      { h: 'Overview', p: 'Third candidate in the Place 2 race alongside Parker and Garner. Younger candidate per forum coverage. Appeared at an April 2026 candidate forum. Stance on development not clearly established in public record.' },
-      { h: 'Key Facts', kv: [
-        ['Race', 'Place 2 — May 2, 2026'],
-        ['Status', 'Challenger'],
-        ['Profile', 'Younger candidate'],
-        ['Stance', 'Unknown'],
-      ]},
-      { h: 'Tags', tags: [
-        {t:'Election May 2', c:'orange'},
-        {t:'Younger candidate', c:'blue'},
-      ]},
-    ]
-  },
-  wesley: {
-    name: 'Brian Wesley',
-    role: 'Place 4 Candidate (May 2, 2026)',
-    badge: 'unknown', badgeText: 'Open Seat Candidate',
-    sections: [
-      { h: 'Overview', p: 'Running for the open Place 4 seat — the seat being vacated by Andre Byrd. Whoever wins Place 4 will be the key unknown variable in how the next council handles development. Stance not fully detailed in public record.' },
-      { h: 'Key Facts', kv: [
-        ['Race', 'Place 4 — May 2, 2026 (open seat)'],
-        ['Status', 'Candidate'],
-        ['Predecessor', 'Andre Byrd (vacating)'],
-        ['Stance', 'Unknown'],
-      ]},
-      { h: 'Tags', tags: [
-        {t:'Election May 2', c:'orange'},
-        {t:'Open seat', c:'blue'},
-        {t:'Key unknown', c:'orange'},
-      ]},
-    ]
-  },
-  edgerson: {
-    name: 'David Edgerson',
-    role: 'Place 4 Candidate (May 2, 2026)',
-    badge: 'unknown', badgeText: 'Open Seat Candidate',
-    sections: [
-      { h: 'Overview', p: 'Running for the open Place 4 seat alongside Brian Wesley. Like Wesley, whoever wins will define whether the council maintains its pro-development lean or shifts. Stance not fully established in public coverage.' },
-      { h: 'Key Facts', kv: [
-        ['Race', 'Place 4 — May 2, 2026 (open seat)'],
-        ['Status', 'Candidate'],
-        ['Predecessor', 'Andre Byrd (vacating)'],
-        ['Stance', 'Unknown'],
-      ]},
-      { h: 'Tags', tags: [
-        {t:'Election May 2', c:'orange'},
-        {t:'Open seat', c:'blue'},
-        {t:'Key unknown', c:'orange'},
-      ]},
-    ]
-  },
-  dewberry: {
-    name: 'Commissioner Dewberry',
-    role: 'P&Z Commission Chair',
-    badge: 'neutral', badgeText: 'P&Z Chair · Appointed 2025',
-    sections: [
-      { h: 'Overview', p: 'Current chair of the Planning & Zoning Commission. Appointed as part of the reconstituted board after council did not reappoint the previous chairman and Commissioner Bell in fall 2025. The new board unanimously approved the Red Sea mixed-use project in December 2025.' },
-      { h: 'Context', p: 'The prior P&Z chairman was removed after voting against recommending a major development — which would have forced council to pass it with a supermajority. Council replaced the board rather than deal with that friction. The new board has been unanimously supportive on every vote since.' },
-      { h: 'Tags', tags: [
-        {t:'P&Z Chair', c:'purple'},
-        {t:'Appointed 2025', c:'blue'},
-        {t:'Unanimously approved Red Sea', c:'green'},
-      ]},
-    ]
-  },
-};
-
-function openPM(key) {
-  const p = PEOPLE[key];
-  if (!p) return;
-  document.getElementById('pm-name').textContent = p.name;
-  document.getElementById('pm-role').textContent = p.role;
-  const badge = document.getElementById('pm-badge');
-  badge.innerHTML = '<span class="pm-badge ' + p.badge + '">' + p.badgeText + '</span>';
-
-  let bodyHtml = '';
-  p.sections.forEach(sec => {
-    bodyHtml += '<div class="pm-section">';
-    bodyHtml += '<div class="pm-sh">' + sec.h + '</div>';
-    if (sec.p) bodyHtml += '<div class="pm-p">' + sec.p + '</div>';
-    if (sec.kv) {
-      sec.kv.forEach(([k,v]) => {
-        bodyHtml += '<div class="pm-kv"><span class="pm-k">' + k + '</span><span class="pm-v">' + v + '</span></div>';
-      });
-    }
-    if (sec.tags) {
-      let tagsHtml = '';
-      sec.tags.forEach(tag => {
-        tagsHtml += '<span class="pm-tag ' + tag.c + '">' + tag.t + '</span>';
-      });
-      bodyHtml += tagsHtml;
-    }
-    bodyHtml += '</div>';
-  });
-  document.getElementById('pm-body').innerHTML = bodyHtml;
-  document.getElementById('person-modal-overlay').classList.add('on');
-  document.body.style.overflow = 'hidden';
-}
-
-function closePM() {
-  document.getElementById('person-modal-overlay').classList.remove('on');
-  document.body.style.overflow = '';
-}
-
-document.addEventListener('keydown', e => { if(e.key==='Escape') closePM(); });
-
-</script>
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -1839,5 +1624,221 @@ function toggleGlossary() {
   </div>
 </div>
 
+
+<script>
+// ── PERSON DATA ──────────────────────────────────────────────────────────────
+const PEOPLE = {
+  proctor: {
+    name: 'Rachel Proctor',
+    role: 'Mayor, City of DeSoto',
+    badge: 'neutral', badgeText: 'Pro-Growth · Mayor',
+    sections: [
+      { h: 'Overview', p: 'Re-elected May 2025. Term runs through 2027. Generally supportive of growth and new development. Not the loudest voice on economic development, but consistently votes with the pro-development bloc.' },
+      { h: 'Key Facts', kv: [
+        ['Term', 'Through 2027'],
+        ['Re-elected', 'May 2025'],
+        ['Up for election', 'No — 2027'],
+        ['Stance', 'Broadly pro-growth'],
+      ]},
+      { h: 'Notable', p: 'Was the subject of a failed recall attempt in 2024 alongside Councilmember Byrd — an organized opposition faction that did not have enough support to go to a vote. The failure of the recall reinforced her political standing in the city.' },
+      { h: 'Tags', tags: [
+        {t:'Stable through 2027', c:'green'},
+        {t:'Pro-growth', c:'green'},
+        {t:'Survived recall 2024', c:'blue'},
+      ]},
+    ]
+  },
+  chisholm: {
+    name: 'Crystal Chisholm',
+    role: 'Mayor Pro Tem · Place 6',
+    badge: 'pro', badgeText: 'Pro-Development',
+    sections: [
+      { h: 'Overview', p: 'Current Mayor Pro Tem. Chairs the economic development committee — arguably the most directly relevant council role for land and development deals. Received a national appointment in January 2026, signaling rising profile beyond DeSoto.' },
+      { h: 'Key Facts', kv: [
+        ['Role', 'Mayor Pro Tem'],
+        ['Committee', 'Economic Development Chair'],
+        ['Up for election', 'No — stable'],
+        ['Stance', 'Pro-development'],
+      ]},
+      { h: 'Notable', p: 'Voted against a CIP bond issuance at one point — not because she is anti-development, but she watches the city\u2019s fiscal exposure carefully. A pragmatic voice, not a rubber stamp.' },
+      { h: 'Tags', tags: [
+        {t:'Mayor Pro Tem', c:'blue'},
+        {t:'Econ Dev Chair', c:'green'},
+        {t:'Stable', c:'green'},
+        {t:'Fiscally cautious', c:'orange'},
+      ]},
+    ]
+  },
+  byrd: {
+    name: 'Andre Byrd',
+    role: 'Councilmember · Place 4',
+    badge: 'pro', badgeText: '★ Most Pro-Development',
+    sections: [
+      { h: 'Overview', p: 'The most vocal and active pro-development voice on council. Elected 2019, served as Mayor Pro Tem. Hosted the April 2026 Economic Development Symposium where he said "big things are happening in DeSoto." Deeply embedded in regional economic development networks — currently President of Leadership Southwest Class of 2026.' },
+      { h: 'Key Facts', kv: [
+        ['Elected', '2019'],
+        ['Former role', 'Mayor Pro Tem'],
+        ['Up for election', 'No — seat stable'],
+        ['Stance', 'Strongest pro-dev voice'],
+      ]},
+      { h: 'Notable', p: 'Voted to deny a hotel development in July 2024 — showing he has opinions about what type of development fits DeSoto, not just a yes-vote on everything. Also survived a recall attempt in 2024 alongside Mayor Proctor.' },
+      { h: 'Why He Matters for Bolton Boone', p: 'The city conversation about a water tower or police station on the subject parcel is most likely to re-engage through Byrd. He is the council member your family is positioned to work with.' },
+      { h: 'Tags', tags: [
+        {t:'Longest-serving pro-dev', c:'green'},
+        {t:'Seat stable', c:'green'},
+        {t:'Your key contact', c:'green'},
+        {t:'Not a rubber stamp', c:'orange'},
+      ]},
+    ]
+  },
+  parker: {
+    name: 'Pierette Parker',
+    role: 'Councilmember · Place 2',
+    badge: 'caution', badgeText: 'Cautious on Development',
+    sections: [
+      { h: 'Overview', p: 'The most cautious voice on development on the current council. Not opposed to all growth, but tends to pump the brakes and ask more questions. Running for re-election May 2, 2026 against two challengers — Cora Garner and Tymerian Oluwole.' },
+      { h: 'Key Facts', kv: [
+        ['Seat', 'Place 2'],
+        ['Election', 'May 2, 2026'],
+        ['Challengers', 'Cora Garner, Tymerian Oluwole'],
+        ['Campaign', '@pparker4place2'],
+      ]},
+      { h: 'Why It Matters', p: 'If Parker wins re-election, the council dynamic stays roughly the same — she remains the cautious counterweight to Byrd and Chisholm. If she loses, the council likely becomes more uniformly pro-development, which would be a real opening for re-engaging on Bolton Boone.' },
+      { h: 'Tags', tags: [
+        {t:'Up for election May 2', c:'orange'},
+        {t:'Development skeptic', c:'red'},
+        {t:'Watch this race', c:'orange'},
+      ]},
+    ]
+  },
+  garner: {
+    name: 'Cora Garner',
+    role: 'Place 2 Candidate (May 2, 2026)',
+    badge: 'unknown', badgeText: 'Challenger — Stance TBD',
+    sections: [
+      { h: 'Overview', p: 'Running against incumbent Pierette Parker for the Place 2 seat. Limited public stance information available — has not made development policy a centerpiece of public comments found to date.' },
+      { h: 'Key Facts', kv: [
+        ['Race', 'Place 2 — May 2, 2026'],
+        ['Incumbent', 'Pierette Parker'],
+        ['Status', 'Challenger'],
+        ['Stance', 'Unknown'],
+      ]},
+      { h: 'Tags', tags: [
+        {t:'Election May 2', c:'orange'},
+        {t:'Stance unclear', c:''},
+      ]},
+    ]
+  },
+  oluwole: {
+    name: 'Tymerian Oluwole',
+    role: 'Place 2 Candidate (May 2, 2026)',
+    badge: 'unknown', badgeText: 'Challenger — Younger Candidate',
+    sections: [
+      { h: 'Overview', p: 'Third candidate in the Place 2 race alongside Parker and Garner. Younger candidate per forum coverage. Appeared at an April 2026 candidate forum. Stance on development not clearly established in public record.' },
+      { h: 'Key Facts', kv: [
+        ['Race', 'Place 2 — May 2, 2026'],
+        ['Status', 'Challenger'],
+        ['Profile', 'Younger candidate'],
+        ['Stance', 'Unknown'],
+      ]},
+      { h: 'Tags', tags: [
+        {t:'Election May 2', c:'orange'},
+        {t:'Younger candidate', c:'blue'},
+      ]},
+    ]
+  },
+  wesley: {
+    name: 'Brian Wesley',
+    role: 'Place 4 Candidate (May 2, 2026)',
+    badge: 'unknown', badgeText: 'Open Seat Candidate',
+    sections: [
+      { h: 'Overview', p: 'Running for the open Place 4 seat — the seat being vacated by Andre Byrd. Whoever wins Place 4 will be the key unknown variable in how the next council handles development. Stance not fully detailed in public record.' },
+      { h: 'Key Facts', kv: [
+        ['Race', 'Place 4 — May 2, 2026 (open seat)'],
+        ['Status', 'Candidate'],
+        ['Predecessor', 'Andre Byrd (vacating)'],
+        ['Stance', 'Unknown'],
+      ]},
+      { h: 'Tags', tags: [
+        {t:'Election May 2', c:'orange'},
+        {t:'Open seat', c:'blue'},
+        {t:'Key unknown', c:'orange'},
+      ]},
+    ]
+  },
+  edgerson: {
+    name: 'David Edgerson',
+    role: 'Place 4 Candidate (May 2, 2026)',
+    badge: 'unknown', badgeText: 'Open Seat Candidate',
+    sections: [
+      { h: 'Overview', p: 'Running for the open Place 4 seat alongside Brian Wesley. Like Wesley, whoever wins will define whether the council maintains its pro-development lean or shifts. Stance not fully established in public coverage.' },
+      { h: 'Key Facts', kv: [
+        ['Race', 'Place 4 — May 2, 2026 (open seat)'],
+        ['Status', 'Candidate'],
+        ['Predecessor', 'Andre Byrd (vacating)'],
+        ['Stance', 'Unknown'],
+      ]},
+      { h: 'Tags', tags: [
+        {t:'Election May 2', c:'orange'},
+        {t:'Open seat', c:'blue'},
+        {t:'Key unknown', c:'orange'},
+      ]},
+    ]
+  },
+  dewberry: {
+    name: 'Commissioner Dewberry',
+    role: 'P&Z Commission Chair',
+    badge: 'neutral', badgeText: 'P&Z Chair · Appointed 2025',
+    sections: [
+      { h: 'Overview', p: 'Current chair of the Planning & Zoning Commission. Appointed as part of the reconstituted board after council did not reappoint the previous chairman and Commissioner Bell in fall 2025. The new board unanimously approved the Red Sea mixed-use project in December 2025.' },
+      { h: 'Context', p: 'The prior P&Z chairman was removed after voting against recommending a major development — which would have forced council to pass it with a supermajority. Council replaced the board rather than deal with that friction. The new board has been unanimously supportive on every vote since.' },
+      { h: 'Tags', tags: [
+        {t:'P&Z Chair', c:'purple'},
+        {t:'Appointed 2025', c:'blue'},
+        {t:'Unanimously approved Red Sea', c:'green'},
+      ]},
+    ]
+  },
+};
+
+function openPM(key) {
+  const p = PEOPLE[key];
+  if (!p) return;
+  document.getElementById('pm-name').textContent = p.name;
+  document.getElementById('pm-role').textContent = p.role;
+  const badge = document.getElementById('pm-badge');
+  badge.innerHTML = '<span class="pm-badge ' + p.badge + '">' + p.badgeText + '</span>';
+
+  let bodyHtml = '';
+  p.sections.forEach(sec => {
+    bodyHtml += '<div class="pm-section">';
+    bodyHtml += '<div class="pm-sh">' + sec.h + '</div>';
+    if (sec.p) bodyHtml += '<div class="pm-p">' + sec.p + '</div>';
+    if (sec.kv) {
+      sec.kv.forEach(([k,v]) => {
+        bodyHtml += '<div class="pm-kv"><span class="pm-k">' + k + '</span><span class="pm-v">' + v + '</span></div>';
+      });
+    }
+    if (sec.tags) {
+      let tagsHtml = '';
+      sec.tags.forEach(tag => {
+        tagsHtml += '<span class="pm-tag ' + tag.c + '">' + tag.t + '</span>';
+      });
+      bodyHtml += tagsHtml;
+    }
+    bodyHtml += '</div>';
+  });
+  document.getElementById('pm-body').innerHTML = bodyHtml;
+  document.getElementById('person-modal-overlay').classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePM() {
+  document.getElementById('person-modal-overlay').classList.remove('on');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if(e.key==='Escape') closePM(); });
+</script>
 </body>
 </html>
