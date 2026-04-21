@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DeSoto Development Map</title>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --navy:#003366;--navy2:#0B5394;
+      --amber:#D97706;--amber-bg:#FEF3C7;--amber-t:#92400E;
+      --blue:#1D4ED8;--blue-bg:#DBEAFE;--blue-t:#1E3A8A;
+      --green:#15803D;--green-bg:#DCFCE7;--green-t:#14532D;
+      --teal:#0F766E;--teal-bg:#CCFBF1;--teal-t:#134E4A;
+      --purple:#7C3AED;--purple-bg:#EDE9FE;--purple-t:#4C1D95;
+      --red:#DC2626;
+      --sl:#1E293B;--slm:#475569;--sll:#94A3B8;
+      --bg:#F1F5F9;--sur:#fff;--bdr:#E2E8F0;
+    }
+    html,body{height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--sl);overflow:hidden}
+    .app{display:grid;grid-template-rows:52px 1fr;height:100vh}
+
+    /* HEADER */
+    header{background:var(--navy);display:flex;align-items:center;justify-content:space-between;padding:0 18px;box-shadow:0 2px 12px rgba(0,0,0,.28);z-index:200}
+    .hl{display:flex;align-items:center;gap:10px}
+    .hico{width:28px;height:28px;background:rgba(255,255,255,.12);border-radius:5px;display:flex;align-items:center;justify-content:center}
+    .hico svg{width:15px;height:15px;stroke:white;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    header h1{font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;color:#fff;letter-spacing:-.01em}
+    header p{font-size:10px;color:rgba(255,255,255,.48);margin-top:1px}
+    .hbadge{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:5px;padding:3px 9px;font-size:10px;color:rgba(255,255,255,.6);font-weight:500}
+
+    /* LAYOUT */
+    .main{display:grid;grid-template-columns:358px 1fr;height:100%;overflow:hidden;position:relative}
+
+    /* SIDEBAR */
+    .sidebar{background:var(--sur);border-right:1px solid var(--bdr);display:flex;flex-direction:column;overflow:hidden;z-index:10;transition:transform .28s cubic-bezier(.4,0,.2,1)}
+
+    /* SIDEBAR TOGGLE BUTTON */
+    #sb-toggle{
+      display:none;
+      position:fixed;
+      bottom:22px;
+      left:50%;
+      transform:translateX(-50%);
+      z-index:999;
+      background:var(--navy);
+      color:white;
+      border:none;
+      border-radius:24px;
+      padding:10px 20px;
+      font-size:13px;
+      font-weight:700;
+      font-family:'DM Sans',sans-serif;
+      box-shadow:0 4px 18px rgba(0,0,0,.35);
+      cursor:pointer;
+      gap:7px;
+      align-items:center;
+      white-space:nowrap;
+    }
+
+    /* MOBILE */
+    @media (max-width: 700px) {
+      .main{grid-template-columns:1fr;position:relative}
+      .sidebar{
+        position:fixed;
+        top:52px; /* below header */
+        left:0;
+        bottom:0;
+        width:92vw;
+        max-width:360px;
+        transform:translateX(0);
+        z-index:500;
+        box-shadow:4px 0 24px rgba(0,0,0,.18);
+      }
+      .sidebar.collapsed{
+        transform:translateX(-100%);
+      }
+      #sb-toggle{
+        display:flex;
+      }
+      #sb-overlay{
+        display:block;
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.28);
+        z-index:499;
+        backdrop-filter:blur(1px);
+      }
+      #sb-overlay.hidden{display:none;}
+    }
+    @media (min-width: 701px){
+      #sb-overlay{display:none !important;}
+    }
+    @media (max-width: 700px) {
+      header{padding:0 12px;}
+      header h1{font-size:12px;}
+      .hbadge{display:none;}
+    }
+    .tabs{display:flex;border-bottom:1px solid var(--bdr);background:var(--bg)}
+    .tab{flex:1;padding:9px 4px;font-size:10px;font-weight:700;color:var(--sll);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;text-transform:uppercase;letter-spacing:.05em}
+    .tab.on{color:var(--navy);border-bottom-color:var(--navy);background:white}
+    .tab:hover:not(.on){color:var(--slm);background:rgba(0,0,0,.02)}
+
+    .panel{flex:1;overflow-y:auto;padding:13px 13px 0;display:none}
+    .panel.on{display:block}
+    .panel::-webkit-scrollbar{width:4px}
+    .panel::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:2px}
+
+    /* SUBJECT HERO */
+    .subj{background:linear-gradient(135deg,#002244 0%,var(--navy2) 100%);border-radius:10px;padding:12px 13px;margin-bottom:13px;color:white}
+    .subj-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.48);margin-bottom:2px}
+    .subj-name{font-family:'DM Sans',sans-serif;font-size:16px;font-weight:800;line-height:1.2}
+    .subj-sub{font-size:10px;color:rgba(255,255,255,.52);margin-top:2px}
+    .smet{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+    .sm{background:rgba(255,255,255,.1);border-radius:6px;padding:6px 8px}
+    .sm-v{font-size:16px;font-weight:800;font-family:'DM Sans',sans-serif;line-height:1}
+    .sm-l{font-size:9px;color:rgba(255,255,255,.48);margin-top:2px}
+
+    /* SECTION LABEL */
+    .slbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--sll);margin:3px 0 7px}
+
+    /* CARDS */
+    .card{border:1.5px solid var(--bdr);border-radius:10px;margin-bottom:9px;overflow:hidden;background:white;cursor:pointer;transition:border-color .2s,box-shadow .2s}
+    .card:hover{border-color:var(--navy2);box-shadow:0 3px 12px rgba(0,51,102,.1)}
+    .card.on{border-color:var(--navy);box-shadow:0 3px 14px rgba(0,51,102,.13)}
+    .ctop{padding:10px 12px;display:flex;align-items:flex-start;gap:8px}
+    .cdot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:2px;border:2px solid white;box-shadow:0 0 0 1.5px currentColor}
+    .ctxt{flex:1;min-width:0}
+    .cname{font-size:12px;font-weight:700;color:var(--sl);line-height:1.3}
+    .csub{font-size:10px;color:var(--slm);margin-top:1px}
+    .cbadge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0;white-space:nowrap}
+    .cchev{font-size:10px;color:var(--sll);transition:transform .2s;flex-shrink:0;margin-top:2px}
+    .card.on .cchev{transform:rotate(180deg)}
+
+    /* EXPANDABLE BODY */
+    .cbody{max-height:0;overflow:hidden;transition:max-height .38s cubic-bezier(.4,0,.2,1)}
+    .card.on .cbody{max-height:2400px}
+    .cinner{padding:0 12px 12px;border-top:1px solid var(--bdr)}
+    .cdesc{font-size:11px;color:var(--slm);line-height:1.65;margin-top:9px}
+    .cdesc strong{color:var(--sl);font-weight:600}
+
+    /* IMAGE GALLERY */
+    .gallery{margin-top:10px}
+    .gal-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--sll);margin-bottom:6px}
+    .gal-tabs{display:flex;gap:5px;margin-bottom:7px;flex-wrap:wrap}
+    .gtab{font-size:9.5px;font-weight:600;padding:3px 8px;border-radius:4px;border:1.5px solid var(--bdr);background:var(--bg);color:var(--slm);cursor:pointer;transition:all .15s}
+    .gtab.on{background:var(--navy);color:white;border-color:var(--navy)}
+    .gal-img{width:100%;border-radius:7px;display:block;border:1px solid var(--bdr);cursor:zoom-in}
+    .gal-caption{font-size:9.5px;color:var(--sll);margin-top:4px;text-align:center}
+
+    /* IMAGE LIGHTBOX */
+    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}
+    .lightbox.on{display:flex}
+    .lb-img{max-width:92vw;max-height:90vh;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+    .lb-close{position:absolute;top:16px;right:20px;color:white;font-size:28px;cursor:pointer;line-height:1;opacity:.7;transition:opacity .15s}
+    .lb-close:hover{opacity:1}
+    .lb-caption{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.65);font-size:11px;white-space:nowrap}
+
+    .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:9px}
+    .ckv{background:var(--bg);border-radius:5px;padding:6px 8px}
+    .ck{font-size:9px;color:var(--sll);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+    .cv{font-size:11px;color:var(--sl);font-weight:600;margin-top:1px;line-height:1.3}
+
+    .cds{margin-top:9px}
+    .cdt{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--sll);margin-bottom:4px}
+    .cdd{font-size:10.5px;color:var(--slm);line-height:1.6}
+
+    .ctags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+    .ctag{font-size:9px;font-weight:500;padding:2px 6px;border-radius:4px;background:var(--bg);border:1px solid var(--bdr);color:var(--slm)}
+
+    .cfoot{display:flex;align-items:center;justify-content:space-between;margin-top:9px;padding-top:8px;border-top:1px solid var(--bdr)}
+    .cfdate{font-size:9.5px;color:var(--sll)}
+    .clink{font-size:9.5px;font-weight:600;color:var(--navy2);text-decoration:none;padding:3px 7px;border-radius:4px;background:var(--blue-bg);transition:all .15s}
+    .clink:hover{background:var(--navy2);color:white}
+
+    /* TIMELINE */
+    .tli{display:flex;gap:10px;margin-bottom:14px}
+    .tll{display:flex;flex-direction:column;align-items:center}
+    .tld{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:2px}
+    .tlline{width:1px;background:var(--bdr);flex:1;min-height:10px;margin-top:3px}
+    .tlr{flex:1;padding-bottom:3px}
+    .tldate{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--sll);margin-bottom:1px}
+    .tltitle{font-size:11.5px;font-weight:700;color:var(--sl);line-height:1.35}
+    .tldesc{font-size:10px;color:var(--slm);margin-top:2px;line-height:1.5}
+    .tlbtn{font-size:9.5px;font-weight:600;color:var(--navy2);margin-top:3px;cursor:pointer;background:none;border:none;padding:0}
+    .tlx{display:none;font-size:11px;color:var(--slm);margin-top:6px;line-height:1.7;background:var(--bg);border-radius:6px;padding:10px 11px;border-left:3px solid var(--navy2)}
+    .tlx.on{display:block}
+    .tlx strong{color:var(--sl);display:block;margin-top:7px;margin-bottom:2px;font-size:10.5px;letter-spacing:.01em}
+    .tlx strong:first-child{margin-top:0}
+    .tlx em{font-style:normal;font-weight:600;color:var(--navy2)}
+
+    /* COMPS */
+    .comp{background:white;border:1.5px solid var(--bdr);border-radius:8px;padding:9px 11px;margin-bottom:7px;cursor:pointer;transition:all .18s}
+    .comp:hover,.comp.on{border-color:var(--navy2);box-shadow:0 2px 10px rgba(0,51,102,.1)}
+    /* Scenario expand arrows */
+    .sarr{transition:transform .2s;display:inline-block}
+    .comp.on{border-color:var(--navy)}
+    .compt{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:3px}
+    .compname{font-size:11.5px;font-weight:700;color:var(--sl)}
+    .compp{font-size:12.5px;font-weight:800;font-family:'DM Sans',sans-serif}
+    .compd{font-size:10px;color:var(--slm);line-height:1.5}
+    .compn{font-size:9px;color:var(--sll);margin-top:2px}
+
+    .hbu{background:white;border:1.5px solid var(--bdr);border-radius:7px;padding:8px 11px;margin-bottom:5px;display:flex;align-items:center;gap:9px}
+    .hbu.top{border-color:var(--green)}
+    .hbun{font-size:19px;font-weight:800;font-family:'DM Sans',sans-serif;color:var(--sll);min-width:20px}
+    .hbu.top .hbun{color:var(--green)}
+    .hbut{font-size:11.5px;font-weight:700;color:var(--sl)}
+    .hbus{font-size:10px;color:var(--slm);margin-top:1px}
+
+    /* LEGEND */
+    .legend{padding:9px 13px 11px;border-top:1px solid var(--bdr);flex-shrink:0;background:white}
+    .legend h4{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--sll);margin-bottom:6px}
+    .lgi{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--slm);margin-bottom:3px}
+    .lgd{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+
+    /* MAP POPUP */
+    .maplibregl-popup-content{padding:0;border-radius:9px;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,.17);border:1.5px solid var(--bdr);max-width:260px;font-family:'Inter',sans-serif}
+    .maplibregl-popup-close-button{font-size:16px;color:var(--slm);padding:5px 9px;z-index:1}
+    .pub{height:3.5px}
+    .puh{padding:9px 12px 7px}
+    .put{font-size:12px;font-weight:700;color:var(--sl)}
+    .pus{font-size:10px;color:var(--slm);margin-top:1px}
+    .pust{display:inline-block;font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;margin-top:4px;text-transform:uppercase;letter-spacing:.04em}
+    .pub2{padding:6px 12px 9px;border-top:1px solid var(--bdr)}
+    .pur{display:flex;justify-content:space-between;gap:8px;margin-bottom:3px}
+    .puk{font-size:9.5px;color:var(--sll);font-weight:500}
+    .puv{font-size:9.5px;color:var(--sl);font-weight:600;text-align:right}
+    .pul{display:block;padding:5px 12px;border-top:1px solid var(--bdr);font-size:9.5px;font-weight:600;color:var(--navy2);text-decoration:none}
+    .pul:hover{background:var(--bg)}
+
+    /* MARKER */
+    .mpin{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:800;font-family:'DM Sans',sans-serif;box-shadow:0 3px 10px rgba(0,0,0,.25);border:2.5px solid white;cursor:pointer;transition:transform .15s}
+    .mpin:hover{transform:scale(1.15)}
+    .spin{width:38px;height:38px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;color:white;font-size:15px;box-shadow:0 4px 14px rgba(0,0,0,.28);border:3px solid white;cursor:pointer;transition:transform .15s}
+    .spin:hover{transform:scale(1.1)}
+
+    /* COMP MARKER */
+    .cmppin{width:14px;height:14px;border-radius:50%;border:2.5px solid white;box-shadow:0 2px 6px rgba(0,0,0,.25);cursor:pointer;transition:transform .15s}
+    .cmppin:hover{transform:scale(1.3)}
+
+    .pb{padding-bottom:14px}
+  </style>
+</head>
+<body>
+<!-- PASSWORD GATE -->
+<div id="gate" style="position:fixed;inset:0;z-index:99999;background:#0B1628;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;">
+  <div style="background:#112240;border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:36px 32px;width:320px;max-width:90vw;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.5)">
+    <svg viewBox="0 0 32 32" width="36" height="36" style="margin:0 auto 14px" fill="none">
+      <polygon points="16,2 30,9 30,23 16,30 2,23 2,9" stroke="#4B9FFF" stroke-width="1.5"/>
+      <circle cx="16" cy="16" r="5" fill="#4B9FFF"/>
+    </svg>
+    <div style="font-size:16px;font-weight:800;color:white;margin-bottom:4px">DeSoto Development Map</div>
+    <div style="font-size:11px;color:rgba(255,255,255,.45);margin-bottom:24px">Danieldale Rd & Bolton Boone Dr · April 2026</div>
+    <input id="pw-input" type="password" placeholder="Enter password" autocomplete="off"
+      style="width:100%;padding:11px 14px;border-radius:8px;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:white;font-size:14px;font-family:inherit;outline:none;box-sizing:border-box;margin-bottom:10px;text-align:center;letter-spacing:.1em"
+      onkeydown="if(event.key==='Enter')checkPw()" />
+    <div id="pw-err" style="font-size:10.5px;color:#F87171;margin-bottom:10px;min-height:16px"></div>
+    <button onclick="checkPw()"
+      style="width:100%;padding:11px;background:#1D4ED8;color:white;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:.02em">
+      View Map →
+    </button>
+    <div style="font-size:9.5px;color:rgba(255,255,255,.25);margin-top:16px">Confidential · April 2026</div>
+  </div>
+</div>
+<script>
+function checkPw() {
+  const val = document.getElementById('pw-input').value.trim();
+  if (val === 'DeSoto2026') {
+    document.getElementById('gate').style.display = 'none';
+  } else {
+    document.getElementById('pw-err').textContent = 'Incorrect password — try again';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+  }
+}
+// Auto-focus on load
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => document.getElementById('pw-input').focus(), 100);
+});
+</script>
+
+
+<div class="app">
+  <header>
+    <div class="hl">
+      <div class="hico"><svg viewBox="0 0 16 16"><polygon points="8,1 15,5 15,11 8,15 1,11 1,5"/><circle cx="8" cy="8" r="2.5"/></svg></div>
+      <div><h1>DeSoto Development Map</h1><p>Danieldale Rd & Bolton Boone Dr · April 2026</p></div>
+    </div>
+    <div class="hbadge">Confidential · April 2026</div>
+  </header>
+
+  <div class="main">
+    <div class="sidebar">
+      <div class="tabs">
+        <button class="tab on" onclick="switchTab('projects',this)">Projects</button>
+        <button class="tab" onclick="switchTab('timeline',this)">Timeline</button>
+        <button class="tab" onclick="switchTab('comps',this)">Comps & HBU</button>
+      </div>
+
+      <!-- PROJECTS -->
+      <div class="panel on pb" id="tab-projects">
+        <div class="subj">
+          <div class="subj-lbl">Subject Property</div>
+          <div class="subj-name">1400 Bolton Boone Dr</div>
+          <div class="subj-sub">DeSoto, TX 75115 · Family-owned · For Sale</div>
+          <div class="smet">
+            <div class="sm"><div class="sm-v">55.1</div><div class="sm-l">Acres (DCAD)</div></div>
+            <div class="sm"><div class="sm-v">Listed</div><div class="sm-l">For Sale</div></div>
+            <div class="sm"><div class="sm-v">Dest. MU</div><div class="sm-l">FLUM Designation</div></div>
+            <div class="sm"><div class="sm-v">$150K+</div><div class="sm-l">Est. $/Acre</div></div>
+          </div>
+        </div>
+
+        <div class="slbl">Adjacent Developments — Click to Expand</div>
+
+        <!-- RED SEA -->
+        <div class="card" id="card-0" onclick="toggleCard(0)">
+          <div class="ctop">
+            <div class="cdot" style="color:#D97706;background:#D97706;"></div>
+            <div class="ctxt"><div class="cname">Red Sea — Smith Legacy</div><div class="csub">1001 W. Danieldale Rd · 9.86 ac · NW corner of intersection</div></div>
+            <div class="cbadge" style="background:#FEF3C7;color:#92400E;">Entitled</div>
+            <div class="cchev">▼</div>
+          </div>
+          <div class="cbody"><div class="cinner">
+            <div class="cdesc"><strong>Luxury mixed-use community</strong> at the St. Stephen Community Church property — directly at the NW corner of Danieldale Rd & Bolton Boone Dr, your land's primary intersection. Originally rezoned MU-1 in May 2025 but a staff error meant MU-1 doesn't permit townhomes, triggering a corrective MU-R rezoning approved Dec 2025.</div>
+            <div class="cgrid">
+              <div class="ckv"><div class="ck">Townhomes</div><div class="cv">44 units · 4-story · ~50 ft</div></div>
+              <div class="ckv"><div class="ck">MF Building</div><div class="cv">66-unit mixed use</div></div>
+              <div class="ckv"><div class="ck">Office/Retail</div><div class="cv">35,000 SF (4 levels + roof)</div></div>
+              <div class="ckv"><div class="ck">Restaurant</div><div class="cv">5,000 SF + rooftop terrace</div></div>
+              <div class="ckv"><div class="ck">Phase 1</div><div class="cv">10 townhomes (Danieldale frontage)</div></div>
+              <div class="ckv"><div class="ck">Parking</div><div class="cv">33,600 SF structured garage</div></div>
+            </div>
+
+            <!-- IMAGE GALLERY: RED SEA -->
+            <div class="gallery">
+              <div class="gal-title">Architectural Plans & Elevations</div>
+              <div class="gal-tabs">
+                <button class="gtab on" onclick="showGal('rs',0,this)">Facade / Elevation</button>
+                <button class="gtab" onclick="showGal('rs',1,this)">Site Plan / Phasing</button>
+              </div>
+              <img class="gal-img" id="rs-img" src="assets/redsea_elev-01_web.jpg" alt="Red Sea Elevation" onclick="openLightbox(this.src, this.alt)" />
+              <div class="gal-caption" id="rs-cap">Cover sheet with rendered townhome facade — 4-story modern design, Danieldale Road frontage (Vizual Architecture, Oct 2025)</div>
+            </div>
+
+            <div class="cds">
+              <div class="cdt">Entitlement History</div>
+              <div class="cdd">Apr 8, 2025 — P&Z recommended MU-1 rezoning<br>May 6, 2025 — City Council approved MU-1<br>Nov 2025 — Site plan submitted; staff found MU-1 blocks townhomes<br>Dec 9, 2025 — P&Z unanimously approved corrective MU-R (Z-1543-25)<br>Jan 2026 — City Council scheduled final vote</div>
+            </div>
+            <div class="cds">
+              <div class="cdt">Key Parties</div>
+              <div class="cdd">Developer: Herschel Smith / Smith Legacy Development<br>Owner: St. Stephen Community Church, Inc.<br>Architect: Vizual Architecture LLC (Johnny Limones, Dallas)<br>Civil: Eyncon Engineering, Ennis TX</div>
+            </div>
+            <div class="ctags"><span class="ctag">MU-R Zoning</span><span class="ctag">Z-1543-25</span><span class="ctag">At Bolton Boone Intersection</span><span class="ctag">No Construction Permits Yet</span></div>
+            <div class="cfoot">
+              <span class="cfdate">P&Z Dec 9, 2025 · Council Jan 2026</span>
+              <a class="clink" href="https://desototx.new.swagit.com/videos/363162" target="_blank">P&Z Meeting ↗</a>
+            </div>
+          </div></div>
+        </div>
+
+        <!-- PARC AT DANIEL FARMS -->
+        <div class="card" id="card-1" onclick="toggleCard(1)">
+          <div class="ctop">
+            <div class="cdot" style="color:#1D4ED8;background:#1D4ED8;"></div>
+            <div class="ctxt"><div class="cname">Parc at Daniel Farms</div><div class="csub">9100 Bolton Boone Dr · 82.19 acres · PD-121</div></div>
+            <div class="cbadge" style="background:#DBEAFE;color:#1E3A8A;">Approved</div>
+            <div class="cchev">▼</div>
+          </div>
+          <div class="cbody"><div class="cinner">
+            <div class="cdesc"><strong>Large-scale garden-style multifamily</strong> spanning 82 acres northwest of the intersection. The May 2025 amendment updated building elevations (gables → hip roofs, brick → fiber cement + accent stone, enlarged clubhouse), revised parking, and adjusted landscaping. Owned by <strong>Pillar Income Asset Management</strong> (Dallas). No construction permits as of April 2026.</div>
+            <div class="cgrid">
+              <div class="ckv"><div class="ck">Total Site</div><div class="cv">82.19 acres</div></div>
+              <div class="ckv"><div class="ck">Phase 1</div><div class="cv">17.4 acres</div></div>
+              <div class="ckv"><div class="ck">Clubhouse</div><div class="cv">6,491 SF (enlarged)</div></div>
+              <div class="ckv"><div class="ck">Amenities</div><div class="cv">Pool, playground, BBQ</div></div>
+              <div class="ckv"><div class="ck">Vote</div><div class="cv">7-0 unanimous</div></div>
+              <div class="ckv"><div class="ck">Zoning</div><div class="cv">PD-121</div></div>
+            </div>
+
+            <!-- IMAGE GALLERY: PARC -->
+            <div class="gallery">
+              <div class="gal-title">Architectural Plans & Elevations</div>
+              <div class="gal-tabs">
+                <button class="gtab on" onclick="showGal('parc',0,this)">Clubhouse Elevations</button>
+                <button class="gtab" onclick="showGal('parc',1,this)">Garage / Units</button>
+                <button class="gtab" onclick="showGal('parc',2,this)">Site Plan</button>
+              </div>
+              <img class="gal-img" id="parc-img" src="assets/parc_elev-01_web.jpg" alt="Parc at Daniel Farms Clubhouse Elevation" onclick="openLightbox(this.src, this.alt)" />
+              <div class="gal-caption" id="parc-cap">Clubhouse elevations (all 4 sides) — composition shingle roof, fiber cement board & batten, manufactured stone accents (HEDK Architects, Jan 2025)</div>
+            </div>
+
+            <div class="cds">
+              <div class="cdt">Exterior Design (Updated May 2025)</div>
+              <div class="cdd">Roofline changed gables → hip roofs with shed roofs at entry towers. Dormers removed. Brick replaced with fiber cement horizontal/vertical siding. Accent stone at balconies and entry towers. Updated window style and color scheme.</div>
+            </div>
+            <div class="cds">
+              <div class="cdt">Key Parties</div>
+              <div class="cdd">Owner: Pillar Income Asset Management (Jonathan Clayton, 1603 LBJ Frwy Suite 800, Dallas)<br>Architect: HEDK Architects (Erik Earnshaw, Addison TX)<br>Civil Engineer: Westwood Professional Services (Ashley Reynolds, Dallas)</div>
+            </div>
+            <div class="ctags"><span class="ctag">PD-121</span><span class="ctag">Multifamily</span><span class="ctag">7-0 Approved</span><span class="ctag">No Construction Permits Yet</span></div>
+            <div class="cfoot">
+              <span class="cfdate">Approved May 6, 2025</span>
+              <a class="clink" href="https://desototx.new.swagit.com/videos/341869" target="_blank">Council Meeting ↗</a>
+            </div>
+          </div></div>
+        </div>
+
+        <!-- DANIELDALE WIDENING -->
+        <div class="card" id="card-2" onclick="toggleCard(2)">
+          <div class="ctop">
+            <div class="cdot" style="color:#7C3AED;background:#7C3AED;"></div>
+            <div class="ctxt"><div class="cname">Danieldale Rd Widening</div><div class="csub">Westmoreland Rd → Duncanville city limit</div></div>
+            <div class="cbadge" style="background:#EDE9FE;color:#4C1D95;">In Design</div>
+            <div class="cchev">▼</div>
+          </div>
+          <div class="cbody"><div class="cinner">
+            <div class="cdesc">Full corridor expansion along Danieldale — the road forming your land's <strong>southern boundary</strong>. Design was 90% complete and construction bids were open as of February 2025. A <strong>new traffic signal specifically at Bolton Boone Drive</strong> is included — turning your corner into a signalized intersection.</div>
+            <div class="cgrid">
+              <div class="ckv"><div class="ck">Lanes</div><div class="cv">4 concrete (raised median)</div></div>
+              <div class="ckv"><div class="ck">Key Signal</div><div class="cv">★ NEW at Bolton Boone Dr</div></div>
+              <div class="ckv"><div class="ck">Utilities</div><div class="cv">Upsized water, sewer, drainage</div></div>
+              <div class="ckv"><div class="ck">Sidewalks</div><div class="cv">DeSoto/Duncanville coordinated</div></div>
+              <div class="ckv"><div class="ck">Design</div><div class="cv">90% complete (Feb 2025)</div></div>
+              <div class="ckv"><div class="ck">Funding</div><div class="cv">$48.55M CIP bond-funded</div></div>
+            </div>
+            <div class="cds">
+              <div class="cdt">Why This Matters for Your Land</div>
+              <div class="cdd">A new traffic signal at Bolton Boone converts your parcel's corner from an uncontrolled T-intersection to a signalized corner — a major step-up in commercial and residential viability. Four-lane Danieldale with upsized utilities substantially improves developer infrastructure assumptions. The seller window between "design complete" and "road open" is historically optimal.</div>
+            </div>
+            <div class="ctags"><span class="ctag">CIP Infrastructure</span><span class="ctag">$48.55M Bond-Funded</span><span class="ctag">DeSoto + Duncanville</span></div>
+            <div class="cfoot">
+              <span class="cfdate">Bids open Feb 2025 · Construction imminent</span>
+              <a class="clink" href="https://desototribune.com/2025/02/12/city-infrastructure-road-projects-drainage-and-public-amenities/" target="_blank">Tribune Article ↗</a>
+            </div>
+          </div></div>
+        </div>
+
+        <!-- ZVL -->
+        <div class="card" id="card-3" onclick="toggleCard(3)">
+          <div class="ctop">
+            <div class="cdot" style="color:#0F766E;background:#0F766E;"></div>
+            <div class="ctxt"><div class="cname">Zoning Verification Letters</div><div class="csub">2400 Bolton Boone Dr · Nov 2025 – Feb 2026</div></div>
+            <div class="cbadge" style="background:#CCFBF1;color:#134E4A;">Active DD</div>
+            <div class="cchev">▼</div>
+          </div>
+          <div class="cbody"><div class="cinner">
+            <div class="cdesc">Three ZVLs filed at 2400 Bolton Boone in 3 months. A ZVL is a formal city confirmation of zoning and permitted uses — almost always filed by a <strong>buyer, developer, or lender doing pre-transaction due diligence</strong>. Three in three months = active deal process on this Bolton Boone parcel, roughly 1.5 miles north of your land.</div>
+            <div class="cgrid">
+              <div class="ckv"><div class="ck">ZVL #1</div><div class="cv">Nov 17, 2025 (ZVL0007-2025)</div></div>
+              <div class="ckv"><div class="ck">ZVL #2</div><div class="cv">Jan 21, 2026 (ZVL0015-2026)</div></div>
+              <div class="ckv"><div class="ck">ZVL #3</div><div class="cv">Feb 2, 2026 (ZVL0020-2026)</div></div>
+              <div class="ckv"><div class="ck">Portal</div><div class="cv">Tyler EnerGov (DeSoto)</div></div>
+            </div>
+            <div class="cds">
+              <div class="cdt">Actionable Next Step</div>
+              <div class="cdd">File a Texas Public Information Act (PIA) request with the DeSoto City Clerk (cityclerk@desototx.gov) to identify who filed these ZVLs. That party is almost certainly actively underwriting Bolton Boone corridor land right now — a direct buyer lead.</div>
+            </div>
+            <div class="ctags"><span class="ctag">Due Diligence Signal</span><span class="ctag">Bolton Boone Corridor</span><span class="ctag">Possible Buyer Lead</span></div>
+            <div class="cfoot"><span class="cfdate">Nov 2025 – Feb 2026 · Tyler EnerGov</span></div>
+          </div></div>
+        </div>
+
+        <!-- ECON SYMPOSIUM -->
+        <div class="card" id="card-4" onclick="toggleCard(4)">
+          <div class="ctop">
+            <div class="cdot" style="color:#D97706;background:#D97706;"></div>
+            <div class="ctxt"><div class="cname">DeSoto Econ Development Symposium</div><div class="csub">City of DeSoto · April 2026</div></div>
+            <div class="cbadge" style="background:#FEF3C7;color:#92400E;">Apr 2026</div>
+            <div class="cchev">▼</div>
+          </div>
+          <div class="cbody"><div class="cinner">
+            <div class="cdesc">DEDC annual symposium where DeSoto presents active deals and growth strategy to the business community. Councilmember Byrd stated publicly <strong>"big things are happening in DeSoto"</strong> — signaling continued political will for development approvals.</div>
+            <div class="cgrid">
+              <div class="ckv"><div class="ck">Host</div><div class="cv">DEDC / Councilmember Byrd</div></div>
+              <div class="ckv"><div class="ck">Date</div><div class="cv">April 2026</div></div>
+              <div class="ckv"><div class="ck">Growth Votes</div><div class="cv">Byrd + Chisholm</div></div>
+              <div class="ckv"><div class="ck">Skeptic</div><div class="cv">Parker</div></div>
+            </div>
+            <div class="cds">
+              <div class="cdt">City Growth Pivot</div>
+              <div class="cdd">DeSoto moving away from industrial/warehouse toward high-value uses: 90-acre BioLife Science Campus in pre-development, $1B bio-manufacturing facility RFP under consideration. Baker Tilly engaged to redefine target industries. $200K allocated to rewrite 40-year-old zoning code. AA bond rating (S&P + Moody's, May 2025).</div>
+            </div>
+            <div class="ctags"><span class="ctag">DEDC</span><span class="ctag">Growth Signal</span><span class="ctag">Byrd + Chisholm Pro-Growth</span><span class="ctag">AA Bond Rating</span></div>
+            <div class="cfoot"><span class="cfdate">April 2026 · Annual symposium</span></div>
+          </div></div>
+        </div>
+      </div>
+
+      <!-- TIMELINE -->
+      <div class="panel pb" id="tab-timeline">
+        <div class="slbl" style="margin-top:0">Confirmed Events — Click for Full Detail</div>
+        <div id="tlc"></div>
+      </div>
+
+      <!-- COMPS & HBU -->
+      <div class="panel pb" id="tab-comps">
+
+        <!-- PRICING SCENARIOS -->
+        <div class="slbl" style="margin-top:0">Pricing Scenarios — 55 Acres</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:10px">
+          <div style="background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:8px;padding:8px;text-align:center">
+            <div style="font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#166534;margin-bottom:2px">Low</div>
+            <div style="font-size:13px;font-weight:800;color:#166534">$75K–<br>$100K</div>
+            <div style="font-size:8px;color:#166534;font-weight:600;margin-top:2px">per acre</div>
+            <div style="font-size:8px;color:#15803D;margin-top:4px;font-weight:700">$4.1M–$5.5M total</div>
+          </div>
+          <div style="background:#EFF6FF;border:2px solid #3B82F6;border-radius:8px;padding:8px;text-align:center;position:relative">
+            <div style="position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:#3B82F6;color:white;font-size:7.5px;font-weight:800;padding:1px 6px;border-radius:4px;white-space:nowrap">BASE CASE</div>
+            <div style="font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#1D4ED8;margin-bottom:2px">Mid</div>
+            <div style="font-size:13px;font-weight:800;color:#1D4ED8">$125K–<br>$175K</div>
+            <div style="font-size:8px;color:#1D4ED8;font-weight:600;margin-top:2px">per acre</div>
+            <div style="font-size:8px;color:#1D4ED8;margin-top:4px;font-weight:700">$6.9M–$9.6M total</div>
+          </div>
+          <div style="background:#FFF7ED;border:1.5px solid #FCD34D;border-radius:8px;padding:8px;text-align:center">
+            <div style="font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#92400E;margin-bottom:2px">High</div>
+            <div style="font-size:13px;font-weight:800;color:#B45309">$200K–<br>$275K</div>
+            <div style="font-size:8px;color:#B45309;font-weight:600;margin-top:2px">per acre</div>
+            <div style="font-size:8px;color:#B45309;margin-top:4px;font-weight:700">$11M–$15.1M total</div>
+          </div>
+        </div>
+
+        <!-- SCENARIO DETAIL CARDS -->
+        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">
+          <div style="background:white;border:1.5px solid #86EFAC;border-radius:8px;overflow:hidden">
+            <div style="padding:7px 10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center" onclick="this.nextElementSibling.classList.toggle('on');this.querySelector('.sarr').textContent=this.nextElementSibling.classList.contains('on')?'▲':'▼'">
+              <span style="font-size:10.5px;font-weight:700;color:#166534">Low Scenario · $75K–$100K/ac</span>
+              <span class="sarr" style="font-size:9px;color:#166534">▼</span>
+            </div>
+            <div class="tlx" style="border-left:none;border-top:1px solid #BBF7D0;border-radius:0;margin:0">
+              <strong style="color:#166534">Who buys at this price?</strong> Value-add land speculator or SF subdivision builder with no confidence in MF entitlement. Treats the site as raw/unentitled — ignores FLUM.
+              <br><br><strong style="color:#166534">Comparable anchor</strong><br>
+              • 62.7-ac South Dallas raw land (2025): <strong>$47,847/ac</strong> — true raw floor<br>
+              • 721 Rayburn Dr, DeSoto (23 ac, unentitled): <strong>$64,539/ac</strong><br>
+              • 91.7-ac Lancaster Ag tract (near I-35E): <strong>$87,148/ac</strong><br>
+              Apply 60–100% FLUM premium to raw floor → $76K–$96K/ac
+              <br><br><strong style="color:#166534">Risk factors driving low price</strong><br>
+              • DFW MF vacancy 12.0% in Q4 2025; rent growth -1.8% YoY<br>
+              • Buyer doubts DeSoto will approve full MU PD<br>
+              • Road widening not yet in construction<br>
+              • 55-acre bulk limits buyer pool
+            </div>
+          </div>
+
+          <div style="background:white;border:2px solid #3B82F6;border-radius:8px;overflow:hidden">
+            <div style="padding:7px 10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center" onclick="this.nextElementSibling.classList.toggle('on');this.querySelector('.sarr').textContent=this.nextElementSibling.classList.contains('on')?'▲':'▼'">
+              <span style="font-size:10.5px;font-weight:700;color:#1D4ED8">Mid Scenario · $125K–$175K/ac ★ Most Likely</span>
+              <span class="sarr" style="font-size:9px;color:#1D4ED8">▼</span>
+            </div>
+            <div class="tlx" style="border-left:none;border-top:1px solid #BFDBFE;border-radius:0;margin:0">
+              <strong style="color:#1D4ED8">Who buys at this price?</strong> Mixed-use or garden MF developer who recognizes the FLUM designation + adjacent approvals as meaningful entitlement de-risking. Plans 200–350 MF units + townhomes.
+              <br><br><strong style="color:#1D4ED8">Key economics at $150K/ac</strong><br>
+              • Land cost/MF unit (18 units/ac): <strong>~$8,333/unit</strong><br>
+              • DFW market average land cost/unit: <strong>$24,943/unit</strong> (Valbridge 2024)<br>
+              • Subject land cost is <strong>67% below DFW average</strong> — very attractive for a developer<br>
+              • Implies total land cost of ~$8.25M at 55 acres
+              <br><br><strong style="color:#1D4ED8">Comparable anchors</strong><br>
+              • 501 W Wintergreen, DeSoto (17 ac, ex-MF-18): <strong>$150,725/ac</strong><br>
+              • 1601 Old Hickory Trl, DeSoto (9.6 ac): <strong>$187,110/ac</strong><br>
+              • 1407 S Uhl Rd, DeSoto (7.9 ac): <strong>$156,642/ac</strong><br>
+              • Lancaster 27-ac residential dev: <strong>$121,742/ac</strong><br>
+              • LandSearch DeSoto avg (all types): <strong>~$150K/ac</strong>
+            </div>
+          </div>
+
+          <div style="background:white;border:1.5px solid #FCD34D;border-radius:8px;overflow:hidden">
+            <div style="padding:7px 10px;cursor:pointer;display:flex;justify-content:space-between;align-items:center" onclick="this.nextElementSibling.classList.toggle('on');this.querySelector('.sarr').textContent=this.nextElementSibling.classList.contains('on')?'▲':'▼'">
+              <span style="font-size:10.5px;font-weight:700;color:#B45309">High Scenario · $200K–$275K/ac</span>
+              <span class="sarr" style="font-size:9px;color:#B45309">▼</span>
+            </div>
+            <div class="tlx" style="border-left:none;border-top:1px solid #FDE68A;border-radius:0;margin:0">
+              <strong style="color:#B45309">Who buys at this price?</strong> Well-capitalized MF/mixed-use developer paying for "last large parcel" scarcity + entitlement certainty. Even at $250K/ac, land cost/unit ($13,889) is 44% below DFW average.
+              <br><br><strong style="color:#B45309">What has to be true</strong><br>
+              • Competitive bidding process (2+ qualified buyers)<br>
+              • MF construction financing loosens<br>
+              • Road widening reaches construction phase<br>
+              • Buyer plans 350–450 units + retail pads — full Dest. MU build-out
+              <br><br><strong style="color:#B45309">Comparable anchors</strong><br>
+              • Lancaster Loop 9 (30 ac, I-35 frontage): <strong>$217,799/ac</strong><br>
+              • 1112 W Belt Line, DeSoto (6 ac, commercial): <strong>$225,551/ac</strong><br>
+              • Lancaster 110-ac I-35/I-45 corridor: <strong>$261,360/ac</strong><br>
+              • Signalized hard corner premium: <strong>+$15K–$40K/ac</strong> vs. comparable non-signalized
+            </div>
+          </div>
+        </div>
+
+        <!-- COMP MAP MARKERS -->
+        <div class="slbl">Land Comps — Click to Locate on Map</div>
+        <div style="font-size:9.5px;color:var(--sll);margin-bottom:8px;margin-top:-4px">Tap any comp to fly the map to that location</div>
+
+        <div class="comp on" id="comp-0" onclick="focusComp(0)">
+          <div class="compt"><div class="compname">1000 W. Wintergreen Rd, DeSoto</div><div class="compp" style="color:var(--amber);">$82K/ac ⚠</div></div>
+          <div class="compd">48.6 ac · $3.999M · Under contract · Estate/ranch</div>
+          <div class="compn">Distressed — no MU zoning, no entitlement · Sets raw floor · 1.5 mi N</div>
+        </div>
+        <div class="comp" id="comp-1" onclick="focusComp(1)">
+          <div class="compt"><div class="compname">501 W. Wintergreen Rd, DeSoto</div><div class="compp" style="color:var(--navy);">$151K/ac</div></div>
+          <div class="compd">17.25 ac · $2.6M · SF-9 (ex-MF-18 zoning) · Active</div>
+          <div class="compn">Best direct size comp · Former MF zoning · ~1.5 mi N</div>
+        </div>
+        <div class="comp" id="comp-2" onclick="focusComp(2)">
+          <div class="compt"><div class="compname">1000 E. Danieldale Rd, DeSoto</div><div class="compp" style="color:var(--navy);">$469K/ac</div></div>
+          <div class="compd">4.97 ac · $2.33M · Retail zoning · Listed Aug 2025</div>
+          <div class="compn">Same road — small-parcel retail premium; not apples-to-apples</div>
+        </div>
+        <div class="comp" id="comp-3" onclick="focusComp(3)">
+          <div class="compt"><div class="compname">Lancaster Loop 9 (I-35 frontage)</div><div class="compp" style="color:var(--navy);">$218K/ac</div></div>
+          <div class="compd">30.2 ac · $6.57M · Commercial/I-35 · Active</div>
+          <div class="compn">High end anchor — major interstate frontage; sets ceiling context</div>
+        </div>
+        <div class="comp" id="comp-4" onclick="focusComp(4)">
+          <div class="compt"><div class="compname">South Dallas Raw Land (Simpson Stuart)</div><div class="compp" style="color:var(--sll);">$48K/ac</div></div>
+          <div class="compd">62.7 ac · $3M · 2025 closed sale · Kennedy Funding</div>
+          <div class="compn">Only confirmed closed comp · Raw, unentitled · True floor</div>
+        </div>
+
+        <!-- ENTITLEMENT PREMIUM -->
+        <div class="slbl" style="margin-top:13px">Entitlement Premium Breakdown</div>
+        <div style="background:white;border:1.5px solid var(--bdr);border-radius:8px;padding:10px 11px;font-size:10.5px;color:var(--slm);line-height:1.75;margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--bg);padding-bottom:4px;margin-bottom:4px"><span>Raw unentitled land (floor)</span><span style="font-weight:700;color:var(--sl)">$48K–$75K/ac</span></div>
+          <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--bg);padding-bottom:4px;margin-bottom:4px"><span>+ Dest. MU FLUM designation</span><span style="font-weight:700;color:#1D4ED8">+50–100%</span></div>
+          <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--bg);padding-bottom:4px;margin-bottom:4px"><span>+ Adjacent approved projects (Parc, Red Sea)</span><span style="font-weight:700;color:#1D4ED8">+$15K–$25K/ac</span></div>
+          <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--bg);padding-bottom:4px;margin-bottom:4px"><span>+ Signalized hard corner (Bolton Boone signal)</span><span style="font-weight:700;color:#1D4ED8">+$15K–$40K/ac</span></div>
+          <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--bg);padding-bottom:4px;margin-bottom:4px"><span>− 55-acre bulk discount</span><span style="font-weight:700;color:#DC2626">−$20K–$40K/ac</span></div>
+          <div style="display:flex;justify-content:space-between;padding-top:2px"><span style="font-weight:700;color:var(--sl)">Indicated value range</span><span style="font-weight:800;color:#1D4ED8">$125K–$175K/ac</span></div>
+        </div>
+
+        <!-- LAND COST PER UNIT -->
+        <div class="slbl">Land Cost / MF Unit Benchmark</div>
+        <div style="background:white;border:1.5px solid var(--bdr);border-radius:8px;padding:10px 11px;font-size:10.5px;color:var(--slm);line-height:1.75;margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--bg);padding-bottom:4px;margin-bottom:4px"><span>DFW market avg land cost/unit</span><span style="font-weight:700;color:var(--sl)">$24,943</span></div>
+          <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--bg);padding-bottom:4px;margin-bottom:4px"><span>Subject at $100K/ac (18 units/ac)</span><span style="font-weight:700;color:#166534">$5,556/unit ✓</span></div>
+          <div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--bg);padding-bottom:4px;margin-bottom:4px"><span>Subject at $150K/ac (18 units/ac)</span><span style="font-weight:700;color:#166534">$8,333/unit ✓</span></div>
+          <div style="display:flex;justify-content:space-between"><span>Subject at $250K/ac (18 units/ac)</span><span style="font-weight:700;color:#1D4ED8">$13,889/unit ✓</span></div>
+          <div style="font-size:9px;color:var(--sll);margin-top:6px">Even at the high case, land cost is 44% below DFW average — strong economics for any garden MF developer. Source: Valbridge Property Advisors 2024.</div>
+        </div>
+
+        <!-- HBU -->
+        <div class="slbl">Highest & Best Use</div>
+        <div class="hbu top"><div class="hbun">1</div><div><div class="hbut">Multifamily — Garden / BTR</div><div class="hbus">Adjacent PD-121 · Dest. MU FLUM · 300–500 units feasible · $8,333/unit land cost at mid price</div></div></div>
+        <div class="hbu"><div class="hbun">2</div><div><div class="hbut">Master-Planned SF / Townhome</div><div class="hbus">Bloomfield/D.R. Horton profile · $406K–$733K homes active on Danieldale · 150–250 lots implied</div></div></div>
+        <div class="hbu"><div class="hbun">3</div><div><div class="hbut">Mixed-Use (MF + Retail Pads)</div><div class="hbus">Consistent with FLUM · Retail viability improves after Danieldale widening opens</div></div></div>
+
+        <!-- LIKELY BUYER -->
+        <div class="slbl" style="margin-top:12px">Likely Buyer Profile</div>
+        <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:10px">
+          <div style="background:white;border:1.5px solid var(--green);border-radius:7px;padding:8px 11px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px"><div style="font-size:11px;font-weight:700;color:var(--sl);">Garden MF / BTR Developer</div><div style="font-size:9px;font-weight:700;color:var(--green);background:var(--green-bg);padding:2px 7px;border-radius:4px;">HIGH FIT</div></div>
+            <div style="font-size:9.5px;color:var(--slm)">Pillar Income Asset Mgmt profile (Parc neighbor) · Needs 300–500 units · Land economics very favorable</div>
+          </div>
+          <div style="background:white;border:1.5px solid var(--green);border-radius:7px;padding:8px 11px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px"><div style="font-size:11px;font-weight:700;color:var(--sl);">Regional Homebuilder</div><div style="font-size:9px;font-weight:700;color:var(--green);background:var(--green-bg);padding:2px 7px;border-radius:4px;">HIGH FIT</div></div>
+            <div style="font-size:9.5px;color:var(--slm)">Bloomfield, D.R. Horton, M/I, Lennar active in Southern Dallas County · Danieldale corridor proven by Homestead at Daniel Farms ($406K–$733K)</div>
+          </div>
+          <div style="background:white;border:1.5px solid var(--bdr);border-radius:7px;padding:8px 11px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px"><div style="font-size:11px;font-weight:700;color:var(--sl);">Townhome / Mixed-Use Dev</div><div style="font-size:9px;font-weight:700;color:var(--amber);background:var(--amber-bg);padding:2px 7px;border-radius:4px;">MED-HIGH</div></div>
+            <div style="font-size:9.5px;color:var(--slm)">Smith Legacy (Red Sea) profile · Smaller capital stack · Would likely phase the site</div>
+          </div>
+          <div style="background:white;border:1.5px solid var(--bdr);border-radius:7px;padding:8px 11px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px"><div style="font-size:11px;font-weight:700;color:var(--sl);">Industrial / Commercial</div><div style="font-size:9px;font-weight:700;color:var(--sll);background:var(--bg);padding:2px 7px;border-radius:4px;">LOW FIT</div></div>
+            <div style="font-size:9.5px;color:var(--slm)">FLUM and adjacent residential approvals make industrial unlikely · City steering away from warehouse uses</div>
+          </div>
+        </div>
+
+        <!-- CAVEATS -->
+        <div class="slbl">Key Caveats</div>
+        <div style="background:#FFF7ED;border:1.5px solid #FCD34D;border-radius:8px;padding:10px 11px;font-size:10px;color:#92400E;line-height:1.7;margin-bottom:6px">
+          <strong>⚠ No CoStar closed-transaction data available publicly.</strong> All DeSoto comps are active listings — buyers can negotiate below asking. A licensed MAI appraisal using CoStar/MLS closed data should be obtained before finalizing any pricing decision.<br><br>
+          • FLUM ≠ actual zoning — full PD rezoning still required (~12–24 month process)<br>
+          • 55-acre bulk limits buyer pool vs. 5–15 acre parcels<br>
+          • DFW MF headwinds: 12% vacancy Q4 2025, -1.8% rent growth YoY<br>
+          • Road widening in design; ROW acquisitions still ongoing as of Feb 2025
+        </div>
+      </div>
+
+      <div class="legend">
+        <h4>Map Legend</h4>
+        <div class="lgi"><div class="lgd" style="background:#003366;border:2px solid white;box-shadow:0 0 0 1.5px #003366;"></div>★ Subject Property (1400 Bolton Boone)</div>
+        <div class="lgi"><div class="lgd" style="background:#D97706;"></div>R — Red Sea Townhomes (1001 Danieldale)</div>
+        <div class="lgi"><div class="lgd" style="background:#1D4ED8;"></div>P — Parc at Daniel Farms (9100 Bolton Boone)</div>
+        <div class="lgi"><div class="lgd" style="background:#15803D;"></div>H — Homestead at Daniel Farms</div>
+        <div class="lgi"><div class="lgd" style="background:#0F766E;"></div>Z — ZVL Buyer DD (2400 Bolton Boone)</div>
+        <div class="lgi"><div style="width:20px;height:2px;border-top:2.5px dashed #7C3AED;flex-shrink:0;"></div>Danieldale Rd Widening corridor</div>
+        <div class="lgi"><div class="lgd" style="background:#6366F1;border-radius:2px;"></div>◆ Land sale comps</div>
+      </div>
+    </div>
+
+    <!-- MAP -->
+    <div style="position:relative;height:100%;display:flex;flex-direction:column;"><div id="map" style="flex:1;width:100%;height:100%;"></div></div>
+  </div>
+</div>
+
+<!-- Mobile sidebar overlay (tap to close) -->
+<div id="sb-overlay" class="hidden" onclick="closeSidebar()"></div>
+
+<!-- Mobile toggle pill -->
+<button id="sb-toggle" onclick="toggleSidebar()">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" id="sb-icon">
+    <rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="18" rx="1"/>
+  </svg>
+  <span id="sb-label">Details</span>
+</button>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <span class="lb-close" onclick="closeLightbox()">✕</span>
+  <img class="lb-img" id="lb-img" src="" alt="" onclick="event.stopPropagation()" />
+  <div class="lb-caption" id="lb-cap"></div>
+</div>
+
+<script>
+// ── GALLERY DATA ──
+const rsImgs = [
+  {src:'assets/redsea_elev-01_web.jpg', cap:'Cover sheet with rendered townhome facade — 4-story modern design facing Danieldale Rd (Vizual Architecture, Oct 2025)'},
+  {src:'assets/redsea_elev-02_web.jpg', cap:'Site plan phasing — 8 phases total: townhomes east, multifamily/garage/retail/restaurant west, church remodel final phase'},
+];
+const parcImgs = [
+  {src:'assets/parc_elev-01_web.jpg', cap:'Clubhouse — all 4 elevation views. Composition shingle roof, fiber cement board & batten, manufactured stone accents (HEDK Architects, Jan 2025)'},
+  {src:'assets/parc_elev-02_web.jpg', cap:'Carport elevations & plans — single-post metal carport structures, 4–8 car configurations'},
+  {src:'assets/parc_site-1_web.jpg', cap:'Site plan — Danieldale Rd frontage, Bolton Boone Dr edge, Janice Orr Blvd. Landscape buffer, phasing, building footprints'},
+];
+
+function showGal(proj, idx, btn) {
+  const imgs = proj === 'rs' ? rsImgs : parcImgs;
+  document.getElementById(proj+'-img').src = imgs[idx].src;
+  document.getElementById(proj+'-img').alt = imgs[idx].cap;
+  document.getElementById(proj+'-cap').textContent = imgs[idx].cap;
+  document.querySelectorAll(`#card-${proj==='rs'?0:1} .gtab`).forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+function openLightbox(src, alt) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-cap').textContent = alt;
+  document.getElementById('lightbox').classList.add('on');
+}
+function closeLightbox() { document.getElementById('lightbox').classList.remove('on'); }
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeLightbox(); });
+
+// ── MAP ──
+const map = new maplibregl.Map({
+  container: 'map',
+  style: 'https://tiles.openfreemap.org/styles/positron',
+  center: [-96.878, 32.636],
+  zoom: 15.0, pitch: 0, bearing: 0
+});
+map.addControl(new maplibregl.NavigationControl(), 'bottom-right');
+
+// ── PROJECT MARKERS ──
+// Corrected GPS coords from Google Maps verification
+const projects = [
+  { id:0, label:'R', color:'#D97706', badgeBg:'#FEF3C7', badgeColor:'#92400E', status:'Entitled',
+    name:'Red Sea — Smith Legacy', sub:'1001 W. Danieldale Rd · 9.86 ac',
+    coords:[-96.879243, 32.633932],
+    rows:[['Townhomes','44 units · 4-story · ~50 ft'],['MF Building','66 units'],['Retail/Office','35,000 SF + restaurant'],['Phase 1','10 townhomes'],['Zoning','MU-R (Z-1543-25)'],['Approved','Dec 2025 P&Z / Jan 2026']],
+    url:'https://desototx.new.swagit.com/videos/363162' },
+  { id:1, label:'P', color:'#1D4ED8', badgeBg:'#DBEAFE', badgeColor:'#1E3A8A', status:'Approved 7-0',
+    name:'Parc at Daniel Farms', sub:'~9100 Bolton Boone Dr · PD-121 · 82 ac',
+    coords:[-96.881482, 32.636075],
+    rows:[['Acreage','82.19 acres'],['Type','Garden-style multifamily'],['Owner','Pillar Income AM'],['Clubhouse','6,491 SF'],['Phase 1','17.4 acres'],['Approved','May 6, 2025 (7-0)']],
+    url:'https://desototx.new.swagit.com/videos/341869' },
+  { id:2, label:'I', color:'#7C3AED', badgeBg:'#EDE9FE', badgeColor:'#4C1D95', status:'In Design',
+    name:'Danieldale Rd Widening', sub:'Westmoreland → Duncanville limit',
+    coords:[-96.878440, 32.633300],
+    rows:[['Scope','4 lanes + median + utilities'],['Signal','NEW at Bolton Boone Dr ★'],['Design','90% complete (Feb 2025)'],['Bids','Phase 1A opened Feb 2025'],['Partners','DeSoto + Duncanville'],['Funding','$48.55M CIP Bond']],
+    url:'https://desototribune.com/2025/02/12/city-infrastructure-road-projects-drainage-and-public-amenities/' },
+  { id:3, label:'Z', color:'#0F766E', badgeBg:'#CCFBF1', badgeColor:'#134E4A', status:'Active DD',
+    name:'ZVL Buyer Activity', sub:'2400 Bolton Boone Dr · 3 ZVLs in 3 months',
+    coords:[-96.878440, 32.640500],
+    rows:[['ZVL #1','Nov 17, 2025'],['ZVL #2','Jan 21, 2026'],['ZVL #3','Feb 2, 2026'],['Signal','Active buyer DD'],['Action','File PIA request to ID filer'],['Portal','Tyler EnerGov (DeSoto)']],
+    url:null },
+  { id:4, label:'H', color:'#15803D', badgeBg:'#DCFCE7', badgeColor:'#14532D', status:'Active Sales',
+    name:'Homestead at Daniel Farms', sub:'Near Belt Line Rd · M/I Homes',
+    coords:[-96.880, 32.6450],
+    rows:[['Builder','M/I Homes'],['Type','Master-planned SF'],['Median Price','$389,000'],['Top Plan','4BR/2.5BA/2,300 SF'],['Incentives','Avg $12,000'],['Status','Active sellout']],
+    url:null },
+];
+
+// Subject star
+const starEl = document.createElement('div');
+starEl.className = 'spin'; starEl.innerHTML = '★';
+const subjectPopup = new maplibregl.Popup({offset:22}).setHTML(`<div>
+  <div class="pub" style="background:#003366;"></div>
+  <div class="puh"><div class="put">★ Subject Property</div><div class="pus">1400 Bolton Boone Dr, DeSoto TX 75115</div><div class="pust" style="background:#003366;color:white;">For Sale</div></div>
+  <div class="pub2">
+    <div class="pur"><span class="puk">Status</span><span class="puv">Family-owned · For Sale</span></div>
+    <div class="pur"><span class="puk">Acreage</span><span class="puv">55.08 ac (DCAD)</span></div>
+    <div class="pur"><span class="puk">FLUM</span><span class="puv">Destination Mixed Use</span></div>
+    <div class="pur"><span class="puk">Est. $/Acre</span><span class="puv">$150K–$250K (entitled, MU)</span></div>
+    <div class="pur"><span class="puk">HBU</span><span class="puv">Multifamily / Master SF</span></div>
+  </div></div>`);
+new maplibregl.Marker({element:starEl}).setLngLat([-96.876425, 32.635973]).setPopup(subjectPopup).addTo(map);
+starEl.addEventListener('click', () => subjectPopup.addTo(map));
+
+const markers = [];
+projects.forEach(p => {
+  const el = document.createElement('div'); el.className = 'mpin'; el.style.background = p.color; el.innerHTML = p.label;
+  const rows = p.rows.map(([k,v]) => `<div class="pur"><span class="puk">${k}</span><span class="puv">${v}</span></div>`).join('');
+  const lnk = p.url ? `<a class="pul" href="${p.url}" target="_blank">View City Record ↗</a>` : '';
+  const popup = new maplibregl.Popup({offset:18}).setHTML(`<div>
+    <div class="pub" style="background:${p.color};"></div>
+    <div class="puh"><div class="put">${p.name}</div><div class="pus">${p.sub}</div><div class="pust" style="background:${p.badgeBg};color:${p.badgeColor};">${p.status}</div></div>
+    <div class="pub2">${rows}</div>${lnk}</div>`);
+  const marker = new maplibregl.Marker({element:el}).setLngLat(p.coords).setPopup(popup).addTo(map);
+  el.addEventListener('click', () => { switchToProjectCard(p.id); popup.addTo(map); });
+  markers.push(marker);
+});
+
+// ── COMP MARKERS ──
+// Wintergreen Rd comps are ~1.4 mi north; approximate positions
+const comps = [
+  // 0: 1000 W Wintergreen — estate/ranch, distressed floor
+  { name:'1000 W. Wintergreen Rd', price:'$82K/ac ⚠ distressed', color:'#D97706', coords:[-96.8837, 32.6530] },
+  // 1: 501 W Wintergreen — 17.25 ac, ex-MF-18, best size comp
+  { name:'501 W. Wintergreen Rd', price:'$151K/ac', color:'#1D4ED8', coords:[-96.8808, 32.6527] },
+  // 2: 1000 E Danieldale — same road, retail, small-parcel premium
+  { name:'1000 E. Danieldale Rd', price:'$469K/ac (small-parcel)', color:'#7C3AED', coords:[-96.8639, 32.6329] },
+  // 3: Lancaster Loop 9 — 30 ac I-35 frontage, ceiling anchor (~3.5 mi SE)
+  { name:'Lancaster Loop 9 (I-35)', price:'$218K/ac', color:'#0F766E', coords:[-96.8560, 32.5980] },
+  // 4: 2700 Simpson Stuart — 62.7 ac South Dallas raw, only confirmed closed sale
+  { name:'S. Dallas Raw Land (Simpson Stuart)', price:'$48K/ac (closed 2025)', color:'#94A3B8', coords:[-96.8127, 32.6760] },
+];
+
+const compMarkers = [];
+comps.forEach((c, i) => {
+  const el = document.createElement('div');
+  el.className = 'cmppin';
+  el.style.background = c.color;
+  el.style.display = 'none'; // hidden by default, shown when Comps tab active
+  const popup = new maplibregl.Popup({offset:12}).setHTML(`<div>
+    <div class="pub" style="background:${c.color};"></div>
+    <div class="puh"><div class="put">◆ ${c.name}</div><div class="pus">Land Sale Comp</div></div>
+    <div class="pub2"><div class="pur"><span class="puk">$/Acre</span><span class="puv">${c.price}</span></div></div></div>`);
+  const m = new maplibregl.Marker({element:el}).setLngLat(c.coords).setPopup(popup).addTo(map);
+  el.addEventListener('click', () => {
+    // Switch to comps tab and open sidebar on mobile
+    document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
+    document.querySelector('.tab[onclick*="comps"]').classList.add('on');
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+    document.getElementById('tab-comps').classList.add('on');
+    if (window.innerWidth <= 700) openSidebar();
+    setTimeout(() => { focusComp(i); popup.addTo(map); }, window.innerWidth <= 700 ? 350 : 50);
+  });
+  compMarkers.push({marker:m, el});
+});
+
+// ── PARCEL OVERLAYS ── (tightened to actual boundaries based on site plans)
+map.on('load', () => {
+  // Danieldale road widening (runs east-west on Danieldale Rd at lat ~32.6330)
+  map.addSource('danieldale',{type:'geojson',data:{type:'Feature',geometry:{type:'LineString',
+    coordinates:[[-96.855,32.6333],[-96.862,32.6333],[-96.868,32.6333],[-96.874,32.6333],[-96.878440,32.6333],[-96.883,32.6333],[-96.890,32.6333],[-96.900,32.6333]]
+  }}});
+  map.addLayer({id:'dd-glow',type:'line',source:'danieldale',paint:{'line-color':'#7C3AED','line-width':14,'line-opacity':0.1}});
+  map.addLayer({id:'dd-line',type:'line',source:'danieldale',paint:{'line-color':'#7C3AED','line-width':3,'line-opacity':0.85,'line-dasharray':[7,3]}});
+
+  // Bolton Boone Drive (runs north-south at lng ~-96.8743)
+  map.addSource('boltonboone',{type:'geojson',data:{type:'Feature',geometry:{type:'LineString',
+    coordinates:[[-96.878440,32.6270],[-96.878440,32.6333],[-96.878440,32.6387],[-96.878440,32.6430],[-96.878440,32.6500]]
+  }}});
+  map.addLayer({id:'bb-glow',type:'line',source:'boltonboone',paint:{'line-color':'#7C3AED','line-width':10,'line-opacity':0.08}});
+  map.addLayer({id:'bb-line',type:'line',source:'boltonboone',paint:{'line-color':'#7C3AED','line-width':2,'line-opacity':0.55,'line-dasharray':[7,3]}});
+
+  // Subject parcel — 1400 Bolton Boone (55.08 ac per DCAD)
+  // EAST of Bolton Boone Dr, NORTH of Danieldale Rd
+  // Coords computed from DCAD parcel dims (2400ft wide × 998ft tall)
+  map.addSource('subject',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',
+    coordinates:[[
+    [-96.878444, 32.633292],
+    [-96.877422, 32.633307],
+    [-96.877421, 32.633251],
+    [-96.874249, 32.633283],
+    [-96.874247, 32.634272],
+    [-96.874247, 32.634409],
+    [-96.874237, 32.636043],
+    [-96.874409, 32.636045],
+    [-96.874405, 32.638663],
+    [-96.878405, 32.638651],
+    [-96.878412, 32.637728],
+    [-96.878087, 32.637726],
+    [-96.878089, 32.637451],
+    [-96.878414, 32.637453],
+    [-96.878444, 32.633292]
+  ]]
+  }}});
+  map.addLayer({id:'subj-fill',type:'fill',source:'subject',paint:{'fill-color':'#003366','fill-opacity':0.13}});
+  map.addLayer({id:'subj-out',type:'line',source:'subject',paint:{'line-color':'#003366','line-width':2.5,'line-dasharray':[4,2]}});
+
+  // Red Sea — 1001 Danieldale (4.86 ac per DCAD; NW corner of intersection)
+  // WEST of Bolton Boone, fronts Danieldale on south. Coords from DCAD dims.
+  map.addSource('redsea',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',
+    coordinates:[[[-96.878444,32.6333],[-96.880041,32.6333],[-96.880041,32.634564],[-96.878444,32.634564],[-96.878444,32.6333]]]
+  }}});
+  map.addLayer({id:'rs-fill',type:'fill',source:'redsea',paint:{'fill-color':'#D97706','fill-opacity':0.15}});
+  map.addLayer({id:'rs-out',type:'line',source:'redsea',paint:{'line-color':'#D97706','line-width':2,'line-dasharray':[4,2]}});
+
+  // Parc at Daniel Farms — 80.9 ac per DCAD, WEST of Bolton Boone, north of Red Sea
+  // Coords computed from DCAD dims (3200ft wide × 1101ft tall)
+  map.addSource('parc',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',
+    coordinates:[[[-96.878444,32.634564],[-96.884520,32.634564],[-96.884520,32.637586],[-96.878444,32.637586],[-96.878444,32.634564]]]
+  }}});
+  map.addLayer({id:'parc-fill',type:'fill',source:'parc',paint:{'fill-color':'#1D4ED8','fill-opacity':0.09}});
+  map.addLayer({id:'parc-out',type:'line',source:'parc',paint:{'line-color':'#1D4ED8','line-width':1.8,'line-dasharray':[4,2]}});
+
+  // ── PARCEL CLICK HANDLERS ── tap fill to get a visual info card
+  const parcelInfo = {
+    'subj-fill': {
+      title: '1400 Bolton Boone Dr — Subject Property',
+      sub: '55 acres · Family-owned · For Sale · Destination Mixed Use FLUM',
+      color: '#003366',
+      desc: 'Large undeveloped tract on the east side of Bolton Boone Dr, just north of the Danieldale Rd intersection. Open land — no structures. Flat topography. City has designated this Destination Mixed Use in the FLUM, supporting multifamily, townhomes, retail, and office.',
+      img: null
+    },
+    'rs-fill': {
+      title: 'Red Sea — Smith Legacy Development',
+      sub: '9.86 ac · 44 Townhomes + 66 MF + Retail · MU-R Entitled',
+      color: '#D97706',
+      desc: 'Northwest corner of Danieldale & Bolton Boone. Former St. Stephen Community Church site. Approved for 44 four-story townhomes (rooftop terraces), 66-unit multifamily building, 35K SF office/retail, restaurant, and structured parking. 8 phases total.',
+      img: 'assets/redsea_elev-01_web.jpg',
+      imgAlt: 'Red Sea elevation rendering',
+      action: () => switchToProjectCard(0)
+    },
+    'parc-fill': {
+      title: 'Parc at Daniel Farms — Pillar Income',
+      sub: '80.9 ac · Garden-Style Multifamily · PD-121 Approved 7-0',
+      color: '#1D4ED8',
+      desc: 'Large garden-style multifamily development west of Bolton Boone, north of the Red Sea site. Approved unanimously May 2025. Phase 1 is 17.4 acres. Clubhouse 6,491 SF, hip roofs, fiber cement siding. Owner: Pillar Income Asset Management (Jonathan Clayton).',
+      img: 'assets/parc_elev-01_web.jpg',
+      imgAlt: 'Parc at Daniel Farms clubhouse elevation',
+      action: () => switchToProjectCard(1)
+    }
+  };
+
+  ['subj-fill','rs-fill','parc-fill'].forEach(layerId => {
+    map.on('click', layerId, (e) => {
+      const info = parcelInfo[layerId];
+      // Build popup HTML
+      const imgHtml = info.img
+        ? `<img src="${info.img}" alt="${info.imgAlt}" style="width:100%;display:block;border-bottom:1px solid #eee;border-radius:0;max-height:140px;object-fit:cover;cursor:pointer" onclick="openLightbox(this.src, this.alt)" />`
+        : `<div style="background:${info.color};height:6px;"></div>`;
+      const html = `<div>
+        ${imgHtml}
+        <div style="padding:10px 12px 8px">
+          <div style="font-size:11.5px;font-weight:800;color:#0F172A;line-height:1.3;margin-bottom:3px">${info.title}</div>
+          <div style="font-size:9.5px;font-weight:600;color:${info.color};margin-bottom:7px">${info.sub}</div>
+          <div style="font-size:10px;color:#475569;line-height:1.6;margin-bottom:8px">${info.desc}</div>
+          <button onclick="parcelInfoAction('${layerId}')" style="background:${info.color};color:white;border:none;border-radius:6px;padding:6px 12px;font-size:10px;font-weight:700;cursor:pointer;width:100%">Open Details →</button>
+        </div>
+      </div>`;
+      new maplibregl.Popup({maxWidth:'280px', offset:8})
+        .setLngLat(e.lngLat)
+        .setHTML(html)
+        .addTo(map);
+    });
+    map.on('mouseenter', layerId, () => { map.getCanvas().style.cursor = 'pointer'; });
+    map.on('mouseleave', layerId, () => { map.getCanvas().style.cursor = ''; });
+  });
+
+  // Signal icon at intersection
+  const sigEl = document.createElement('div');
+  sigEl.innerHTML = '🚦 New Signal';
+  sigEl.style.cssText = 'background:#7C3AED;color:white;font-size:8.5px;font-weight:700;letter-spacing:.04em;padding:3px 7px;border-radius:4px;text-transform:uppercase;box-shadow:0 2px 8px rgba(0,0,0,.2);white-space:nowrap;cursor:default;pointer-events:none;';
+  new maplibregl.Marker({element:sigEl,anchor:'bottom'}).setLngLat([-96.8784,32.6333]).addTo(map);
+});
+
+// ── CARD TOGGLE ──
+function toggleCard(id) {
+  const card = document.getElementById('card-'+id);
+  const isOpen = card.classList.contains('on');
+  document.querySelectorAll('.card.on').forEach(c => c.classList.remove('on'));
+  if (!isOpen) {
+    card.classList.add('on');
+    if (id < projects.length) {
+      map.flyTo({center:projects[id].coords, zoom:15.6, duration:800, essential:true});
+      setTimeout(() => markers[id].getPopup().addTo(map), 500);
+    }
+  }
+}
+function switchToProjectCard(id) {
+  // Switch to projects tab then open card
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
+  document.querySelector('.tab[onclick*="projects"]').classList.add('on');
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  document.getElementById('tab-projects').classList.add('on');
+  // On mobile: open sidebar so the card is visible
+  if (window.innerWidth <= 700) openSidebar();
+  setTimeout(() => {
+    toggleCard(id);
+    // Scroll the card into view inside the sidebar
+    const card = document.getElementById('card-' + id);
+    if (card) card.scrollIntoView({behavior:'smooth', block:'start'});
+  }, window.innerWidth <= 700 ? 350 : 100);
+}
+
+// ── COMP FOCUS ──
+function focusComp(idx) {
+  document.querySelectorAll('.comp').forEach((c,i) => c.classList.toggle('on', i===idx));
+  const c = comps[idx];
+  map.flyTo({center:c.coords, zoom:15.0, duration:800, essential:true});
+  setTimeout(() => compMarkers[idx].marker.getPopup().addTo(map), 500);
+  // Scroll comp card into view in sidebar
+  const compEl = document.getElementById('comp-' + idx);
+  if (compEl) setTimeout(() => compEl.scrollIntoView({behavior:'smooth', block:'nearest'}), 200);
+}
+
+// ── TABS ──
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  document.getElementById('tab-'+name).classList.add('on');
+
+  // Show/hide comp markers
+  const showComps = name === 'comps';
+  compMarkers.forEach(({el}) => el.style.display = showComps ? 'block' : 'none');
+
+  if (showComps) {
+    // Zoom out to show both subject + Wintergreen comps ~1.5 mi north
+    map.flyTo({center:[-96.876, 32.644], zoom:13.2, duration:900});
+  } else if (name === 'projects') {
+    map.flyTo({center:[-96.878, 32.6355], zoom:15.0, duration:800});
+  }
+}
+
+// ── TIMELINE ──
+const tlData = [
+  {date:'Apr 2026',color:'#D97706',title:'DeSoto Econ Development Symposium',
+   desc:'Councilmember Byrd: "big things are happening in DeSoto." City presented growth strategy to business community.',
+   extra:'<strong>Key People:</strong> Councilmember Carl Byrd (District 3, growth proponent), Mayor Rachel Proctor, Councilmember Candice Chisholm (economic development chair), City Manager Tarron Richardson, DEDC Executive Director Darryl Maximilian Robinson.<br><br><strong>City Strategy:</strong> DeSoto is mid-pivot — away from industrial/warehouse toward high-value mixed-use and life sciences. Active initiatives: 90-acre BioLife Science Campus (pre-development, partnered with DFW airport corridor anchor), $1B bio-manufacturing RFP issued, Baker Tilly engaged to rewrite target industry framework, $200K appropriated to overhaul 40-year-old zoning code.<br><br><strong>Fiscal Position:</strong> AA bond rating (S&P + Moody\'s, May 2025). $48.55M CIP bond issued. DeSoto\'s general fund is structurally balanced per audits through FY2025.<br><br><strong>Signal for Subject Site:</strong> Byrd publicly stated "big things are happening in DeSoto" — political will for continued MU approvals is strong. The 1400 Bolton Boone corridor sits squarely in the FLUM\'s Destination Mixed Use zone, which the city has approved every application in.'},
+  {date:'Mar 2026',color:'#DC2626',title:'Two Affordable Housing Applications (TDHCA)',
+   desc:'Reserve at DeSoto (100 units elderly) and Victory Village (90 units) submitted under 2026 9% HTC round.',
+   extra:'<strong>Applications:</strong><br>• <em>Reserve at DeSoto</em> — 100 units, senior/elderly housing, 121 S. Elerson Rd. Developer not publicly disclosed in filings reviewed.<br>• <em>Victory Village</em> — 90 units, family workforce housing, 911 N. Hampton Rd.<br><br><strong>Program:</strong> Texas 9% Low Income Housing Tax Credit (LIHTC), administered by TDHCA. Highly competitive — statewide award rate typically under 30%. Awards expected Q3 2026.<br><br><strong>Location Context:</strong> Neither project is on the Bolton Boone/Danieldale corridor but both confirm the city is actively supporting residential density across multiple neighborhoods simultaneously. Combined with PD-121 (Parc) and Red Sea, DeSoto is on track to add 500+ residential units in the next 3–5 years.'},
+  {date:'Feb 2026',color:'#0F766E',title:'3rd ZVL — 2400 Bolton Boone',
+   desc:'ZVL0020-2026 filed Feb 2, 2026. Third ZVL in 3 months at same address.',
+   extra:'<strong>What is a ZVL?</strong> A Zoning Verification Letter is a formal written confirmation from DeSoto\'s planning department confirming: (1) current zoning classification, (2) permitted uses, (3) any active variances or special conditions. Developers and lenders require them during due diligence.<br><br><strong>3 ZVLs in 3 months at the same address is highly unusual.</strong> Typical pattern: 1 ZVL per buyer per site. Multiple ZVLs suggest either: (a) multiple parties independently evaluating the same parcel, or (b) one party re-filing as deal structure evolved (e.g. different entity names for a fund, lender, or JV partner).<br><br><strong>Timing significance:</strong> All three ZVLs occurred after the Danieldale widening design hit 90%, after Red Sea MU-R approval, and as Parc at Daniel Farms was moving through amendment. The filer was almost certainly tracking these catalysts.<br><br><strong>Action item:</strong> File a Texas Public Information Act (PIA) request to cityclerk@desototx.gov requesting the ZVL applicant name, contact, and any correspondence for ZVL0007-2025, ZVL0015-2026, and ZVL0020-2026. Response required within 10 business days.'},
+  {date:'Jan 2026',color:'#D97706',title:'Red Sea — City Council Final Vote (Scheduled)',
+   desc:'Z-1543-25 scheduled for DeSoto City Council vote per staff report notification section.',
+   extra:'<strong>Case:</strong> Z-1543-25 — Rezone from MU-1 to MU-R, 1001 W. Danieldale Rd (9.86 ac)<br><strong>Scheduled:</strong> January 6, 2026 City Council public hearing (per Dec 9 P&Z staff report)<br><strong>P&Z vote:</strong> Unanimous approval, Dec 9, 2025<br><strong>Outcome:</strong> Not yet confirmed from primary record as of April 2026.<br><br><strong>Key People:</strong><br>• <em>Herschel Smith</em> — Applicant/Developer, Smith Legacy Development. Dallas-based developer with DeSoto track record.<br>• <em>Johnny Limones</em> — Architect, Vizual Architecture LLC. Prepared all elevation and site plan submittals.<br>• <em>St. Stephen Community Church Inc</em> — Property owner of record (4.86 ac per DCAD, Account #65001011300000100).<br><br><strong>Verify:</strong> Call DeSoto Planning Dept at (972) 230-9620 or review the Jan 6, 2026 council video at desototx.new.swagit.com/videos.'},
+  {date:'Jan 2026',color:'#0F766E',title:'2nd ZVL — 2400 Bolton Boone',
+   desc:'ZVL0015-2026 filed Jan 21, 2026. Second ZVL in 2 months.',
+   extra:'Second ZVL at 2400 Bolton Boone within a 2-month window, following the first in November 2025. Rapid succession suggests an active deal process.'},
+  {date:'Dec 2025',color:'#D97706',title:'Red Sea — P&Z Unanimous Approval',
+   desc:'Dec 9, 2025 — DeSoto P&Z unanimously approved corrective MU-R rezoning (Z-1543-25).',
+   extra:'<strong>Project Program (8 phases):</strong><br>• Phase 1: 10 townhomes (Danieldale frontage, 4-story, ~50 ft, rooftop terraces)<br>• Phases 2–4: 34 additional townhomes<br>• Phases 5–6: 66-unit multifamily building<br>• Phase 7: 35,000 SF office/retail + 5,000 SF restaurant<br>• Phase 8: 33,600 SF structured parking garage<br><br><strong>Why MU-1 → MU-R?</strong> MU-1 (Mixed Use 1) does not permit townhomes as a use type per DeSoto\'s UDC. Staff caught the discrepancy when Smith Legacy submitted the site plan in Nov 2025. MU-R (Mixed Use Residential) explicitly permits townhomes + multifamily + ground-floor retail — the correct designation.<br><br><strong>Key People:</strong><br>• <em>Herschel Smith</em>, Smith Legacy Development — developer/applicant<br>• <em>Johnny Limones</em>, Vizual Architecture LLC — architect of record<br>• <em>St. Stephen Community Church Inc</em> — landowner<br><br><strong>Staff finding:</strong> Compatible with 2024 Comprehensive Plan Destination Mixed Use FLUM. Unanimous P&Z recommendation.'},
+  {date:'Dec 2025',color:'#7C3AED',title:'Hampton Road Corridor Rezoning Approved',
+   desc:'Dec 2, 2025 — Council approved HRCC for walkable high-density Urban Center.',
+   extra:'Hampton Road Character Code (HRCC) establishes high-density mixed-use "Urban Center" along Hampton Road. Separate from Danieldale/Bolton Boone but signals city-wide push toward density and walkable mixed-use. $50M Hampton Road CIP (2025–2029) listed for site work and paving.'},
+  {date:'Nov 2025',color:'#D97706',title:'Red Sea Site Plan Submitted — Staff Finds MU-1 Error',
+   desc:'Smith Legacy submitted for site plan review; staff discovered MU-1 doesn\'t permit townhomes.',
+   extra:'This was a staff oversight from the original May 2025 MU-1 rezoning. When the site plan came in showing townhomes, staff caught the discrepancy and required a corrective rezoning to MU-R before the site plan could proceed. The December 9 P&Z hearing was the corrective step.'},
+  {date:'Nov 2025',color:'#0F766E',title:'1st ZVL — 2400 Bolton Boone',
+   desc:'ZVL0007-2025 filed Nov 17, 2025. First signal of active buyer DD on Bolton Boone.',
+   extra:'First recorded signal of developer or buyer interest at 2400 Bolton Boone Dr. Timing — November 2025 — coincides with Red Sea site plan submission and Danieldale widening design near completion. Highly likely the ZVL filer was tracking these developments.'},
+  {date:'May 2025',color:'#1D4ED8',title:'Parc at Daniel Farms — Approved 7-0',
+   desc:'May 6, 2025 — Council unanimously approved PD-121 amendment for 82-acre multifamily.',
+   extra:'<strong>Project:</strong> 80.9-acre garden-style multifamily, Phase 1 = 17.4 acres. Approved as PD-121 amendment (7-0) May 6, 2025.<br><br><strong>Key People &amp; Companies:</strong><br>• <em>Pillar Income Asset Management</em> — Owner/developer. Dallas-based private REIT manager. Contact: Jonathan Clayton, 1603 LBJ Freeway Suite 800, Dallas TX 75234.<br>• <em>HEDK Architects</em> — Architect of record. Contact: Erik Earnshaw. Prepared all clubhouse, unit, and carport elevations.<br>• <em>Westwood Professional Services</em> — Civil engineer. Contact: Ashley Reynolds. DPP DeSoto Professional Park LLC holds DCAD title.<br><br><strong>What changed in the amendment:</strong><br>• Clubhouse enlarged: 4,844 SF → 6,491 SF<br>• Roof style changed: gable → hip roofs<br>• Exterior: brick → fiber cement siding + accent stone veneer<br>• Landscape plan updated (Exhibit F)<br><br><strong>Status as of April 2026:</strong> Approved, no construction permits pulled yet. Pillar is likely in pre-development/capital stack assembly. No groundbreaking date announced.'},
+  {date:'May 2025',color:'#D97706',title:'Red Sea — Original MU-1 Rezoning Approved',
+   desc:'May 6, 2025 — Council approved Office-1 → MU-1 rezoning for 1001 Danieldale.',
+   extra:'Applicant Herschel Smith / Smith Legacy Development. P&Z recommended Apr 8, 2025. Cited compatibility with 2024 Comprehensive Plan "Destination Mixed Use" FLUM designation. Later found to have a staff error (MU-1 doesn\'t permit townhomes), leading to corrective MU-R rezoning December 2025.'},
+  {date:'May 2025',color:'#1D4ED8',title:'DeSoto Issues $48.55M AA-Rated Bonds',
+   desc:'Bond issuance rated AA by both S&P and Moody\'s. Funds Westmoreland signals, streets, water/sewer.',
+   extra:'<strong>Bond rating:</strong> AA (S&P) and Aa3 (Moody\'s) — issued May 2025. This is DeSoto\'s highest-ever credit rating and puts the city among the top-rated municipalities in Dallas County.<br><br><strong>CIP projects funded ($48.55M):</strong><br>• Westmoreland Road signal renovations<br>• Danieldale Road widening (including new Bolton Boone signal)<br>• Alley reconstruction citywide<br>• Aquatics/recreation center upgrades<br>• Wolf Creek drainage improvements<br>• Nance Farm development site work<br>• Water/sewer capital replacements<br><br><strong>What this means for buyers:</strong> DeSoto has the balance sheet and bond capacity to deliver the infrastructure it has promised. The Danieldale widening is not a "maybe" — it is funded and in design. A buyer of 1400 Bolton Boone is acquiring a site with imminent access improvements already financed by the city.'},
+  {date:'Feb 2025',color:'#7C3AED',title:'Danieldale Rd Widening — Design 90%, Bids Open',
+   desc:'Phase 1A bids opened. Design 90% complete. New signal at Bolton Boone confirmed in scope.',
+   extra:'<strong>Project scope:</strong> Widen W. Danieldale Rd from Westmoreland Rd to the Duncanville city limit — 4 concrete travel lanes (2 each direction), raised median, upgraded water/sewer utilities, sidewalks on both sides (DeSoto/Duncanville coordinated), drainage improvements.<br><br><strong>Critical for subject site:</strong> New traffic signal specifically at Bolton Boone Drive is included in the scope. This directly serves the 1400 Bolton Boone driveway — a major access upgrade that materially improves the site\'s development feasibility and value.<br><br><strong>Timeline:</strong> Design 90% complete as of Feb 2025. Phase 1A bids opened. Construction timeline not yet confirmed publicly.<br><br><strong>Funding:</strong> $48.55M CIP Bond (AA-rated, May 2025). DeSoto is coordinating with Duncanville on sidewalk connectivity across the city limit boundary.<br><br><strong>Key Contact:</strong> DeSoto City Engineer confirmed scope at Dec 9, 2025 P&Z meeting. Contact Public Works at (972) 230-9600 for construction timeline updates.'},
+];
+
+const tlc = document.getElementById('tlc');
+tlData.forEach((item,i) => {
+  const div = document.createElement('div'); div.className='tli';
+  div.innerHTML=`<div class="tll"><div class="tld" style="background:${item.color};"></div>${i<tlData.length-1?'<div class="tlline"></div>':''}</div>
+  <div class="tlr"><div class="tldate">${item.date}</div><div class="tltitle">${item.title}</div>
+  <div class="tldesc">${item.desc}</div>
+  <button class="tlbtn" onclick="toggleTl(${i},this)">+ More detail</button>
+  <div class="tlx" id="tlx-${i}">${item.extra}</div></div>`;
+  tlc.appendChild(div);
+});
+function toggleTl(i,btn){
+  const el=document.getElementById('tlx-'+i); el.classList.toggle('on');
+  btn.textContent=el.classList.contains('on')?'− Less detail':'+ More detail';
+}
+
+// ── Parcel click action dispatcher
+function parcelInfoAction(layerId) {
+  document.querySelectorAll('.maplibregl-popup-close-button').forEach(b => b.click());
+  if (layerId === 'rs-fill') switchToProjectCard(0);
+  else if (layerId === 'parc-fill') switchToProjectCard(1);
+  else {
+    // Subject — scroll to top of projects panel
+    document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
+    document.querySelector('.tab[onclick*="projects"]').classList.add('on');
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+    document.getElementById('tab-projects').classList.add('on');
+    if (window.innerWidth <= 700) openSidebar();
+  }
+}
+
+// ── Mobile sidebar toggle ──────────────────────────────────────────
+const sidebar = document.querySelector('.sidebar');
+const overlay = document.getElementById('sb-overlay');
+const sbLabel = document.getElementById('sb-label');
+const sbIcon  = document.getElementById('sb-icon');
+
+// Start collapsed on mobile
+if (window.innerWidth <= 700) {
+  sidebar.classList.add('collapsed');
+  overlay.classList.add('hidden');
+}
+
+function openSidebar() {
+  sidebar.classList.remove('collapsed');
+  overlay.classList.remove('hidden');
+  sbLabel.textContent = 'Hide';
+  sbIcon.innerHTML = '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>';
+}
+
+function closeSidebar() {
+  sidebar.classList.add('collapsed');
+  overlay.classList.add('hidden');
+  sbLabel.textContent = 'Details';
+  sbIcon.innerHTML = '<rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="18" rx="1"/>';
+  // Resize map so it fills the full screen
+  setTimeout(() => map && map.resize(), 300);
+}
+
+function toggleSidebar() {
+  if (sidebar.classList.contains('collapsed')) {
+    openSidebar();
+  } else {
+    closeSidebar();
+  }
+}
+
+// When a tab is clicked on mobile, open the sidebar automatically
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    if (window.innerWidth <= 700 && sidebar.classList.contains('collapsed')) {
+      openSidebar();
+    }
+  });
+});
+
+// Resize observer — whenever sidebar transition ends, tell map to recalculate
+sidebar.addEventListener('transitionend', () => { if (map) map.resize(); });
+
+</script>
+</body>
+</html>
