@@ -565,31 +565,36 @@ window.addEventListener('DOMContentLoaded', () => {
 
             <!-- Council Members Grid -->
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:6px">
-              <div style="background:white;border:1.5px solid #003366;border-radius:6px;padding:5px 6px;text-align:center">
-                <div class="person-chip" onclick="openPM('proctor')" style="font-size:8px;font-weight:800;color:#003366">Rachel Proctor ↗</div>
+              <div onclick="openPM('proctor')" style="background:white;border:1.5px solid #003366;border-radius:6px;padding:5px 6px;text-align:center;cursor:pointer">
+                <div style="font-size:8px;font-weight:800;color:#003366">Rachel Proctor</div>
                 <div style="font-size:7.5px;color:var(--slm)">Mayor</div>
                 <div style="font-size:7px;background:#DCFCE7;color:#166534;border-radius:3px;padding:1px 4px;margin-top:2px;font-weight:700">Until 2027</div>
               </div>
-              <div style="background:white;border:1.5px solid #003366;border-radius:6px;padding:5px 6px;text-align:center">
-                <div class="person-chip" onclick="openPM('chisholm')" style="font-size:8px;font-weight:800;color:#003366">Crystal Chisholm ↗</div>
+              <div onclick="openPM('chisholm')" style="background:white;border:1.5px solid #003366;border-radius:6px;padding:5px 6px;text-align:center;cursor:pointer">
+                <div style="font-size:8px;font-weight:800;color:#003366">Crystal Chisholm</div>
                 <div style="font-size:7.5px;color:var(--slm)">Mayor Pro Tem</div>
                 <div style="font-size:7px;background:#DCFCE7;color:#166534;border-radius:3px;padding:1px 4px;margin-top:2px;font-weight:700">Stable</div>
               </div>
-              <div style="background:white;border:1.5px solid #15803D;border-radius:6px;padding:5px 6px;text-align:center">
-                <div class="person-chip" onclick="openPM('byrd')" style="font-size:8px;font-weight:800;color:#15803D">Andre Byrd ↗</div>
+              <div onclick="openPM('byrd')" style="background:white;border:1.5px solid #15803D;border-radius:6px;padding:5px 6px;text-align:center;cursor:pointer">
+                <div style="font-size:8px;font-weight:800;color:#15803D">Andre Byrd</div>
                 <div style="font-size:7.5px;color:var(--slm)">Place 4</div>
                 <div style="font-size:7px;background:#DCFCE7;color:#166534;border-radius:3px;padding:1px 4px;margin-top:2px;font-weight:700">Pro-Dev ★</div>
               </div>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:10px">
-              <div style="background:white;border:1.5px solid #D97706;border-radius:6px;padding:5px 6px;text-align:center">
-                <div class="person-chip" onclick="openPM('parker')" style="font-size:8px;font-weight:800;color:#D97706">Pierette Parker ↗</div>
+              <div onclick="openPM('parker')" style="background:white;border:1.5px solid #D97706;border-radius:6px;padding:5px 6px;text-align:center;cursor:pointer">
+                <div style="font-size:8px;font-weight:800;color:#D97706">Pierette Parker</div>
                 <div style="font-size:7.5px;color:var(--slm)">Place 2</div>
                 <div style="font-size:7px;background:#FEF3C7;color:#92400E;border-radius:3px;padding:1px 4px;margin-top:2px;font-weight:700">Election May 2 ⚠</div>
               </div>
-              <div style="background:white;border:1.5px dashed #94A3B8;border-radius:6px;padding:5px 6px;text-align:center">
-                <div style="font-size:8px;font-weight:800;color:#475569">Place 4 Open</div>
-                <div class="person-chip" onclick="openPM('wesley')" style="font-size:7px;color:#475569;text-decoration:underline;cursor:pointer">Wesley ↗</div> <span style="font-size:7px;color:#94A3B8">/</span> <div class="person-chip" onclick="openPM('edgerson')" style="font-size:7px;color:#475569;text-decoration:underline;cursor:pointer;display:inline">Edgerson ↗</div>
+              <div onclick="openPM('wesley')" style="background:white;border:1.5px dashed #94A3B8;border-radius:6px;padding:5px 6px;text-align:center;cursor:pointer">
+                <div style="font-size:8px;font-weight:800;color:#475569">Brian Wesley</div>
+                <div style="font-size:7.5px;color:var(--slm)">Place 4 Candidate</div>
+                <div style="font-size:7px;background:#F1F5F9;color:#475569;border-radius:3px;padding:1px 4px;margin-top:2px;font-weight:700">Election May 2 ⚠</div>
+              </div>
+              <div onclick="openPM('edgerson')" style="background:white;border:1.5px dashed #94A3B8;border-radius:6px;padding:5px 6px;text-align:center;cursor:pointer">
+                <div style="font-size:8px;font-weight:800;color:#475569">David Edgerson</div>
+                <div style="font-size:7.5px;color:var(--slm)">Place 4 Candidate</div>
                 <div style="font-size:7px;background:#F1F5F9;color:#475569;border-radius:3px;padding:1px 4px;margin-top:2px;font-weight:700">Election May 2 ⚠</div>
               </div>
             </div>
@@ -603,8 +608,8 @@ window.addEventListener('DOMContentLoaded', () => {
               <div style="font-size:8px;color:var(--slm);margin-top:3px">Reviews &amp; recommends on rezoning — council has final say</div>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:10px">
-              <div style="background:white;border:1px solid #DDD6FE;border-radius:5px;padding:4px 5px;text-align:center">
-                <div class="person-chip" onclick="openPM('dewberry')" style="font-size:7.5px;font-weight:800;color:#7C3AED">Dewberry ↗</div>
+              <div onclick="openPM('dewberry')" style="background:white;border:1px solid #DDD6FE;border-radius:5px;padding:4px 5px;text-align:center;cursor:pointer">
+                <div style="font-size:7.5px;font-weight:800;color:#7C3AED">Dewberry</div>
                 <div style="font-size:7px;color:var(--slm)">Chair</div>
               </div>
               <div style="background:white;border:1px solid #DDD6FE;border-radius:5px;padding:4px 5px;text-align:center">
