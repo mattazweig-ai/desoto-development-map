@@ -490,6 +490,110 @@ window.addEventListener('DOMContentLoaded', () => {
 
       <!-- CITY & COUNCIL -->
       <div class="panel pb" id="tab-timeline">
+        <!-- ORG CHART -->
+        <div id="org-chart-wrap" style="margin:0 0 10px 0">
+          <button onclick="(function(){var b=document.getElementById('org-chart-body');var a=document.getElementById('org-chart-arrow');var open=b.style.display!=='none';b.style.display=open?'none':'block';a.textContent=open?'▸':'▾';})()" style="width:100%;background:var(--bg);border:1px solid var(--bdr);border-radius:8px;padding:8px 11px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-family:inherit">
+            <span style="font-size:10.5px;font-weight:800;color:var(--sl);letter-spacing:.01em;text-transform:uppercase">How Decisions Get Made</span>
+            <span id="org-chart-arrow" style="font-size:11px;color:var(--slm)">▾</span>
+          </button>
+          <div id="org-chart-body" style="background:var(--bg);border:1px solid var(--bdr);border-top:none;border-radius:0 0 8px 8px;padding:12px 10px 10px">
+
+            <!-- ROW 1: Mayor + Council -->
+            <div style="text-align:center;margin-bottom:4px">
+              <div style="display:inline-block;background:#003366;color:white;border-radius:7px;padding:6px 14px;font-size:9.5px;font-weight:800;letter-spacing:.02em">CITY COUNCIL</div>
+              <div style="font-size:8px;color:var(--slm);margin-top:3px">Final authority on zoning &amp; development</div>
+            </div>
+
+            <!-- Council Members Grid -->
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:6px">
+              <div style="background:white;border:1.5px solid #003366;border-radius:6px;padding:5px 6px;text-align:center">
+                <div style="font-size:8px;font-weight:800;color:#003366">Rachel Proctor</div>
+                <div style="font-size:7.5px;color:var(--slm)">Mayor</div>
+                <div style="font-size:7px;background:#DCFCE7;color:#166534;border-radius:3px;padding:1px 4px;margin-top:2px;font-weight:700">Until 2027</div>
+              </div>
+              <div style="background:white;border:1.5px solid #003366;border-radius:6px;padding:5px 6px;text-align:center">
+                <div style="font-size:8px;font-weight:800;color:#003366">Crystal Chisholm</div>
+                <div style="font-size:7.5px;color:var(--slm)">Mayor Pro Tem</div>
+                <div style="font-size:7px;background:#DCFCE7;color:#166534;border-radius:3px;padding:1px 4px;margin-top:2px;font-weight:700">Stable</div>
+              </div>
+              <div style="background:white;border:1.5px solid #15803D;border-radius:6px;padding:5px 6px;text-align:center">
+                <div style="font-size:8px;font-weight:800;color:#15803D">Andre Byrd</div>
+                <div style="font-size:7.5px;color:var(--slm)">Place 4</div>
+                <div style="font-size:7px;background:#DCFCE7;color:#166534;border-radius:3px;padding:1px 4px;margin-top:2px;font-weight:700">Pro-Dev ★</div>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:10px">
+              <div style="background:white;border:1.5px solid #D97706;border-radius:6px;padding:5px 6px;text-align:center">
+                <div style="font-size:8px;font-weight:800;color:#D97706">Pierette Parker</div>
+                <div style="font-size:7.5px;color:var(--slm)">Place 2</div>
+                <div style="font-size:7px;background:#FEF3C7;color:#92400E;border-radius:3px;padding:1px 4px;margin-top:2px;font-weight:700">Election May 2 ⚠</div>
+              </div>
+              <div style="background:white;border:1.5px dashed #94A3B8;border-radius:6px;padding:5px 6px;text-align:center">
+                <div style="font-size:8px;font-weight:800;color:#475569">Place 4 Open</div>
+                <div style="font-size:7.5px;color:var(--slm)">Wesley / Edgerson</div>
+                <div style="font-size:7px;background:#F1F5F9;color:#475569;border-radius:3px;padding:1px 4px;margin-top:2px;font-weight:700">Election May 2 ⚠</div>
+              </div>
+            </div>
+
+            <!-- Arrow down -->
+            <div style="text-align:center;font-size:14px;color:var(--slm);margin-bottom:6px;line-height:1">↓</div>
+
+            <!-- ROW 2: P&Z -->
+            <div style="text-align:center;margin-bottom:4px">
+              <div style="display:inline-block;background:#7C3AED;color:white;border-radius:7px;padding:6px 14px;font-size:9.5px;font-weight:800;letter-spacing:.02em">P&amp;Z COMMISSION</div>
+              <div style="font-size:8px;color:var(--slm);margin-top:3px">Reviews &amp; recommends on rezoning — council has final say</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:10px">
+              <div style="background:white;border:1px solid #DDD6FE;border-radius:5px;padding:4px 5px;text-align:center">
+                <div style="font-size:7.5px;font-weight:800;color:#7C3AED">Dewberry</div>
+                <div style="font-size:7px;color:var(--slm)">Chair</div>
+              </div>
+              <div style="background:white;border:1px solid #DDD6FE;border-radius:5px;padding:4px 5px;text-align:center">
+                <div style="font-size:7.5px;font-weight:800;color:#7C3AED">Alexis</div>
+                <div style="font-size:7px;color:var(--slm)">Commissioner</div>
+              </div>
+              <div style="background:white;border:1px solid #DDD6FE;border-radius:5px;padding:4px 5px;text-align:center">
+                <div style="font-size:7.5px;font-weight:800;color:#7C3AED">Edwards</div>
+                <div style="font-size:7px;color:var(--slm)">Commissioner</div>
+              </div>
+              <div style="background:white;border:1px solid #DDD6FE;border-radius:5px;padding:4px 5px;text-align:center">
+                <div style="font-size:7.5px;font-weight:800;color:#7C3AED">Leroy</div>
+                <div style="font-size:7px;color:var(--slm)">Commissioner</div>
+              </div>
+              <div style="background:white;border:1px solid #DDD6FE;border-radius:5px;padding:4px 5px;text-align:center">
+                <div style="font-size:7.5px;font-weight:800;color:#7C3AED">Laura</div>
+                <div style="font-size:7px;color:var(--slm)">Commissioner</div>
+              </div>
+              <div style="background:white;border:1px solid #DDD6FE;border-radius:5px;padding:4px 5px;text-align:center">
+                <div style="font-size:7.5px;font-weight:800;color:#7C3AED">M. Jones</div>
+                <div style="font-size:7px;color:var(--slm)">New · Dec 2025</div>
+              </div>
+            </div>
+
+            <!-- Arrow down -->
+            <div style="text-align:center;font-size:14px;color:var(--slm);margin-bottom:6px;line-height:1">↓</div>
+
+            <!-- ROW 3: How a rezoning works -->
+            <div style="background:white;border:1px solid var(--bdr);border-radius:6px;padding:7px 9px">
+              <div style="font-size:8.5px;font-weight:800;color:var(--sl);margin-bottom:5px">Rezoning Process</div>
+              <div style="display:flex;flex-direction:column;gap:3px">
+                <div style="display:flex;align-items:flex-start;gap:6px">
+                  <div style="min-width:16px;height:16px;background:#E2E8F0;border-radius:50%;font-size:7.5px;font-weight:800;color:var(--sl);display:flex;align-items:center;justify-content:center">1</div>
+                  <div style="font-size:8px;color:var(--slm);padding-top:2px">Applicant submits to city planning staff</div>
+                </div>
+                <div style="display:flex;align-items:flex-start;gap:6px">
+                  <div style="min-width:16px;height:16px;background:#EDE9FE;border-radius:50%;font-size:7.5px;font-weight:800;color:#7C3AED;display:flex;align-items:center;justify-content:center">2</div>
+                  <div style="font-size:8px;color:var(--slm);padding-top:2px">P&amp;Z public hearing + recommendation vote</div>
+                </div>
+                <div style="display:flex;align-items:flex-start;gap:6px">
+                  <div style="min-width:16px;height:16px;background:#DBEAFE;border-radius:50%;font-size:7.5px;font-weight:800;color:#1D4ED8;display:flex;align-items:center;justify-content:center">3</div>
+                  <div style="font-size:8px;color:var(--slm);padding-top:2px">City Council final vote — if P&amp;Z denied, supermajority required</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
         <div id="tlc"></div>
       </div>
 
