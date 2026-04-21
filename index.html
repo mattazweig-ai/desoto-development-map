@@ -5,7 +5,222 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DeSoto Development Map</title>
   <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
-  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js">
+// ── PERSON DATA ──────────────────────────────────────────────────────────────
+const PEOPLE = {
+  proctor: {
+    name: 'Rachel Proctor',
+    role: 'Mayor, City of DeSoto',
+    badge: 'neutral', badgeText: 'Pro-Growth · Mayor',
+    sections: [
+      { h: 'Overview', p: 'Re-elected May 2025. Term runs through 2027. Generally supportive of growth and new development. Not the loudest voice on economic development, but consistently votes with the pro-development bloc.' },
+      { h: 'Key Facts', kv: [
+        ['Term', 'Through 2027'],
+        ['Re-elected', 'May 2025'],
+        ['Up for election', 'No — 2027'],
+        ['Stance', 'Broadly pro-growth'],
+      ]},
+      { h: 'Notable', p: 'Was the subject of a failed recall attempt in 2024 alongside Councilmember Byrd — an organized opposition faction that did not have enough support to go to a vote. The failure of the recall reinforced her political standing in the city.' },
+      { h: 'Tags', tags: [
+        {t:'Stable through 2027', c:'green'},
+        {t:'Pro-growth', c:'green'},
+        {t:'Survived recall 2024', c:'blue'},
+      ]},
+    ]
+  },
+  chisholm: {
+    name: 'Crystal Chisholm',
+    role: 'Mayor Pro Tem · Place 6',
+    badge: 'pro', badgeText: 'Pro-Development',
+    sections: [
+      { h: 'Overview', p: 'Current Mayor Pro Tem. Chairs the economic development committee — arguably the most directly relevant council role for land and development deals. Received a national appointment in January 2026, signaling rising profile beyond DeSoto.' },
+      { h: 'Key Facts', kv: [
+        ['Role', 'Mayor Pro Tem'],
+        ['Committee', 'Economic Development Chair'],
+        ['Up for election', 'No — stable'],
+        ['Stance', 'Pro-development'],
+      ]},
+      { h: 'Notable', p: 'Voted against a CIP bond issuance at one point — not because she is anti-development, but she watches the city's fiscal exposure carefully. A pragmatic voice, not a rubber stamp.' },
+      { h: 'Tags', tags: [
+        {t:'Mayor Pro Tem', c:'blue'},
+        {t:'Econ Dev Chair', c:'green'},
+        {t:'Stable', c:'green'},
+        {t:'Fiscally cautious', c:'orange'},
+      ]},
+    ]
+  },
+  byrd: {
+    name: 'Andre Byrd',
+    role: 'Councilmember · Place 4',
+    badge: 'pro', badgeText: '★ Most Pro-Development',
+    sections: [
+      { h: 'Overview', p: 'The most vocal and active pro-development voice on council. Elected 2019, served as Mayor Pro Tem. Hosted the April 2026 Economic Development Symposium where he said "big things are happening in DeSoto." Deeply embedded in regional economic development networks — currently President of Leadership Southwest Class of 2026.' },
+      { h: 'Key Facts', kv: [
+        ['Elected', '2019'],
+        ['Former role', 'Mayor Pro Tem'],
+        ['Up for election', 'No — seat stable'],
+        ['Stance', 'Strongest pro-dev voice'],
+      ]},
+      { h: 'Notable', p: 'Voted to deny a hotel development in July 2024 — showing he has opinions about what type of development fits DeSoto, not just a yes-vote on everything. Also survived a recall attempt in 2024 alongside Mayor Proctor.' },
+      { h: 'Why He Matters for Bolton Boone', p: 'The city conversation about a water tower or police station on the subject parcel is most likely to re-engage through Byrd. He is the council member your family is positioned to work with.' },
+      { h: 'Tags', tags: [
+        {t:'Longest-serving pro-dev', c:'green'},
+        {t:'Seat stable', c:'green'},
+        {t:'Your key contact', c:'green'},
+        {t:'Not a rubber stamp', c:'orange'},
+      ]},
+    ]
+  },
+  parker: {
+    name: 'Pierette Parker',
+    role: 'Councilmember · Place 2',
+    badge: 'caution', badgeText: 'Cautious on Development',
+    sections: [
+      { h: 'Overview', p: 'The most cautious voice on development on the current council. Not opposed to all growth, but tends to pump the brakes and ask more questions. Running for re-election May 2, 2026 against two challengers — Cora Garner and Tymerian Oluwole.' },
+      { h: 'Key Facts', kv: [
+        ['Seat', 'Place 2'],
+        ['Election', 'May 2, 2026'],
+        ['Challengers', 'Cora Garner, Tymerian Oluwole'],
+        ['Campaign', '@pparker4place2'],
+      ]},
+      { h: 'Why It Matters', p: 'If Parker wins re-election, the council dynamic stays roughly the same — she remains the cautious counterweight to Byrd and Chisholm. If she loses, the council likely becomes more uniformly pro-development, which would be a real opening for re-engaging on Bolton Boone.' },
+      { h: 'Tags', tags: [
+        {t:'Up for election May 2', c:'orange'},
+        {t:'Development skeptic', c:'red'},
+        {t:'Watch this race', c:'orange'},
+      ]},
+    ]
+  },
+  garner: {
+    name: 'Cora Garner',
+    role: 'Place 2 Candidate (May 2, 2026)',
+    badge: 'unknown', badgeText: 'Challenger — Stance TBD',
+    sections: [
+      { h: 'Overview', p: 'Running against incumbent Pierette Parker for the Place 2 seat. Limited public stance information available — has not made development policy a centerpiece of public comments found to date.' },
+      { h: 'Key Facts', kv: [
+        ['Race', 'Place 2 — May 2, 2026'],
+        ['Incumbent', 'Pierette Parker'],
+        ['Status', 'Challenger'],
+        ['Stance', 'Unknown'],
+      ]},
+      { h: 'Tags', tags: [
+        {t:'Election May 2', c:'orange'},
+        {t:'Stance unclear', c:''},
+      ]},
+    ]
+  },
+  oluwole: {
+    name: 'Tymerian Oluwole',
+    role: 'Place 2 Candidate (May 2, 2026)',
+    badge: 'unknown', badgeText: 'Challenger — Younger Candidate',
+    sections: [
+      { h: 'Overview', p: 'Third candidate in the Place 2 race alongside Parker and Garner. Younger candidate per forum coverage. Appeared at an April 2026 candidate forum. Stance on development not clearly established in public record.' },
+      { h: 'Key Facts', kv: [
+        ['Race', 'Place 2 — May 2, 2026'],
+        ['Status', 'Challenger'],
+        ['Profile', 'Younger candidate'],
+        ['Stance', 'Unknown'],
+      ]},
+      { h: 'Tags', tags: [
+        {t:'Election May 2', c:'orange'},
+        {t:'Younger candidate', c:'blue'},
+      ]},
+    ]
+  },
+  wesley: {
+    name: 'Brian Wesley',
+    role: 'Place 4 Candidate (May 2, 2026)',
+    badge: 'unknown', badgeText: 'Open Seat Candidate',
+    sections: [
+      { h: 'Overview', p: 'Running for the open Place 4 seat — the seat being vacated by Andre Byrd. Whoever wins Place 4 will be the key unknown variable in how the next council handles development. Stance not fully detailed in public record.' },
+      { h: 'Key Facts', kv: [
+        ['Race', 'Place 4 — May 2, 2026 (open seat)'],
+        ['Status', 'Candidate'],
+        ['Predecessor', 'Andre Byrd (vacating)'],
+        ['Stance', 'Unknown'],
+      ]},
+      { h: 'Tags', tags: [
+        {t:'Election May 2', c:'orange'},
+        {t:'Open seat', c:'blue'},
+        {t:'Key unknown', c:'orange'},
+      ]},
+    ]
+  },
+  edgerson: {
+    name: 'David Edgerson',
+    role: 'Place 4 Candidate (May 2, 2026)',
+    badge: 'unknown', badgeText: 'Open Seat Candidate',
+    sections: [
+      { h: 'Overview', p: 'Running for the open Place 4 seat alongside Brian Wesley. Like Wesley, whoever wins will define whether the council maintains its pro-development lean or shifts. Stance not fully established in public coverage.' },
+      { h: 'Key Facts', kv: [
+        ['Race', 'Place 4 — May 2, 2026 (open seat)'],
+        ['Status', 'Candidate'],
+        ['Predecessor', 'Andre Byrd (vacating)'],
+        ['Stance', 'Unknown'],
+      ]},
+      { h: 'Tags', tags: [
+        {t:'Election May 2', c:'orange'},
+        {t:'Open seat', c:'blue'},
+        {t:'Key unknown', c:'orange'},
+      ]},
+    ]
+  },
+  dewberry: {
+    name: 'Commissioner Dewberry',
+    role: 'P&Z Commission Chair',
+    badge: 'neutral', badgeText: 'P&Z Chair · Appointed 2025',
+    sections: [
+      { h: 'Overview', p: 'Current chair of the Planning & Zoning Commission. Appointed as part of the reconstituted board after council did not reappoint the previous chairman and Commissioner Bell in fall 2025. The new board unanimously approved the Red Sea mixed-use project in December 2025.' },
+      { h: 'Context', p: 'The prior P&Z chairman was removed after voting against recommending a major development — which would have forced council to pass it with a supermajority. Council replaced the board rather than deal with that friction. The new board has been unanimously supportive on every vote since.' },
+      { h: 'Tags', tags: [
+        {t:'P&Z Chair', c:'purple'},
+        {t:'Appointed 2025', c:'blue'},
+        {t:'Unanimously approved Red Sea', c:'green'},
+      ]},
+    ]
+  },
+};
+
+function openPM(key) {
+  const p = PEOPLE[key];
+  if (!p) return;
+  document.getElementById('pm-name').textContent = p.name;
+  document.getElementById('pm-role').textContent = p.role;
+  const badge = document.getElementById('pm-badge');
+  badge.innerHTML = '<span class="pm-badge ' + p.badge + '">' + p.badgeText + '</span>';
+
+  let bodyHtml = '';
+  p.sections.forEach(sec => {
+    bodyHtml += '<div class="pm-section">';
+    bodyHtml += '<div class="pm-sh">' + sec.h + '</div>';
+    if (sec.p) bodyHtml += '<div class="pm-p">' + sec.p + '</div>';
+    if (sec.kv) {
+      sec.kv.forEach(([k,v]) => {
+        bodyHtml += '<div class="pm-kv"><span class="pm-k">' + k + '</span><span class="pm-v">' + v + '</span></div>';
+      });
+    }
+    if (sec.tags) {
+      let tagsHtml = '';
+      sec.tags.forEach(tag => {
+        tagsHtml += '<span class="pm-tag ' + tag.c + '">' + tag.t + '</span>';
+      });
+      bodyHtml += tagsHtml;
+    }
+    bodyHtml += '</div>';
+  });
+  document.getElementById('pm-body').innerHTML = bodyHtml;
+  document.getElementById('person-modal-overlay').classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePM() {
+  document.getElementById('person-modal-overlay').classList.remove('on');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if(e.key==='Escape') closePM(); });
+
+</script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -258,7 +473,66 @@
     .tl-pkv{background:white;border-radius:4px;padding:5px 7px}
     .tl-pk{font-size:8px;color:var(--sll);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
     .tl-pv{font-size:10px;color:var(--sl);font-weight:600;margin-top:1px}
-  </style>
+  
+/* ── Person Modal ───────────────────────────────────────── */
+#person-modal-overlay {
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9000;
+  align-items:center;justify-content:center;padding:16px;
+}
+#person-modal-overlay.on { display:flex; }
+#person-modal {
+  background:#fff;border-radius:14px;max-width:360px;width:100%;
+  max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25);
+  position:relative;
+}
+.pm-header {
+  padding:18px 18px 12px;border-bottom:1px solid #F1F5F9;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:10px;
+}
+.pm-namewrap { flex:1; }
+.pm-name { font-size:15px;font-weight:800;color:#0F172A;line-height:1.2; }
+.pm-role { font-size:11px;color:#64748B;margin-top:2px;font-weight:500; }
+.pm-badge {
+  font-size:9px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;
+  padding:3px 8px;border-radius:20px;margin-top:5px;display:inline-block;
+}
+.pm-badge.pro    { background:#DCFCE7;color:#166534; }
+.pm-badge.caution{ background:#FEF3C7;color:#92400E; }
+.pm-badge.unknown{ background:#F1F5F9;color:#475569; }
+.pm-badge.neutral{ background:#EFF6FF;color:#1D4ED8; }
+.pm-close {
+  background:none;border:none;font-size:18px;color:#94A3B8;cursor:pointer;
+  padding:0;line-height:1;flex-shrink:0;margin-top:-2px;
+}
+.pm-body { padding:14px 18px 18px; }
+.pm-section { margin-bottom:13px; }
+.pm-section:last-child { margin-bottom:0; }
+.pm-sh {
+  font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
+  color:#94A3B8;margin-bottom:5px;
+}
+.pm-p { font-size:11.5px;color:#334155;line-height:1.55; }
+.pm-tag {
+  display:inline-block;font-size:9.5px;font-weight:700;
+  padding:2px 7px;border-radius:12px;margin:2px 2px 0 0;
+  background:#F1F5F9;color:#475569;
+}
+.pm-tag.green  { background:#DCFCE7;color:#166534; }
+.pm-tag.orange { background:#FEF3C7;color:#92400E; }
+.pm-tag.red    { background:#FEE2E2;color:#991B1B; }
+.pm-tag.blue   { background:#DBEAFE;color:#1D4ED8; }
+.pm-tag.purple { background:#EDE9FE;color:#6D28D9; }
+.pm-kv { display:flex;gap:6px;font-size:11px;margin-bottom:4px; }
+.pm-k { color:#94A3B8;font-weight:600;min-width:80px; }
+.pm-v { color:#1E293B;font-weight:500; }
+
+/* clickable person chip in org chart */
+.person-chip {
+  cursor:pointer;transition:opacity .15s;
+}
+.person-chip:hover { opacity:.8; }
+
+</style>
 </head>
 <body>
 <!-- PASSWORD GATE -->
@@ -507,30 +781,30 @@ window.addEventListener('DOMContentLoaded', () => {
             <!-- Council Members Grid -->
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:6px">
               <div style="background:white;border:1.5px solid #003366;border-radius:6px;padding:5px 6px;text-align:center">
-                <div style="font-size:8px;font-weight:800;color:#003366">Rachel Proctor</div>
+                <div class="person-chip" onclick="openPM('proctor')" style="font-size:8px;font-weight:800;color:#003366">Rachel Proctor ↗</div>
                 <div style="font-size:7.5px;color:var(--slm)">Mayor</div>
                 <div style="font-size:7px;background:#DCFCE7;color:#166534;border-radius:3px;padding:1px 4px;margin-top:2px;font-weight:700">Until 2027</div>
               </div>
               <div style="background:white;border:1.5px solid #003366;border-radius:6px;padding:5px 6px;text-align:center">
-                <div style="font-size:8px;font-weight:800;color:#003366">Crystal Chisholm</div>
+                <div class="person-chip" onclick="openPM('chisholm')" style="font-size:8px;font-weight:800;color:#003366">Crystal Chisholm ↗</div>
                 <div style="font-size:7.5px;color:var(--slm)">Mayor Pro Tem</div>
                 <div style="font-size:7px;background:#DCFCE7;color:#166534;border-radius:3px;padding:1px 4px;margin-top:2px;font-weight:700">Stable</div>
               </div>
               <div style="background:white;border:1.5px solid #15803D;border-radius:6px;padding:5px 6px;text-align:center">
-                <div style="font-size:8px;font-weight:800;color:#15803D">Andre Byrd</div>
+                <div class="person-chip" onclick="openPM('byrd')" style="font-size:8px;font-weight:800;color:#15803D">Andre Byrd ↗</div>
                 <div style="font-size:7.5px;color:var(--slm)">Place 4</div>
                 <div style="font-size:7px;background:#DCFCE7;color:#166534;border-radius:3px;padding:1px 4px;margin-top:2px;font-weight:700">Pro-Dev ★</div>
               </div>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:10px">
               <div style="background:white;border:1.5px solid #D97706;border-radius:6px;padding:5px 6px;text-align:center">
-                <div style="font-size:8px;font-weight:800;color:#D97706">Pierette Parker</div>
+                <div class="person-chip" onclick="openPM('parker')" style="font-size:8px;font-weight:800;color:#D97706">Pierette Parker ↗</div>
                 <div style="font-size:7.5px;color:var(--slm)">Place 2</div>
                 <div style="font-size:7px;background:#FEF3C7;color:#92400E;border-radius:3px;padding:1px 4px;margin-top:2px;font-weight:700">Election May 2 ⚠</div>
               </div>
               <div style="background:white;border:1.5px dashed #94A3B8;border-radius:6px;padding:5px 6px;text-align:center">
                 <div style="font-size:8px;font-weight:800;color:#475569">Place 4 Open</div>
-                <div style="font-size:7.5px;color:var(--slm)">Wesley / Edgerson</div>
+                <div class="person-chip" onclick="openPM('wesley')" style="font-size:7px;color:#475569;text-decoration:underline;cursor:pointer">Wesley ↗</div> <span style="font-size:7px;color:#94A3B8">/</span> <div class="person-chip" onclick="openPM('edgerson')" style="font-size:7px;color:#475569;text-decoration:underline;cursor:pointer;display:inline">Edgerson ↗</div>
                 <div style="font-size:7px;background:#F1F5F9;color:#475569;border-radius:3px;padding:1px 4px;margin-top:2px;font-weight:700">Election May 2 ⚠</div>
               </div>
             </div>
@@ -545,7 +819,7 @@ window.addEventListener('DOMContentLoaded', () => {
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:10px">
               <div style="background:white;border:1px solid #DDD6FE;border-radius:5px;padding:4px 5px;text-align:center">
-                <div style="font-size:7.5px;font-weight:800;color:#7C3AED">Dewberry</div>
+                <div class="person-chip" onclick="openPM('dewberry')" style="font-size:7.5px;font-weight:800;color:#7C3AED">Dewberry ↗</div>
                 <div style="font-size:7px;color:var(--slm)">Chair</div>
               </div>
               <div style="background:white;border:1px solid #DDD6FE;border-radius:5px;padding:4px 5px;text-align:center">
@@ -1356,15 +1630,36 @@ tlSections.forEach(sec => {
   // Sort newest → oldest by sortKey
   items.sort((a, b) => b.sortKey - a.sortKey);
 
-  // Section header
-  const hdr = document.createElement('div');
-  hdr.style.cssText = 'margin-bottom:10px;margin-top:16px;';
-  hdr.innerHTML = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
-    <div style="width:3px;height:18px;border-radius:2px;background:${sec.color};flex-shrink:0;"></div>
-    <div style="font-size:10px;font-weight:800;color:var(--sl);font-family:'DM Sans',sans-serif;letter-spacing:-.01em">${sec.label}</div>
+  // Section header — collapsible
+  const secWrap = document.createElement('div');
+  secWrap.style.cssText = 'margin-top:16px;';
+  const secId = 'tl-sec-' + sec.id;
+
+  const hdr = document.createElement('button');
+  hdr.style.cssText = 'width:100%;background:none;border:none;padding:0 0 8px;cursor:pointer;text-align:left;font-family:inherit;';
+  hdr.innerHTML = `<div style="display:flex;align-items:center;gap:8px;justify-content:space-between">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div style="width:3px;height:18px;border-radius:2px;background:${sec.color};flex-shrink:0;"></div>
+      <div style="font-size:10px;font-weight:800;color:var(--sl);font-family:'DM Sans',sans-serif;letter-spacing:-.01em">${sec.label}</div>
+    </div>
+    <span class="tl-sec-arrow" style="font-size:10px;color:var(--slm);padding-right:2px">▾</span>
   </div>
-  <div style="font-size:8.5px;color:var(--sll);margin-left:11px;margin-bottom:8px">${sec.subtitle}</div>`;
-  tlc.appendChild(hdr);
+  <div style="font-size:8.5px;color:var(--sll);margin-left:11px">${sec.subtitle}</div>`;
+  hdr.onclick = function() {
+    const body = document.getElementById(secId);
+    const arrow = this.querySelector('.tl-sec-arrow');
+    const open = body.style.display !== 'none';
+    body.style.display = open ? 'none' : 'block';
+    arrow.textContent = open ? '▸' : '▾';
+  };
+
+  const secBody = document.createElement('div');
+  secBody.id = secId;
+  secBody.style.cssText = 'margin-bottom:10px;';
+
+  secWrap.appendChild(hdr);
+  secWrap.appendChild(secBody);
+  tlc.appendChild(secWrap);
 
   // Items
   items.forEach((item, secIdx) => {
@@ -1377,7 +1672,7 @@ tlSections.forEach(sec => {
     <div class="tldesc">${item.desc}</div>
     <button class="tlbtn" onclick="toggleTl('${uid}',this)">+ More detail</button>
     <div class="tlx" id="tlx-${uid}">${item.extra}</div></div>`;
-    tlc.appendChild(div);
+    secBody.appendChild(div);
   });
 });
 
@@ -1528,5 +1823,21 @@ function toggleGlossary() {
 }
 
 </script>
+
+<!-- ── PERSON MODAL ─────────────────────────────── -->
+<div id="person-modal-overlay" onclick="if(event.target===this)closePM()">
+  <div id="person-modal">
+    <div class="pm-header">
+      <div class="pm-namewrap">
+        <div class="pm-name" id="pm-name"></div>
+        <div class="pm-role" id="pm-role"></div>
+        <div id="pm-badge"></div>
+      </div>
+      <button class="pm-close" onclick="closePM()">✕</button>
+    </div>
+    <div class="pm-body" id="pm-body"></div>
+  </div>
+</div>
+
 </body>
 </html>
