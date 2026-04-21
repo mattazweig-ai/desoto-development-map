@@ -299,6 +299,7 @@ window.addEventListener('DOMContentLoaded', () => {
         <button class="tab on" onclick="switchTab('projects',this)">Projects</button>
         <button class="tab" onclick="switchTab('timeline',this)">Timeline</button>
         <button class="tab" onclick="switchTab('comps',this)">Comps & HBU</button>
+        <button class="tab" onclick="switchTab('updates',this)">Updates</button>
       </div>
 
       <!-- PROJECTS -->
@@ -318,8 +319,8 @@ window.addEventListener('DOMContentLoaded', () => {
         <div class="slbl">Adjacent Developments — Click to Expand</div>
 
         <!-- RED SEA -->
-        <div class="card" id="card-0" onclick="toggleCard(0)">
-          <div class="ctop">
+        <div class="card" id="card-0">
+          <div class="ctop" onclick="toggleCard(0)" style="cursor:pointer">
             <div class="cdot" style="color:#D97706;background:#D97706;"></div>
             <div class="ctxt"><div class="cname">Red Sea — Smith Legacy</div><div class="csub">1001 W. Danieldale Rd · 9.86 ac · NW corner of intersection</div></div>
             <div class="cbadge" style="background:#FEF3C7;color:#92400E;">Entitled</div>
@@ -340,10 +341,10 @@ window.addEventListener('DOMContentLoaded', () => {
             <div class="gallery">
               <div class="gal-title">Architectural Plans & Elevations</div>
               <div class="gal-tabs">
-                <button class="gtab on" onclick="showGal('rs',0,this)">Facade / Elevation</button>
-                <button class="gtab" onclick="showGal('rs',1,this)">Site Plan / Phasing</button>
+                <button class="gtab on" onclick="event.stopPropagation();showGal('rs',0,this)">Facade / Elevation</button>
+                <button class="gtab" onclick="event.stopPropagation();showGal('rs',1,this)">Site Plan / Phasing</button>
               </div>
-              <img class="gal-img" id="rs-img" src="assets/redsea_elev-01_web.jpg" alt="Red Sea Elevation" onclick="openLightbox(this.src, this.alt)" />
+              <img class="gal-img" id="rs-img" src="assets/redsea_elev-01_web.jpg" alt="Red Sea Elevation" onclick="event.stopPropagation();openLightbox(this.src, this.alt)" />
               <div class="gal-caption" id="rs-cap">Cover sheet with rendered townhome facade — 4-story modern design, Danieldale Road frontage (Vizual Architecture, Oct 2025)</div>
             </div>
 
@@ -364,8 +365,8 @@ window.addEventListener('DOMContentLoaded', () => {
         </div>
 
         <!-- PARC AT DANIEL FARMS -->
-        <div class="card" id="card-1" onclick="toggleCard(1)">
-          <div class="ctop">
+        <div class="card" id="card-1">
+          <div class="ctop" onclick="toggleCard(1)" style="cursor:pointer">
             <div class="cdot" style="color:#1D4ED8;background:#1D4ED8;"></div>
             <div class="ctxt"><div class="cname">Parc at Daniel Farms</div><div class="csub">9100 Bolton Boone Dr · 82.19 acres · PD-121</div></div>
             <div class="cbadge" style="background:#DBEAFE;color:#1E3A8A;">Approved</div>
@@ -386,11 +387,11 @@ window.addEventListener('DOMContentLoaded', () => {
             <div class="gallery">
               <div class="gal-title">Architectural Plans & Elevations</div>
               <div class="gal-tabs">
-                <button class="gtab on" onclick="showGal('parc',0,this)">Clubhouse Elevations</button>
-                <button class="gtab" onclick="showGal('parc',1,this)">Garage / Units</button>
-                <button class="gtab" onclick="showGal('parc',2,this)">Site Plan</button>
+                <button class="gtab on" onclick="event.stopPropagation();showGal('parc',0,this)">Clubhouse Elevations</button>
+                <button class="gtab" onclick="event.stopPropagation();showGal('parc',1,this)">Garage / Units</button>
+                <button class="gtab" onclick="event.stopPropagation();showGal('parc',2,this)">Site Plan</button>
               </div>
-              <img class="gal-img" id="parc-img" src="assets/parc_elev-01_web.jpg" alt="Parc at Daniel Farms Clubhouse Elevation" onclick="openLightbox(this.src, this.alt)" />
+              <img class="gal-img" id="parc-img" src="assets/parc_elev-01_web.jpg" alt="Parc at Daniel Farms Clubhouse Elevation" onclick="event.stopPropagation();openLightbox(this.src, this.alt)" />
               <div class="gal-caption" id="parc-cap">Clubhouse elevations (all 4 sides) — composition shingle roof, fiber cement board & batten, manufactured stone accents (HEDK Architects, Jan 2025)</div>
             </div>
 
@@ -411,8 +412,8 @@ window.addEventListener('DOMContentLoaded', () => {
         </div>
 
         <!-- DANIELDALE WIDENING -->
-        <div class="card" id="card-2" onclick="toggleCard(2)">
-          <div class="ctop">
+        <div class="card" id="card-2">
+          <div class="ctop" onclick="toggleCard(2)" style="cursor:pointer">
             <div class="cdot" style="color:#7C3AED;background:#7C3AED;"></div>
             <div class="ctxt"><div class="cname">Danieldale Rd Widening</div><div class="csub">Westmoreland Rd → Duncanville city limit</div></div>
             <div class="cbadge" style="background:#EDE9FE;color:#4C1D95;">In Design</div>
@@ -441,8 +442,8 @@ window.addEventListener('DOMContentLoaded', () => {
         </div>
 
         <!-- ZVL -->
-        <div class="card" id="card-3" onclick="toggleCard(3)">
-          <div class="ctop">
+        <div class="card" id="card-3">
+          <div class="ctop" onclick="toggleCard(3)" style="cursor:pointer">
             <div class="cdot" style="color:#0F766E;background:#0F766E;"></div>
             <div class="ctxt"><div class="cname">Zoning Verification Letters</div><div class="csub">2400 Bolton Boone Dr · Nov 2025 – Feb 2026</div></div>
             <div class="cbadge" style="background:#CCFBF1;color:#134E4A;">Active DD</div>
@@ -466,8 +467,8 @@ window.addEventListener('DOMContentLoaded', () => {
         </div>
 
         <!-- ECON SYMPOSIUM -->
-        <div class="card" id="card-4" onclick="toggleCard(4)">
-          <div class="ctop">
+        <div class="card" id="card-4">
+          <div class="ctop" onclick="toggleCard(4)" style="cursor:pointer">
             <div class="cdot" style="color:#D97706;background:#D97706;"></div>
             <div class="ctxt"><div class="cname">DeSoto Econ Development Symposium</div><div class="csub">City of DeSoto · April 2026</div></div>
             <div class="cbadge" style="background:#FEF3C7;color:#92400E;">Apr 2026</div>
@@ -674,6 +675,60 @@ window.addEventListener('DOMContentLoaded', () => {
           • 55-acre bulk limits buyer pool vs. 5–15 acre parcels<br>
           • DFW MF headwinds: 12% vacancy Q4 2025, -1.8% rent growth YoY<br>
           • Road widening in design; ROW acquisitions still ongoing as of Feb 2025
+        </div>
+      </div>
+
+      <!-- UPDATES TAB -->
+      <div class="panel pb" id="tab-updates">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div class="slbl" style="margin:0">Recent Updates</div>
+          <div style="font-size:9px;font-weight:700;color:var(--sll);text-transform:uppercase;letter-spacing:.05em">Last refreshed: Apr 2026</div>
+        </div>
+
+        <!-- Empty state — shown until first refresh -->
+        <div id="updates-empty" style="text-align:center;padding:32px 16px 24px">
+          <svg viewBox="0 0 48 48" width="40" height="40" style="margin:0 auto 12px;display:block;opacity:.3" fill="none">
+            <circle cx="24" cy="24" r="20" stroke="#94A3B8" stroke-width="2"/>
+            <path d="M24 14v10l6 6" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <div style="font-size:12px;font-weight:700;color:var(--sl);margin-bottom:6px">No updates yet</div>
+          <div style="font-size:10.5px;color:var(--sll);line-height:1.6;max-width:220px;margin:0 auto">This tab will populate when a research refresh is run. Check back after the next manual update.</div>
+        </div>
+
+        <!-- Update feed — hidden until populated -->
+        <div id="updates-feed" style="display:none;flex-direction:column;gap:8px"></div>
+
+        <!-- What gets tracked section -->
+        <div class="slbl" style="margin-top:18px">What Gets Tracked on Each Refresh</div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <div style="background:white;border:1.5px solid var(--bdr);border-radius:7px;padding:8px 11px;display:flex;gap:9px;align-items:flex-start">
+            <div style="width:7px;height:7px;border-radius:50%;background:#D97706;flex-shrink:0;margin-top:3px"></div>
+            <div><div style="font-size:10.5px;font-weight:700;color:var(--sl)">Red Sea (Z-1543-25)</div><div style="font-size:9.5px;color:var(--slm)">Jan 2026 council vote confirmation · Site plan approval · Permit filings · Construction start</div></div>
+          </div>
+          <div style="background:white;border:1.5px solid var(--bdr);border-radius:7px;padding:8px 11px;display:flex;gap:9px;align-items:flex-start">
+            <div style="width:7px;height:7px;border-radius:50%;background:#1D4ED8;flex-shrink:0;margin-top:3px"></div>
+            <div><div style="font-size:10.5px;font-weight:700;color:var(--sl)">Parc at Daniel Farms (PD-121)</div><div style="font-size:9.5px;color:var(--slm)">Construction permits · Groundbreaking date · Financing announcements</div></div>
+          </div>
+          <div style="background:white;border:1.5px solid var(--bdr);border-radius:7px;padding:8px 11px;display:flex;gap:9px;align-items:flex-start">
+            <div style="width:7px;height:7px;border-radius:50%;background:#7C3AED;flex-shrink:0;margin-top:3px"></div>
+            <div><div style="font-size:10.5px;font-weight:700;color:var(--sl)">Danieldale Rd Widening</div><div style="font-size:9.5px;color:var(--slm)">Construction start · Bolton Boone signal install · Completion timeline</div></div>
+          </div>
+          <div style="background:white;border:1.5px solid var(--bdr);border-radius:7px;padding:8px 11px;display:flex;gap:9px;align-items:flex-start">
+            <div style="width:7px;height:7px;border-radius:50%;background:#0F766E;flex-shrink:0;margin-top:3px"></div>
+            <div><div style="font-size:10.5px;font-weight:700;color:var(--sl)">ZVL Activity (2400 Bolton Boone)</div><div style="font-size:9.5px;color:var(--slm)">New ZVL filings · PIA request response · Buyer identity</div></div>
+          </div>
+          <div style="background:white;border:1.5px solid var(--bdr);border-radius:7px;padding:8px 11px;display:flex;gap:9px;align-items:flex-start">
+            <div style="width:7px;height:7px;border-radius:50%;background:#15803D;flex-shrink:0;margin-top:3px"></div>
+            <div><div style="font-size:10.5px;font-weight:700;color:var(--sl)">Land Comps & Pricing</div><div style="font-size:9.5px;color:var(--slm)">New DeSoto / Southern Dallas land transactions · Price per acre movements</div></div>
+          </div>
+          <div style="background:white;border:1.5px solid var(--bdr);border-radius:7px;padding:8px 11px;display:flex;gap:9px;align-items:flex-start">
+            <div style="width:7px;height:7px;border-radius:50%;background:#D97706;flex-shrink:0;margin-top:3px"></div>
+            <div><div style="font-size:10.5px;font-weight:700;color:var(--sl)">DeSoto City Actions</div><div style="font-size:9.5px;color:var(--slm)">New rezoning cases · P&Z agenda items · Council votes affecting the corridor</div></div>
+          </div>
+        </div>
+
+        <div style="background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:8px;padding:10px 12px;margin-top:14px;font-size:10px;color:#1D4ED8;line-height:1.6">
+          <strong>To request a refresh:</strong> Message your Perplexity agent and say "run a full update on the DeSoto map." All items above will be re-researched and any changes pushed to this page automatically.
         </div>
       </div>
 
@@ -939,7 +994,7 @@ map.on('load', () => {
       const info = parcelInfo[layerId];
       // Build popup HTML
       const imgHtml = info.img
-        ? `<img src="${info.img}" alt="${info.imgAlt}" style="width:100%;display:block;border-bottom:1px solid #eee;border-radius:0;max-height:140px;object-fit:cover;cursor:pointer" onclick="openLightbox(this.src, this.alt)" />`
+        ? `<img src="${info.img}" alt="${info.imgAlt}" style="width:100%;display:block;border-bottom:1px solid #eee;border-radius:0;max-height:140px;object-fit:cover;cursor:pointer" onclick="event.stopPropagation();openLightbox(this.src, this.alt)" />`
         : `<div style="background:${info.color};height:6px;"></div>`;
       const html = `<div>
         ${imgHtml}
