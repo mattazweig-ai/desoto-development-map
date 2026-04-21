@@ -297,7 +297,7 @@ window.addEventListener('DOMContentLoaded', () => {
     <div class="sidebar">
       <div class="tabs">
         <button class="tab on" onclick="switchTab('projects',this)">Projects</button>
-        <button class="tab" onclick="switchTab('timeline',this)">Timeline</button>
+        <button class="tab" onclick="switchTab('timeline',this)">City & Council</button>
         <button class="tab" onclick="switchTab('comps',this)">Comps & HBU</button>
         <button class="tab" onclick="switchTab('updates',this)">Updates</button>
       </div>
@@ -316,7 +316,7 @@ window.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
 
-        <div class="slbl">Adjacent Developments — Click to Expand</div>
+        <div class="slbl" style="margin-top:4px">Adjacent Developments</div>
 
         <!-- RED SEA -->
         <div class="card" id="card-0">
@@ -411,6 +411,36 @@ window.addEventListener('DOMContentLoaded', () => {
           </div></div>
         </div>
 
+
+        <!-- HOMESTEAD AT DANIEL FARMS -->
+        <div class="card" id="card-4">
+          <div class="ctop" onclick="toggleCard(4)" style="cursor:pointer">
+            <div class="cdot" style="color:#15803D;background:#15803D;"></div>
+            <div class="ctxt"><div class="cname">Homestead at Daniel Farms</div><div class="csub">Near Belt Line Rd · M/I Homes · Active Sales</div></div>
+            <div class="cbadge" style="background:#DCFCE7;color:#14532D;">Active Sales</div>
+            <div class="cchev">▼</div>
+          </div>
+          <div class="cbody"><div class="cinner">
+            <div class="cdesc"><strong>Master-planned single-family community</strong> by M/I Homes on the Danieldale corridor. Active sellout with strong price points — proving buyer demand for residential product in this area. Adjacent to your land's broader submarket.</div>
+            <div class="cgrid">
+              <div class="ckv"><div class="ck">Builder</div><div class="cv">M/I Homes</div></div>
+              <div class="ckv"><div class="ck">Type</div><div class="cv">Master-planned SF</div></div>
+              <div class="ckv"><div class="ck">Median Price</div><div class="cv">$389,000</div></div>
+              <div class="ckv"><div class="ck">Top Plan</div><div class="cv">4BR / 2.5BA / 2,300 SF</div></div>
+              <div class="ckv"><div class="ck">Incentives</div><div class="cv">Avg $12,000</div></div>
+              <div class="ckv"><div class="ck">Status</div><div class="cv">Active sellout</div></div>
+            </div>
+            <div class="cds">
+              <div class="cdt">Why This Matters</div>
+              <div class="cdd">Active SF absorption at $389K median proves DeSoto buyers exist at price points that support developer economics. Active incentives signal competition for buyers — not a distressed market. Bloomfield and D.R. Horton also active in Southern Dallas County at similar price points.</div>
+            </div>
+            <div class="ctags"><span class="ctag">M/I Homes</span><span class="ctag">Active Sellout</span><span class="ctag">SF Demand Signal</span></div>
+            <div class="cfoot"><span class="cfdate">Active sales · Belt Line Rd / Danieldale corridor</span></div>
+          </div></div>
+        </div>
+
+        <div class="slbl" style="margin-top:14px">Infrastructure</div>
+
         <!-- DANIELDALE WIDENING -->
         <div class="card" id="card-2">
           <div class="ctop" onclick="toggleCard(2)" style="cursor:pointer">
@@ -441,60 +471,10 @@ window.addEventListener('DOMContentLoaded', () => {
           </div></div>
         </div>
 
-        <!-- ZVL -->
-        <div class="card" id="card-3">
-          <div class="ctop" onclick="toggleCard(3)" style="cursor:pointer">
-            <div class="cdot" style="color:#0F766E;background:#0F766E;"></div>
-            <div class="ctxt"><div class="cname">Zoning Verification Letters</div><div class="csub">2400 Bolton Boone Dr · Nov 2025 – Feb 2026</div></div>
-            <div class="cbadge" style="background:#CCFBF1;color:#134E4A;">Active DD</div>
-            <div class="cchev">▼</div>
-          </div>
-          <div class="cbody"><div class="cinner">
-            <div class="cdesc">Three ZVLs filed at 2400 Bolton Boone in 3 months. A ZVL is a formal city confirmation of zoning and permitted uses — almost always filed by a <strong>buyer, developer, or lender doing pre-transaction due diligence</strong>. Three in three months = active deal process on this Bolton Boone parcel, roughly 1.5 miles north of your land.</div>
-            <div class="cgrid">
-              <div class="ckv"><div class="ck">ZVL #1</div><div class="cv">Nov 17, 2025 (ZVL0007-2025)</div></div>
-              <div class="ckv"><div class="ck">ZVL #2</div><div class="cv">Jan 21, 2026 (ZVL0015-2026)</div></div>
-              <div class="ckv"><div class="ck">ZVL #3</div><div class="cv">Feb 2, 2026 (ZVL0020-2026)</div></div>
-              <div class="ckv"><div class="ck">Portal</div><div class="cv">Tyler EnerGov (DeSoto)</div></div>
-            </div>
-            <div class="cds">
-              <div class="cdt">Actionable Next Step</div>
-              <div class="cdd">File a Texas Public Information Act (PIA) request with the DeSoto City Clerk (cityclerk@desototx.gov) to identify who filed these ZVLs. That party is almost certainly actively underwriting Bolton Boone corridor land right now — a direct buyer lead.</div>
-            </div>
-            <div class="ctags"><span class="ctag">Due Diligence Signal</span><span class="ctag">Bolton Boone Corridor</span><span class="ctag">Possible Buyer Lead</span></div>
-            <div class="cfoot"><span class="cfdate">Nov 2025 – Feb 2026 · Tyler EnerGov</span></div>
-          </div></div>
-        </div>
-
-        <!-- ECON SYMPOSIUM -->
-        <div class="card" id="card-4">
-          <div class="ctop" onclick="toggleCard(4)" style="cursor:pointer">
-            <div class="cdot" style="color:#D97706;background:#D97706;"></div>
-            <div class="ctxt"><div class="cname">DeSoto Econ Development Symposium</div><div class="csub">City of DeSoto · April 2026</div></div>
-            <div class="cbadge" style="background:#FEF3C7;color:#92400E;">Apr 2026</div>
-            <div class="cchev">▼</div>
-          </div>
-          <div class="cbody"><div class="cinner">
-            <div class="cdesc">DEDC annual symposium where DeSoto presents active deals and growth strategy to the business community. Councilmember Byrd stated publicly <strong>"big things are happening in DeSoto"</strong> — signaling continued political will for development approvals.</div>
-            <div class="cgrid">
-              <div class="ckv"><div class="ck">Host</div><div class="cv">DEDC / Councilmember Byrd</div></div>
-              <div class="ckv"><div class="ck">Date</div><div class="cv">April 2026</div></div>
-              <div class="ckv"><div class="ck">Growth Votes</div><div class="cv">Byrd + Chisholm</div></div>
-              <div class="ckv"><div class="ck">Skeptic</div><div class="cv">Parker</div></div>
-            </div>
-            <div class="cds">
-              <div class="cdt">City Growth Pivot</div>
-              <div class="cdd">DeSoto moving away from industrial/warehouse toward high-value uses: 90-acre BioLife Science Campus in pre-development, $1B bio-manufacturing facility RFP under consideration. Baker Tilly engaged to redefine target industries. $200K allocated to rewrite 40-year-old zoning code. AA bond rating (S&P + Moody's, May 2025).</div>
-            </div>
-            <div class="ctags"><span class="ctag">DEDC</span><span class="ctag">Growth Signal</span><span class="ctag">Byrd + Chisholm Pro-Growth</span><span class="ctag">AA Bond Rating</span></div>
-            <div class="cfoot"><span class="cfdate">April 2026 · Annual symposium</span></div>
-          </div></div>
-        </div>
       </div>
 
-      <!-- TIMELINE -->
+      <!-- CITY & COUNCIL -->
       <div class="panel pb" id="tab-timeline">
-        <div class="slbl" style="margin-top:0">Confirmed Events — Click for Full Detail</div>
         <div id="tlc"></div>
       </div>
 
@@ -729,6 +709,29 @@ window.addEventListener('DOMContentLoaded', () => {
 
         <div style="background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:8px;padding:10px 12px;margin-top:14px;font-size:10px;color:#1D4ED8;line-height:1.6">
           <strong>To request a refresh:</strong> Message your Perplexity agent and say "run a full update on the DeSoto map." All items above will be re-researched and any changes pushed to this page automatically.
+        </div>
+      </div>
+
+      <!-- GLOSSARY -->
+      <div id="glossary-wrap" style="border-top:1px solid var(--bdr);flex-shrink:0;background:white;">
+        <button onclick="toggleGlossary()" style="width:100%;padding:9px 13px;display:flex;align-items:center;justify-content:space-between;background:none;border:none;cursor:pointer;font-family:inherit;">
+          <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--sll)">Key Terms & Glossary</span>
+          <span id="glos-arrow" style="font-size:9px;color:var(--sll);transition:transform .2s;display:inline-block;">▼</span>
+        </button>
+        <div id="glossary-body" style="max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.4,0,.2,1);">
+          <div style="padding:0 13px 12px;display:flex;flex-direction:column;gap:5px;">
+            <div style="background:var(--bg);border-radius:6px;padding:7px 9px"><div style="font-size:9.5px;font-weight:700;color:var(--sl)">Entitled</div><div style="font-size:9px;color:var(--slm);margin-top:1px;line-height:1.5">A property that has received government approval (zoning, permits) to be developed for a specific use. Reduces risk for buyers — less regulatory uncertainty.</div></div>
+            <div style="background:var(--bg);border-radius:6px;padding:7px 9px"><div style="font-size:9.5px;font-weight:700;color:var(--sl)">FLUM — Future Land Use Map</div><div style="font-size:9px;color:var(--slm);margin-top:1px;line-height:1.5">City's official plan showing intended future use of land. Not legally binding zoning, but a strong signal of what will be approved. Subject parcel: Destination Mixed Use.</div></div>
+            <div style="background:var(--bg);border-radius:6px;padding:7px 9px"><div style="font-size:9.5px;font-weight:700;color:var(--sl)">MU-R — Mixed Use Residential</div><div style="font-size:9px;color:var(--slm);margin-top:1px;line-height:1.5">DeSoto zoning designation allowing townhomes, multifamily, and ground-floor retail. The correct zone for the Red Sea project (required corrective rezoning from MU-1).</div></div>
+            <div style="background:var(--bg);border-radius:6px;padding:7px 9px"><div style="font-size:9.5px;font-weight:700;color:var(--sl)">MU-1 — Mixed Use 1</div><div style="font-size:9px;color:var(--slm);margin-top:1px;line-height:1.5">Similar to MU-R but does NOT permit townhomes — why Red Sea needed a corrective rezoning in Dec 2025.</div></div>
+            <div style="background:var(--bg);border-radius:6px;padding:7px 9px"><div style="font-size:9.5px;font-weight:700;color:var(--sl)">PD — Planned Development</div><div style="font-size:9px;color:var(--slm);margin-top:1px;line-height:1.5">Custom zoning district negotiated with the city for a specific project, specifying uses, densities, and design standards. Parc at Daniel Farms = PD-121.</div></div>
+            <div style="background:var(--bg);border-radius:6px;padding:7px 9px"><div style="font-size:9.5px;font-weight:700;color:var(--sl)">P&Z — Planning & Zoning Commission</div><div style="font-size:9px;color:var(--slm);margin-top:1px;line-height:1.5">City board that reviews and recommends on rezoning applications before City Council vote. Approval here is required before council can act.</div></div>
+            <div style="background:var(--bg);border-radius:6px;padding:7px 9px"><div style="font-size:9.5px;font-weight:700;color:var(--sl)">ZVL — Zoning Verification Letter</div><div style="font-size:9px;color:var(--slm);margin-top:1px;line-height:1.5">Formal written confirmation from city of current zoning and permitted uses. Almost always filed by buyers or lenders during due diligence — a strong deal signal.</div></div>
+            <div style="background:var(--bg);border-radius:6px;padding:7px 9px"><div style="font-size:9.5px;font-weight:700;color:var(--sl)">HBU — Highest & Best Use</div><div style="font-size:9px;color:var(--slm);margin-top:1px;line-height:1.5">The legally permissible, physically possible, financially feasible, and maximally productive use of a property. The gold standard for land valuation.</div></div>
+            <div style="background:var(--bg);border-radius:6px;padding:7px 9px"><div style="font-size:9.5px;font-weight:700;color:var(--sl)">DCAD — Dallas Central Appraisal District</div><div style="font-size:9px;color:var(--slm);margin-top:1px;line-height:1.5">The county office that tracks property ownership, assessed values, and dimensions for tax purposes. Used to verify parcel boundaries and acreage.</div></div>
+            <div style="background:var(--bg);border-radius:6px;padding:7px 9px"><div style="font-size:9.5px;font-weight:700;color:var(--sl)">BTR — Build-to-Rent</div><div style="font-size:9px;color:var(--slm);margin-top:1px;line-height:1.5">Residential development (often SF or townhomes) built specifically to be rented rather than sold. A major buyer category for land like this.</div></div>
+            <div style="background:var(--bg);border-radius:6px;padding:7px 9px"><div style="font-size:9.5px;font-weight:700;color:var(--sl)">CIP — Capital Improvement Program</div><div style="font-size:9px;color:var(--slm);margin-top:1px;line-height:1.5">City's multi-year plan for infrastructure spending. The Danieldale widening is CIP-funded, meaning it's already budgeted and bonded — not just proposed.</div></div>
+          </div>
         </div>
       </div>
 
@@ -1080,62 +1083,112 @@ function switchTab(name, btn) {
   }
 }
 
-// ── TIMELINE ──
-const tlData = [
-  {date:'Apr 2026',color:'#D97706',title:'DeSoto Econ Development Symposium',
-   desc:'Councilmember Byrd: "big things are happening in DeSoto." City presented growth strategy to business community.',
-   extra:'<strong>Key People:</strong> Councilmember Carl Byrd (District 3, growth proponent), Mayor Rachel Proctor, Councilmember Candice Chisholm (economic development chair), City Manager Tarron Richardson, DEDC Executive Director Darryl Maximilian Robinson.<br><br><strong>City Strategy:</strong> DeSoto is mid-pivot — away from industrial/warehouse toward high-value mixed-use and life sciences. Active initiatives: 90-acre BioLife Science Campus (pre-development, partnered with DFW airport corridor anchor), $1B bio-manufacturing RFP issued, Baker Tilly engaged to rewrite target industry framework, $200K appropriated to overhaul 40-year-old zoning code.<br><br><strong>Fiscal Position:</strong> AA bond rating (S&P + Moody\'s, May 2025). $48.55M CIP bond issued. DeSoto\'s general fund is structurally balanced per audits through FY2025.<br><br><strong>Signal for Subject Site:</strong> Byrd publicly stated "big things are happening in DeSoto" — political will for continued MU approvals is strong. The 1400 Bolton Boone corridor sits squarely in the FLUM\'s Destination Mixed Use zone, which the city has approved every application in.'},
-  {date:'Mar 2026',color:'#DC2626',title:'Two Affordable Housing Applications (TDHCA)',
-   desc:'Reserve at DeSoto (100 units elderly) and Victory Village (90 units) submitted under 2026 9% HTC round.',
-   extra:'<strong>Applications:</strong><br>• <em>Reserve at DeSoto</em> — 100 units, senior/elderly housing, 121 S. Elerson Rd. Developer not publicly disclosed in filings reviewed.<br>• <em>Victory Village</em> — 90 units, family workforce housing, 911 N. Hampton Rd.<br><br><strong>Program:</strong> Texas 9% Low Income Housing Tax Credit (LIHTC), administered by TDHCA. Highly competitive — statewide award rate typically under 30%. Awards expected Q3 2026.<br><br><strong>Location Context:</strong> Neither project is on the Bolton Boone/Danieldale corridor but both confirm the city is actively supporting residential density across multiple neighborhoods simultaneously. Combined with PD-121 (Parc) and Red Sea, DeSoto is on track to add 500+ residential units in the next 3–5 years.'},
-  {date:'Feb 2026',color:'#0F766E',title:'3rd ZVL — 2400 Bolton Boone',
-   desc:'ZVL0020-2026 filed Feb 2, 2026. Third ZVL in 3 months at same address.',
-   extra:'<strong>What is a ZVL?</strong> A Zoning Verification Letter is a formal written confirmation from DeSoto\'s planning department confirming: (1) current zoning classification, (2) permitted uses, (3) any active variances or special conditions. Developers and lenders require them during due diligence.<br><br><strong>3 ZVLs in 3 months at the same address is highly unusual.</strong> Typical pattern: 1 ZVL per buyer per site. Multiple ZVLs suggest either: (a) multiple parties independently evaluating the same parcel, or (b) one party re-filing as deal structure evolved (e.g. different entity names for a fund, lender, or JV partner).<br><br><strong>Timing significance:</strong> All three ZVLs occurred after the Danieldale widening design hit 90%, after Red Sea MU-R approval, and as Parc at Daniel Farms was moving through amendment. The filer was almost certainly tracking these catalysts.<br><br><strong>Action item:</strong> File a Texas Public Information Act (PIA) request to cityclerk@desototx.gov requesting the ZVL applicant name, contact, and any correspondence for ZVL0007-2025, ZVL0015-2026, and ZVL0020-2026. Response required within 10 business days.'},
-  {date:'Jan 2026',color:'#D97706',title:'Red Sea — City Council Final Vote (Scheduled)',
-   desc:'Z-1543-25 scheduled for DeSoto City Council vote per staff report notification section.',
-   extra:'<strong>Case:</strong> Z-1543-25 — Rezone from MU-1 to MU-R, 1001 W. Danieldale Rd (9.86 ac)<br><strong>Scheduled:</strong> January 6, 2026 City Council public hearing (per Dec 9 P&Z staff report)<br><strong>P&Z vote:</strong> Unanimous approval, Dec 9, 2025<br><strong>Outcome:</strong> Not yet confirmed from primary record as of April 2026.<br><br><strong>Key People:</strong><br>• <em>Herschel Smith</em> — Applicant/Developer, Smith Legacy Development. Dallas-based developer with DeSoto track record.<br>• <em>Johnny Limones</em> — Architect, Vizual Architecture LLC. Prepared all elevation and site plan submittals.<br>• <em>St. Stephen Community Church Inc</em> — Property owner of record (4.86 ac per DCAD, Account #65001011300000100).<br><br><strong>Verify:</strong> Call DeSoto Planning Dept at (972) 230-9620 or review the Jan 6, 2026 council video at desototx.new.swagit.com/videos.'},
-  {date:'Jan 2026',color:'#0F766E',title:'2nd ZVL — 2400 Bolton Boone',
-   desc:'ZVL0015-2026 filed Jan 21, 2026. Second ZVL in 2 months.',
-   extra:'Second ZVL at 2400 Bolton Boone within a 2-month window, following the first in November 2025. Rapid succession suggests an active deal process.'},
-  {date:'Dec 2025',color:'#D97706',title:'Red Sea — P&Z Unanimous Approval',
-   desc:'Dec 9, 2025 — DeSoto P&Z unanimously approved corrective MU-R rezoning (Z-1543-25).',
-   extra:'<strong>Project Program (8 phases):</strong><br>• Phase 1: 10 townhomes (Danieldale frontage, 4-story, ~50 ft, rooftop terraces)<br>• Phases 2–4: 34 additional townhomes<br>• Phases 5–6: 66-unit multifamily building<br>• Phase 7: 35,000 SF office/retail + 5,000 SF restaurant<br>• Phase 8: 33,600 SF structured parking garage<br><br><strong>Why MU-1 → MU-R?</strong> MU-1 (Mixed Use 1) does not permit townhomes as a use type per DeSoto\'s UDC. Staff caught the discrepancy when Smith Legacy submitted the site plan in Nov 2025. MU-R (Mixed Use Residential) explicitly permits townhomes + multifamily + ground-floor retail — the correct designation.<br><br><strong>Key People:</strong><br>• <em>Herschel Smith</em>, Smith Legacy Development — developer/applicant<br>• <em>Johnny Limones</em>, Vizual Architecture LLC — architect of record<br>• <em>St. Stephen Community Church Inc</em> — landowner<br><br><strong>Staff finding:</strong> Compatible with 2024 Comprehensive Plan Destination Mixed Use FLUM. Unanimous P&Z recommendation.'},
-  {date:'Dec 2025',color:'#7C3AED',title:'Hampton Road Corridor Rezoning Approved',
-   desc:'Dec 2, 2025 — Council approved HRCC for walkable high-density Urban Center.',
-   extra:'Hampton Road Character Code (HRCC) establishes high-density mixed-use "Urban Center" along Hampton Road. Separate from Danieldale/Bolton Boone but signals city-wide push toward density and walkable mixed-use. $50M Hampton Road CIP (2025–2029) listed for site work and paving.'},
-  {date:'Nov 2025',color:'#D97706',title:'Red Sea Site Plan Submitted — Staff Finds MU-1 Error',
-   desc:'Smith Legacy submitted for site plan review; staff discovered MU-1 doesn\'t permit townhomes.',
-   extra:'This was a staff oversight from the original May 2025 MU-1 rezoning. When the site plan came in showing townhomes, staff caught the discrepancy and required a corrective rezoning to MU-R before the site plan could proceed. The December 9 P&Z hearing was the corrective step.'},
-  {date:'Nov 2025',color:'#0F766E',title:'1st ZVL — 2400 Bolton Boone',
-   desc:'ZVL0007-2025 filed Nov 17, 2025. First signal of active buyer DD on Bolton Boone.',
-   extra:'First recorded signal of developer or buyer interest at 2400 Bolton Boone Dr. Timing — November 2025 — coincides with Red Sea site plan submission and Danieldale widening design near completion. Highly likely the ZVL filer was tracking these developments.'},
-  {date:'May 2025',color:'#1D4ED8',title:'Parc at Daniel Farms — Approved 7-0',
-   desc:'May 6, 2025 — Council unanimously approved PD-121 amendment for 82-acre multifamily.',
-   extra:'<strong>Project:</strong> 80.9-acre garden-style multifamily, Phase 1 = 17.4 acres. Approved as PD-121 amendment (7-0) May 6, 2025.<br><br><strong>Key People &amp; Companies:</strong><br>• <em>Pillar Income Asset Management</em> — Owner/developer. Dallas-based private REIT manager. Contact: Jonathan Clayton, 1603 LBJ Freeway Suite 800, Dallas TX 75234.<br>• <em>HEDK Architects</em> — Architect of record. Contact: Erik Earnshaw. Prepared all clubhouse, unit, and carport elevations.<br>• <em>Westwood Professional Services</em> — Civil engineer. Contact: Ashley Reynolds. DPP DeSoto Professional Park LLC holds DCAD title.<br><br><strong>What changed in the amendment:</strong><br>• Clubhouse enlarged: 4,844 SF → 6,491 SF<br>• Roof style changed: gable → hip roofs<br>• Exterior: brick → fiber cement siding + accent stone veneer<br>• Landscape plan updated (Exhibit F)<br><br><strong>Status as of April 2026:</strong> Approved, no construction permits pulled yet. Pillar is likely in pre-development/capital stack assembly. No groundbreaking date announced.'},
-  {date:'May 2025',color:'#D97706',title:'Red Sea — Original MU-1 Rezoning Approved',
-   desc:'May 6, 2025 — Council approved Office-1 → MU-1 rezoning for 1001 Danieldale.',
-   extra:'Applicant Herschel Smith / Smith Legacy Development. P&Z recommended Apr 8, 2025. Cited compatibility with 2024 Comprehensive Plan "Destination Mixed Use" FLUM designation. Later found to have a staff error (MU-1 doesn\'t permit townhomes), leading to corrective MU-R rezoning December 2025.'},
-  {date:'May 2025',color:'#1D4ED8',title:'DeSoto Issues $48.55M AA-Rated Bonds',
-   desc:'Bond issuance rated AA by both S&P and Moody\'s. Funds Westmoreland signals, streets, water/sewer.',
-   extra:'<strong>Bond rating:</strong> AA (S&P) and Aa3 (Moody\'s) — issued May 2025. This is DeSoto\'s highest-ever credit rating and puts the city among the top-rated municipalities in Dallas County.<br><br><strong>CIP projects funded ($48.55M):</strong><br>• Westmoreland Road signal renovations<br>• Danieldale Road widening (including new Bolton Boone signal)<br>• Alley reconstruction citywide<br>• Aquatics/recreation center upgrades<br>• Wolf Creek drainage improvements<br>• Nance Farm development site work<br>• Water/sewer capital replacements<br><br><strong>What this means for buyers:</strong> DeSoto has the balance sheet and bond capacity to deliver the infrastructure it has promised. The Danieldale widening is not a "maybe" — it is funded and in design. A buyer of 1400 Bolton Boone is acquiring a site with imminent access improvements already financed by the city.'},
-  {date:'Feb 2025',color:'#7C3AED',title:'Danieldale Rd Widening — Design 90%, Bids Open',
-   desc:'Phase 1A bids opened. Design 90% complete. New signal at Bolton Boone confirmed in scope.',
-   extra:'<strong>Project scope:</strong> Widen W. Danieldale Rd from Westmoreland Rd to the Duncanville city limit — 4 concrete travel lanes (2 each direction), raised median, upgraded water/sewer utilities, sidewalks on both sides (DeSoto/Duncanville coordinated), drainage improvements.<br><br><strong>Critical for subject site:</strong> New traffic signal specifically at Bolton Boone Drive is included in the scope. This directly serves the 1400 Bolton Boone driveway — a major access upgrade that materially improves the site\'s development feasibility and value.<br><br><strong>Timeline:</strong> Design 90% complete as of Feb 2025. Phase 1A bids opened. Construction timeline not yet confirmed publicly.<br><br><strong>Funding:</strong> $48.55M CIP Bond (AA-rated, May 2025). DeSoto is coordinating with Duncanville on sidewalk connectivity across the city limit boundary.<br><br><strong>Key Contact:</strong> DeSoto City Engineer confirmed scope at Dec 9, 2025 P&Z meeting. Contact Public Works at (972) 230-9600 for construction timeline updates.'},
+// ── CITY & COUNCIL TIMELINE ──
+// Sections: city-council | pz | econ-dev | buyer-activity | infrastructure
+const tlSections = [
+  { id:'city-council',    label:'City Council',         subtitle:'1st & 3rd Tuesday monthly · Current Mayor: Rachel Proctor', color:'#1D4ED8' },
+  { id:'pz',              label:'P&Z Commission',        subtitle:'Planning & Zoning — hears rezoning cases before council vote', color:'#7C3AED' },
+  { id:'econ-dev',        label:'Economic Development',  subtitle:'DEDC · Bond activity · Growth strategy', color:'#D97706' },
+  { id:'buyer-activity',  label:'Buyer Activity',        subtitle:'Zoning verification letters & due diligence signals', color:'#0F766E' },
+  { id:'infrastructure',  label:'Infrastructure',        subtitle:'Roads, utilities, and capital improvements', color:'#7C3AED' },
 ];
 
+const tlData = [
+  // ── CITY COUNCIL ──
+  {section:'city-council', date:'Jan 2026',color:'#D97706',title:'Red Sea — City Council Final Vote (Scheduled)',
+   desc:'Z-1543-25 scheduled for DeSoto City Council vote per staff report notification section.',
+   extra:'<strong>Case:</strong> Z-1543-25 — Rezone from MU-1 to MU-R, 1001 W. Danieldale Rd (9.86 ac)<br><strong>Scheduled:</strong> January 6, 2026 City Council public hearing (per Dec 9 P&Z staff report)<br><strong>P&Z vote:</strong> Unanimous approval, Dec 9, 2025<br><strong>Outcome:</strong> Not yet confirmed from primary record as of April 2026.<br><br><strong>Key People:</strong><br>• <em>Herschel Smith</em> — Applicant/Developer, Smith Legacy Development. Dallas-based developer with DeSoto track record.<br>• <em>Johnny Limones</em> — Architect, Vizual Architecture LLC. Prepared all elevation and site plan submittals.<br>• <em>St. Stephen Community Church Inc</em> — Property owner of record (4.86 ac per DCAD, Account #65001011300000100).<br><br><strong>Verify:</strong> Call DeSoto Planning Dept at (972) 230-9620 or review the Jan 6, 2026 council video at desototx.new.swagit.com/videos.'},
+  {section:'city-council', date:'May 2025',color:'#1D4ED8',title:'Parc at Daniel Farms — Approved 7-0',
+   desc:'May 6, 2025 — Council unanimously approved PD-121 amendment for 82-acre multifamily.',
+   extra:'<strong>Project:</strong> 80.9-acre garden-style multifamily, Phase 1 = 17.4 acres. Approved as PD-121 amendment (7-0) May 6, 2025.<br><br><strong>Key People &amp; Companies:</strong><br>• <em>Pillar Income Asset Management</em> — Owner/developer. Dallas-based private REIT manager. Contact: Jonathan Clayton, 1603 LBJ Freeway Suite 800, Dallas TX 75234.<br>• <em>HEDK Architects</em> — Architect of record. Contact: Erik Earnshaw. Prepared all clubhouse, unit, and carport elevations.<br>• <em>Westwood Professional Services</em> — Civil engineer. Contact: Ashley Reynolds.<br><br><strong>What changed in the amendment:</strong><br>• Clubhouse enlarged: 4,844 SF → 6,491 SF<br>• Roof style changed: gable → hip roofs<br>• Exterior: brick → fiber cement siding + accent stone veneer<br>• Landscape plan updated (Exhibit F)<br><br><strong>Status as of April 2026:</strong> Approved, no construction permits pulled yet.'},
+  {section:'city-council', date:'May 2025',color:'#D97706',title:'Red Sea — Original MU-1 Rezoning Approved',
+   desc:'May 6, 2025 — Council approved Office-1 → MU-1 rezoning for 1001 Danieldale.',
+   extra:'Applicant Herschel Smith / Smith Legacy Development. P&Z recommended Apr 8, 2025. Cited compatibility with 2024 Comprehensive Plan "Destination Mixed Use" FLUM designation. Later found to have a staff error (MU-1 doesn\'t permit townhomes), leading to corrective MU-R rezoning December 2025.'},
+  {section:'city-council', date:'Dec 2025',color:'#7C3AED',title:'Hampton Road Corridor Rezoning Approved',
+   desc:'Dec 2, 2025 — Council approved HRCC for walkable high-density Urban Center.',
+   extra:'Hampton Road Character Code (HRCC) establishes high-density mixed-use "Urban Center" along Hampton Road. Separate from Danieldale/Bolton Boone but signals city-wide push toward density and walkable mixed-use. $50M Hampton Road CIP (2025–2029) listed for site work and paving.'},
+
+  // ── P&Z ──
+  {section:'pz', date:'Dec 2025',color:'#D97706',title:'Red Sea — P&Z Unanimous Approval (MU-R)',
+   desc:'Dec 9, 2025 — DeSoto P&Z unanimously approved corrective MU-R rezoning (Z-1543-25).',
+   extra:'<strong>Project Program (8 phases):</strong><br>• Phase 1: 10 townhomes (Danieldale frontage, 4-story, ~50 ft, rooftop terraces)<br>• Phases 2–4: 34 additional townhomes<br>• Phases 5–6: 66-unit multifamily building<br>• Phase 7: 35,000 SF office/retail + 5,000 SF restaurant<br>• Phase 8: 33,600 SF structured parking garage<br><br><strong>Why MU-1 → MU-R?</strong> MU-1 (Mixed Use 1) does not permit townhomes as a use type per DeSoto\'s UDC. Staff caught the discrepancy when Smith Legacy submitted the site plan in Nov 2025. MU-R (Mixed Use Residential) explicitly permits townhomes + multifamily + ground-floor retail — the correct designation.<br><br><strong>Key People:</strong><br>• <em>Herschel Smith</em>, Smith Legacy Development — developer/applicant<br>• <em>Johnny Limones</em>, Vizual Architecture LLC — architect of record<br>• <em>St. Stephen Community Church Inc</em> — landowner<br><br><strong>Staff finding:</strong> Compatible with 2024 Comprehensive Plan Destination Mixed Use FLUM. Unanimous P&Z recommendation.'},
+  {section:'pz', date:'Apr 2025',color:'#D97706',title:'Red Sea — P&Z Recommended MU-1 (Original)',
+   desc:'Apr 8, 2025 — P&Z recommended MU-1 rezoning for 1001 Danieldale (later found to be error).',
+   extra:'P&Z recommended the original MU-1 rezoning for the Red Sea site, citing compatibility with the FLUM\'s Destination Mixed Use designation. The vote was later forwarded to council where it was approved May 6, 2025. A staff error meant MU-1 didn\'t permit townhomes — triggering the Dec 2025 corrective MU-R hearing.'},
+
+  // ── ECONOMIC DEVELOPMENT ──
+  {section:'econ-dev', date:'Apr 2026',color:'#D97706',title:'DeSoto Economic Development Symposium',
+   desc:'DEDC annual symposium — Councilmember Byrd: "big things are happening in DeSoto."',
+   extra:'<strong>Key People:</strong> Councilmember Carl Byrd (District 3, growth proponent), Mayor Rachel Proctor, Councilmember Candice Chisholm (economic development chair), City Manager Tarron Richardson, DEDC Executive Director Darryl Maximilian Robinson.<br><br><strong>City Strategy:</strong> DeSoto is mid-pivot — away from industrial/warehouse toward high-value mixed-use and life sciences. Active initiatives: 90-acre BioLife Science Campus (pre-development), $1B bio-manufacturing RFP issued, Baker Tilly engaged to rewrite target industry framework, $200K appropriated to overhaul 40-year-old zoning code.<br><br><strong>Fiscal Position:</strong> AA bond rating (S&P + Moody\'s, May 2025). $48.55M CIP bond issued. DeSoto\'s general fund is structurally balanced per audits through FY2025.<br><br><strong>Signal for Subject Site:</strong> Byrd publicly stated "big things are happening in DeSoto" — political will for continued MU approvals is strong. The 1400 Bolton Boone corridor sits squarely in the FLUM\'s Destination Mixed Use zone, which the city has approved every application in.'},
+  {section:'econ-dev', date:'May 2025',color:'#1D4ED8',title:'DeSoto Issues $48.55M AA-Rated Bonds',
+   desc:'Bond issuance rated AA by both S&P and Moody\'s. Funds Westmoreland signals, streets, water/sewer.',
+   extra:'<strong>Bond rating:</strong> AA (S&P) and Aa3 (Moody\'s) — issued May 2025. Highest-ever credit rating for DeSoto — among top-rated municipalities in Dallas County.<br><br><strong>CIP projects funded ($48.55M):</strong><br>• Westmoreland Road signal renovations<br>• Danieldale Road widening (including new Bolton Boone signal)<br>• Alley reconstruction citywide<br>• Aquatics/recreation center upgrades<br>• Wolf Creek drainage improvements<br>• Nance Farm development site work<br>• Water/sewer capital replacements<br><br><strong>What this means for buyers:</strong> DeSoto has the balance sheet to deliver the infrastructure it has promised. The Danieldale widening is funded and in design — not just proposed.'},
+  {section:'econ-dev', date:'Mar 2026',color:'#DC2626',title:'Two Affordable Housing Applications (TDHCA)',
+   desc:'Reserve at DeSoto (100 units elderly) and Victory Village (90 units) submitted under 2026 9% HTC round.',
+   extra:'<strong>Applications:</strong><br>• <em>Reserve at DeSoto</em> — 100 units, senior/elderly housing, 121 S. Elerson Rd.<br>• <em>Victory Village</em> — 90 units, family workforce housing, 911 N. Hampton Rd.<br><br><strong>Program:</strong> Texas 9% Low Income Housing Tax Credit (LIHTC), administered by TDHCA. Awards expected Q3 2026.<br><br><strong>Context:</strong> Neither project is on the Bolton Boone/Danieldale corridor but both confirm DeSoto is actively supporting residential density across multiple neighborhoods. Combined with PD-121 (Parc) and Red Sea, DeSoto is on track to add 500+ residential units in 3–5 years.'},
+
+  // ── BUYER ACTIVITY ──
+  {section:'buyer-activity', date:'Feb 2026',color:'#0F766E',title:'3rd ZVL — 2400 Bolton Boone',
+   desc:'ZVL0020-2026 filed Feb 2, 2026. Third ZVL in 3 months at same address.',
+   extra:'<strong>What is a ZVL?</strong> A Zoning Verification Letter is formal written confirmation from DeSoto\'s planning department of: (1) current zoning classification, (2) permitted uses, (3) any active variances. Developers and lenders require them during due diligence.<br><br><strong>3 ZVLs in 3 months is highly unusual.</strong> Multiple ZVLs suggest either: (a) multiple parties independently evaluating the same parcel, or (b) one party re-filing as deal structure evolved.<br><br><strong>Action item:</strong> File a Texas Public Information Act (PIA) request to cityclerk@desototx.gov requesting the ZVL applicant name, contact, and any correspondence for ZVL0007-2025, ZVL0015-2026, and ZVL0020-2026. Response required within 10 business days.'},
+  {section:'buyer-activity', date:'Jan 2026',color:'#0F766E',title:'2nd ZVL — 2400 Bolton Boone',
+   desc:'ZVL0015-2026 filed Jan 21, 2026. Second ZVL in 2 months.',
+   extra:'Second ZVL at 2400 Bolton Boone within a 2-month window, following the first in November 2025. Rapid succession suggests an active deal process. Timing coincides with Red Sea MU-R P&Z approval and Danieldale widening near construction.'},
+  {section:'buyer-activity', date:'Nov 2025',color:'#0F766E',title:'1st ZVL — 2400 Bolton Boone',
+   desc:'ZVL0007-2025 filed Nov 17, 2025. First signal of active buyer DD on Bolton Boone.',
+   extra:'First recorded signal of developer or buyer interest at 2400 Bolton Boone Dr. Timing — November 2025 — coincides with Red Sea site plan submission and Danieldale widening design near completion. Highly likely the ZVL filer was tracking these developments.'},
+
+  // ── INFRASTRUCTURE ──
+  {section:'infrastructure', date:'Nov 2025',color:'#D97706',title:'Red Sea Site Plan Submitted — Staff Finds MU-1 Error',
+   desc:'Smith Legacy submitted for site plan review; staff discovered MU-1 doesn\'t permit townhomes.',
+   extra:'This was a staff oversight from the original May 2025 MU-1 rezoning. When the site plan came in showing townhomes, staff caught the discrepancy and required a corrective rezoning to MU-R before the site plan could proceed. The December 9 P&Z hearing was the corrective step.'},
+  {section:'infrastructure', date:'Feb 2025',color:'#7C3AED',title:'Danieldale Rd Widening — Design 90%, Bids Open',
+   desc:'Phase 1A bids opened. Design 90% complete. New signal at Bolton Boone confirmed in scope.',
+   extra:'<strong>Project scope:</strong> Widen W. Danieldale Rd from Westmoreland Rd to the Duncanville city limit — 4 concrete travel lanes (2 each direction), raised median, upgraded water/sewer utilities, sidewalks on both sides, drainage improvements.<br><br><strong>Critical for subject site:</strong> New traffic signal specifically at Bolton Boone Drive is included in the scope. This directly serves the 1400 Bolton Boone driveway — a major access upgrade that materially improves development feasibility and value.<br><br><strong>Timeline:</strong> Design 90% complete as of Feb 2025. Phase 1A bids opened. Construction timeline not yet confirmed publicly.<br><br><strong>Funding:</strong> $48.55M CIP Bond (AA-rated, May 2025). DeSoto coordinating with Duncanville on sidewalk connectivity.<br><br><strong>Key Contact:</strong> DeSoto City Engineer confirmed scope at Dec 9, 2025 P&Z meeting. Contact Public Works at (972) 230-9600 for construction timeline updates.'},
+];
+
+// Build timeline with section headers
 const tlc = document.getElementById('tlc');
-tlData.forEach((item,i) => {
-  const div = document.createElement('div'); div.className='tli';
-  div.innerHTML=`<div class="tll"><div class="tld" style="background:${item.color};"></div>${i<tlData.length-1?'<div class="tlline"></div>':''}</div>
-  <div class="tlr"><div class="tldate">${item.date}</div><div class="tltitle">${item.title}</div>
-  <div class="tldesc">${item.desc}</div>
-  <button class="tlbtn" onclick="toggleTl(${i},this)">+ More detail</button>
-  <div class="tlx" id="tlx-${i}">${item.extra}</div></div>`;
-  tlc.appendChild(div);
+let currentSection = null;
+let itemIdx = 0;
+const itemsPerSection = {};
+tlData.forEach(item => {
+  if (!itemsPerSection[item.section]) itemsPerSection[item.section] = [];
+  itemsPerSection[item.section].push(item);
 });
-function toggleTl(i,btn){
-  const el=document.getElementById('tlx-'+i); el.classList.toggle('on');
-  btn.textContent=el.classList.contains('on')?'− Less detail':'+ More detail';
+
+tlSections.forEach(sec => {
+  const items = itemsPerSection[sec.id] || [];
+  if (!items.length) return;
+
+  // Section header
+  const hdr = document.createElement('div');
+  hdr.style.cssText = 'margin-bottom:10px;margin-top:16px;';
+  hdr.innerHTML = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
+    <div style="width:3px;height:18px;border-radius:2px;background:${sec.color};flex-shrink:0;"></div>
+    <div style="font-size:10px;font-weight:800;color:var(--sl);font-family:'DM Sans',sans-serif;letter-spacing:-.01em">${sec.label}</div>
+  </div>
+  <div style="font-size:8.5px;color:var(--sll);margin-left:11px;margin-bottom:8px">${sec.subtitle}</div>`;
+  tlc.appendChild(hdr);
+
+  // Items in this section
+  items.forEach((item, secIdx) => {
+    const isLast = secIdx === items.length - 1;
+    const div = document.createElement('div');
+    div.className = 'tli';
+    div.innerHTML = `<div class="tll"><div class="tld" style="background:${item.color};"></div>${!isLast ? '<div class="tlline"></div>' : ''}</div>
+    <div class="tlr"><div class="tldate">${item.date}</div><div class="tltitle">${item.title}</div>
+    <div class="tldesc">${item.desc}</div>
+    <button class="tlbtn" onclick="toggleTl('${sec.id}-${secIdx}',this)">+ More detail</button>
+    <div class="tlx" id="tlx-${sec.id}-${secIdx}">${item.extra}</div></div>`;
+    tlc.appendChild(div);
+  });
+});
+
+function toggleTl(id, btn) {
+  const el = document.getElementById('tlx-' + id);
+  el.classList.toggle('on');
+  btn.textContent = el.classList.contains('on') ? '− Less detail' : '+ More detail';
 }
 
 // ── Parcel click action dispatcher
@@ -1200,6 +1253,20 @@ document.querySelectorAll('.tab').forEach(t => {
 
 // Resize observer — whenever sidebar transition ends, tell map to recalculate
 sidebar.addEventListener('transitionend', () => { if (map) map.resize(); });
+
+// ── GLOSSARY TOGGLE ──
+function toggleGlossary() {
+  const body = document.getElementById('glossary-body');
+  const arrow = document.getElementById('glos-arrow');
+  const isOpen = body.style.maxHeight && body.style.maxHeight !== '0px';
+  if (isOpen) {
+    body.style.maxHeight = '0px';
+    arrow.style.transform = 'rotate(0deg)';
+  } else {
+    body.style.maxHeight = body.scrollHeight + 'px';
+    arrow.style.transform = 'rotate(180deg)';
+  }
+}
 
 </script>
 </body>
