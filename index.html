@@ -1413,6 +1413,12 @@ tlData.forEach(item => {
   itemsBySection[item.section].push(item);
 });
 
+// One-time hint so the tap-to-expand pattern is obvious
+const tlHint = document.createElement('div');
+tlHint.style.cssText = 'font-size:9.5px;color:var(--slm);margin:14px 0 4px;display:flex;align-items:center;gap:6px;';
+tlHint.innerHTML = '<span style="display:inline-flex;width:15px;height:15px;border-radius:50%;background:var(--bdr);color:var(--sl);font-size:10px;font-weight:800;align-items:center;justify-content:center;line-height:1">›</span><em style="font-style:normal">Tap any category below to expand</em>';
+tlc.appendChild(tlHint);
+
 tlSections.forEach(sec => {
   const items = itemsBySection[sec.id] || [];
   if (!items.length) return;
@@ -1422,30 +1428,53 @@ tlSections.forEach(sec => {
 
   // Section header — collapsible
   const secWrap = document.createElement('div');
-  secWrap.style.cssText = 'margin-top:16px;';
+  secWrap.style.cssText = 'margin-top:10px;';
   const secId = 'tl-sec-' + sec.id;
 
   const hdr = document.createElement('button');
-  hdr.style.cssText = 'width:100%;background:none;border:none;padding:0 0 8px;cursor:pointer;text-align:left;font-family:inherit;';
-  hdr.innerHTML = `<div style="display:flex;align-items:center;gap:8px;justify-content:space-between">
-    <div style="display:flex;align-items:center;gap:8px;">
-      <div style="width:3px;height:18px;border-radius:2px;background:${sec.color};flex-shrink:0;"></div>
-      <div style="font-size:10px;font-weight:800;color:var(--sl);font-family:'DM Sans',sans-serif;letter-spacing:-.01em">${sec.label}</div>
+  hdr.setAttribute('aria-expanded', 'false');
+  hdr.style.cssText = `
+    width:100%;
+    background:#fff;
+    border:1.5px solid var(--bdr);
+    border-left:4px solid ${sec.color};
+    border-radius:9px;
+    padding:11px 12px;
+    cursor:pointer;
+    text-align:left;
+    font-family:inherit;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    transition:background .15s, border-color .15s, box-shadow .15s;
+    box-shadow:0 1px 2px rgba(15,23,42,.04);
+  `.replace(/\s+/g, ' ');
+  hdr.onmouseenter = () => { hdr.style.background = '#F8FAFC'; hdr.style.borderColor = '#CBD5E1'; hdr.style.borderLeftColor = sec.color; };
+  hdr.onmouseleave = () => { hdr.style.background = '#fff'; hdr.style.borderColor = 'var(--bdr)'; hdr.style.borderLeftColor = sec.color; };
+  const itemWord = items.length === 1 ? 'item' : 'items';
+  hdr.innerHTML = `
+    <div style="flex:1;min-width:0">
+      <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+        <div style="font-size:11.5px;font-weight:800;color:var(--sl);font-family:'DM Sans',sans-serif;letter-spacing:-.01em">${sec.label}</div>
+        <div style="font-size:9px;font-weight:700;color:${sec.color};background:${sec.color}1A;padding:2px 7px;border-radius:10px;letter-spacing:.02em">${items.length} ${itemWord}</div>
+      </div>
+      <div style="font-size:9px;color:var(--slm);margin-top:3px;line-height:1.45">${sec.subtitle}</div>
     </div>
-    <span class="tl-sec-arrow" style="font-size:10px;color:var(--slm);padding-right:2px">▾</span>
-  </div>
-  <div style="font-size:8.5px;color:var(--sll);margin-left:11px">${sec.subtitle}</div>`;
+    <div class="tl-sec-arrow" style="flex-shrink:0;width:26px;height:26px;border-radius:50%;background:${sec.color}1A;display:flex;align-items:center;justify-content:center;color:${sec.color};font-size:15px;font-weight:800;line-height:1;transition:transform .2s ease;transform:rotate(0deg)">›</div>
+  `;
   hdr.onclick = function() {
     const body = document.getElementById(secId);
     const arrow = this.querySelector('.tl-sec-arrow');
     const open = body.style.display !== 'none';
     body.style.display = open ? 'none' : 'block';
-    arrow.textContent = open ? '▸' : '▾';
+    arrow.style.transform = open ? 'rotate(0deg)' : 'rotate(90deg)';
+    this.setAttribute('aria-expanded', open ? 'false' : 'true');
   };
 
   const secBody = document.createElement('div');
   secBody.id = secId;
-  secBody.style.cssText = 'margin-bottom:10px;';
+  secBody.style.cssText = 'margin:8px 0 4px;display:none;';
 
   secWrap.appendChild(hdr);
   secWrap.appendChild(secBody);
