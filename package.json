@@ -1,0 +1,16 @@
+{
+  "name": "desoto-development-map",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Single-page MapLibre brochure for the 1400 Bolton Boone parcel.",
+  "scripts": {
+    "serve": "http-server -p 8080 -c-1 -s .",
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0",
+    "http-server": "^14.1.1"
+  }
+}
