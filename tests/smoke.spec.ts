@@ -34,14 +34,16 @@ test.describe('Map + markers', () => {
 });
 
 test.describe('Project pin ↔ sidebar card mapping', () => {
-  // Guards the invariant in index.html:755-811 — projects[id] / markers[id] / card-${id}
+  // Guards the invariant in index.html — projects[id] / markers[id] / card-${id}
   // must stay aligned. If someone reorders the `projects` array without renumbering the
   // card ids, this test fails loudly instead of silently pointing to the wrong card.
+  //
+  // Note: pin "Z" (ZVL Buyer Activity, project id 3) is intentionally map-only and
+  // has no matching sidebar card on main. Skipped here.
   const pins: Array<{ label: string; cardId: number }> = [
     { label: 'R', cardId: 0 },
     { label: 'P', cardId: 1 },
     { label: 'I', cardId: 2 },
-    { label: 'Z', cardId: 3 },
     { label: 'H', cardId: 4 },
   ];
 
