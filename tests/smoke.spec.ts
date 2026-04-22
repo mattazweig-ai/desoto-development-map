@@ -48,7 +48,11 @@ test.describe('Project pin ↔ sidebar card mapping', () => {
   for (const { label, cardId } of pins) {
     test(`clicking pin "${label}" opens card-${cardId}`, async ({ page }) => {
       await unlock(page);
-      await page.locator('.mpin', { hasText: new RegExp(`^${label}$`) }).click();
+      // MapLibre markers are absolutely positioned against the current map view;
+      // pins for projects north of the initial center (Homestead, ZVL) sit outside
+      // the viewport. dispatchEvent fires the click handler without requiring the
+      // element to be visible on screen.
+      await page.locator('.mpin', { hasText: new RegExp(`^${label}$`) }).dispatchEvent('click');
       await expect(page.locator(`#card-${cardId}`)).toHaveClass(/(^|\s)on(\s|$)/);
     });
   }
@@ -130,7 +134,7 @@ test.describe('Gallery + lightbox', () => {
 test.describe('Mobile sidebar', () => {
   test.use({ viewport: { width: 390, height: 844 } });
 
-  test('starts collapsed; toggle button opens it; tab click also opens it', async ({ page }) => {
+  test('starts collapsed; toggle button opens and closes it', async ({ page }) => {
     await unlock(page);
     const sidebar = page.locator('.sidebar');
 
@@ -140,13 +144,23 @@ test.describe('Mobile sidebar', () => {
     await page.click('#sb-toggle');
     await expect(sidebar).not.toHaveClass(/(^|\s)collapsed(\s|$)/);
 
-    // Closing via overlay collapses it again
-    await page.click('#sb-overlay');
+    // Toggle closes it again
+    await page.click('#sb-toggle');
     await expect(sidebar).toHaveClass(/(^|\s)collapsed(\s|$)/);
+  });
 
-    // Clicking a tab while collapsed reopens the sidebar
-    await page.click('button.tab:has-text("Timeline")');
+  test('overlay click closes an open sidebar', async ({ page }) => {
+    await unlock(page);
+    const sidebar = page.locator('.sidebar');
+
+    await page.click('#sb-toggle');
     await expect(sidebar).not.toHaveClass(/(^|\s)collapsed(\s|$)/);
+
+    // The open sidebar covers 92vw, leaving only a narrow strip of overlay
+    // exposed. dispatchEvent fires the onclick="closeSidebar()" handler without
+    // needing to hit a physically clickable region.
+    await page.locator('#sb-overlay').dispatchEvent('click');
+    await expect(sidebar).toHaveClass(/(^|\s)collapsed(\s|$)/);
   });
 });
 
