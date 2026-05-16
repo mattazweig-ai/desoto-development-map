@@ -386,7 +386,22 @@ window.addEventListener('DOMContentLoaded', () => {
             <div class="sm"><div class="sm-v">55.1</div><div class="sm-l">Acres (DCAD)</div></div>
             <div class="sm"><div class="sm-v">Listed</div><div class="sm-l">For Sale</div></div>
             <div class="sm"><div class="sm-v">Dest. MU</div><div class="sm-l">FLUM Designation</div></div>
-            <div class="sm"><div class="sm-v">$150K+</div><div class="sm-l">Est. $/Acre</div></div>
+            <div class="sm"><div class="sm-v">$285K+</div><div class="sm-l">Est. $/Acre</div></div>
+          </div>
+          <!-- Water Tower Deal Banner -->
+          <div style="margin-top:10px;background:#FEF9C3;border:1.5px solid #D97706;border-radius:8px;padding:9px 12px;">
+            <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px">
+              <div style="background:#D97706;color:white;font-size:9px;font-weight:800;letter-spacing:.06em;padding:2px 7px;border-radius:4px;text-transform:uppercase;">🏗 Deal Pending</div>
+              <div style="font-size:10.5px;font-weight:800;color:#92400E;">Water Tower Sale</div>
+            </div>
+            <div style="font-size:9.5px;color:#78350F;line-height:1.6;">
+              <strong>4 acres</strong> of inland land (150 ft setback from east boundary, SE corner) agreed for sale to City of DeSoto for a municipal water tower.
+            </div>
+            <div style="display:flex;gap:8px;margin-top:7px;flex-wrap:wrap;">
+              <div style="background:white;border:1px solid #FCD34D;border-radius:5px;padding:4px 8px;font-size:9px;color:#92400E;"><strong>$6.00/sqft</strong> · $285,120/acre</div>
+              <div style="background:white;border:1px solid #FCD34D;border-radius:5px;padding:4px 8px;font-size:9px;color:#92400E;"><strong>~$1.04M</strong> gross</div>
+              <div style="background:white;border:1px solid #FCD34D;border-radius:5px;padding:4px 8px;font-size:9px;color:#92400E;">Paperwork pending</div>
+            </div>
           </div>
         </div>
 
@@ -926,6 +941,7 @@ window.addEventListener('DOMContentLoaded', () => {
         <div class="lgi"><div class="lgd" style="background:#15803D;"></div>H — Homestead at Daniel Farms</div>
         <div class="lgi"><div class="lgd" style="background:#0F766E;"></div>Z — ZVL Buyer DD (2400 Bolton Boone)</div>
         <div class="lgi"><div style="width:20px;height:2px;border-top:2.5px dashed #7C3AED;flex-shrink:0;"></div>Danieldale Rd Widening corridor</div>
+        <div class="lgi"><div class="lgd" style="background:#F59E0B;border-radius:2px;border:1.5px solid #B45309;"></div>🏗 Water Tower — City Deal Pending</div>
         <div class="lgi"><div class="lgd" style="background:#6366F1;border-radius:2px;"></div>◆ Land sale comps</div>
       </div>
     </div>
@@ -1146,6 +1162,26 @@ map.on('load', () => {
   map.addLayer({id:'parc-fill',type:'fill',source:'parc',paint:{'fill-color':'#1D4ED8','fill-opacity':0.09}});
   map.addLayer({id:'parc-out',type:'line',source:'parc',paint:{'line-color':'#1D4ED8','line-width':1.8,'line-dasharray':[4,2]}});
 
+  // Water tower parcel — 4 acres, 150ft setback from east boundary, SE corner of subject
+  // Calculated: 150ft wide × 1162ft tall = ~4 acres; east edge = subject east boundary
+  map.addSource('watertower',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',
+    coordinates:[[[-96.874726,32.633283],[-96.874237,32.633283],[-96.874237,32.636474],[-96.874726,32.636474],[-96.874726,32.633283]]]
+  }}});
+  map.addLayer({id:'wt-fill',type:'fill',source:'watertower',paint:{'fill-color':'#F59E0B','fill-opacity':0.32}});
+  map.addLayer({id:'wt-out',type:'line',source:'watertower',paint:{'line-color':'#B45309','line-width':2,'line-dasharray':[3,2]}});
+
+  // Water tower label marker
+  const wtEl = document.createElement('div');
+  wtEl.innerHTML = '🏗 Water Tower';
+  wtEl.style.cssText = 'background:#B45309;color:white;font-size:8px;font-weight:800;letter-spacing:.04em;padding:3px 7px;border-radius:4px;text-transform:uppercase;box-shadow:0 2px 8px rgba(0,0,0,.25);white-space:nowrap;cursor:pointer;pointer-events:auto;';
+  wtEl.addEventListener('click', () => {
+    new maplibregl.Popup({maxWidth:'260px',offset:10})
+      .setLngLat([-96.874482, 32.634879])
+      .setHTML(wtPopupHTML())
+      .addTo(map);
+  });
+  new maplibregl.Marker({element:wtEl,anchor:'bottom'}).setLngLat([-96.874482, 32.635200]).addTo(map);
+
   // ── PARCEL CLICK HANDLERS ── tap fill to get a visual info card
   const parcelInfo = {
     'subj-fill': {
@@ -1172,10 +1208,33 @@ map.on('load', () => {
       img: 'assets/parc_elev-01_web.jpg',
       imgAlt: 'Parc at Daniel Farms clubhouse elevation',
       action: () => switchToProjectCard(1)
+    },
+    'wt-fill': {
+      title: 'Water Tower — City of DeSoto Deal',
+      sub: '4 acres · SE corner · 150 ft inland setback · Deal Pending',
+      color: '#B45309',
+      desc: 'City of DeSoto agreed to purchase this 4-acre parcel for a municipal water tower. Land sits 150 ft back from the eastern boundary of the subject property. Priced at $6.00/sqft ($285,120/acre), totaling ~$1.04M gross. Price agreed — paperwork pending.',
+      img: null,
+      action: null
     }
   };
 
-  ['subj-fill','rs-fill','parc-fill'].forEach(layerId => {
+  function wtPopupHTML() {
+    return `<div>
+      <div style="background:#B45309;height:6px;border-radius:4px 4px 0 0;"></div>
+      <div style="padding:10px 12px 10px">
+        <div style="font-size:11.5px;font-weight:800;color:#0F172A;margin-bottom:2px">🏗 Water Tower — City of DeSoto</div>
+        <div style="font-size:9.5px;font-weight:700;color:#B45309;margin-bottom:7px">4 acres · SE corner · 150 ft setback · Deal Pending</div>
+        <div style="font-size:10px;color:#475569;line-height:1.6;margin-bottom:8px">4-acre inland parcel agreed for sale to the City of DeSoto for a municipal water tower. Located 150 ft from the east boundary of the subject property. Price agreed — paperwork pending.</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <div style="background:#FEF3C7;border:1px solid #FCD34D;border-radius:5px;padding:4px 8px;font-size:9px;color:#92400E;"><strong>$6.00/sqft</strong></div>
+          <div style="background:#FEF3C7;border:1px solid #FCD34D;border-radius:5px;padding:4px 8px;font-size:9px;color:#92400E;"><strong>$285K/acre</strong></div>
+          <div style="background:#FEF3C7;border:1px solid #FCD34D;border-radius:5px;padding:4px 8px;font-size:9px;color:#92400E;"><strong>~$1.04M gross</strong></div>
+        </div>
+      </div></div>`;
+  }
+
+  ['subj-fill','rs-fill','parc-fill','wt-fill'].forEach(layerId => {
     map.on('click', layerId, (e) => {
       const info = parcelInfo[layerId];
       // Build popup HTML
