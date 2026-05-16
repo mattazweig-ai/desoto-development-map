@@ -395,7 +395,7 @@ window.addEventListener('DOMContentLoaded', () => {
               <div style="font-size:10.5px;font-weight:800;color:#92400E;">Water Tower Sale</div>
             </div>
             <div style="font-size:9.5px;color:#78350F;line-height:1.6;">
-              <strong>4 acres</strong> of inland land (150 ft setback from east boundary, SE corner) agreed for sale to City of DeSoto for a municipal water tower.
+              <strong>4 acres</strong> of inland land — 150 ft back from Danieldale Rd, east side of property (no road frontage) — agreed for sale to City of DeSoto for a municipal water tower.
             </div>
             <div style="display:flex;gap:8px;margin-top:7px;flex-wrap:wrap;">
               <div style="background:white;border:1px solid #FCD34D;border-radius:5px;padding:4px 8px;font-size:9px;color:#92400E;"><strong>$6.00/sqft</strong> · $285,120/acre</div>
@@ -1162,10 +1162,10 @@ map.on('load', () => {
   map.addLayer({id:'parc-fill',type:'fill',source:'parc',paint:{'fill-color':'#1D4ED8','fill-opacity':0.09}});
   map.addLayer({id:'parc-out',type:'line',source:'parc',paint:{'line-color':'#1D4ED8','line-width':1.8,'line-dasharray':[4,2]}});
 
-  // Water tower parcel — 4 acres, 150ft setback from east boundary, SE corner of subject
-  // Calculated: 150ft wide × 1162ft tall = ~4 acres; east edge = subject east boundary
+  // Water tower parcel — 4 acres, 150ft setback from Danieldale Rd (south), east side of subject
+  // 400ft wide (E-W) × 436ft deep (N-S) = ~4 acres; no road frontage
   map.addSource('watertower',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',
-    coordinates:[[[-96.874726,32.633283],[-96.874237,32.633283],[-96.874237,32.636474],[-96.874726,32.636474],[-96.874726,32.633283]]]
+    coordinates:[[[-96.875542,32.633695],[-96.874237,32.633695],[-96.874237,32.634892],[-96.875542,32.634892],[-96.875542,32.633695]]]
   }}});
   map.addLayer({id:'wt-fill',type:'fill',source:'watertower',paint:{'fill-color':'#F59E0B','fill-opacity':0.32}});
   map.addLayer({id:'wt-out',type:'line',source:'watertower',paint:{'line-color':'#B45309','line-width':2,'line-dasharray':[3,2]}});
@@ -1176,11 +1176,11 @@ map.on('load', () => {
   wtEl.style.cssText = 'background:#B45309;color:white;font-size:8px;font-weight:800;letter-spacing:.04em;padding:3px 7px;border-radius:4px;text-transform:uppercase;box-shadow:0 2px 8px rgba(0,0,0,.25);white-space:nowrap;cursor:pointer;pointer-events:auto;';
   wtEl.addEventListener('click', () => {
     new maplibregl.Popup({maxWidth:'260px',offset:10})
-      .setLngLat([-96.874482, 32.634879])
+      .setLngLat([-96.874889, 32.634293])
       .setHTML(wtPopupHTML())
       .addTo(map);
   });
-  new maplibregl.Marker({element:wtEl,anchor:'bottom'}).setLngLat([-96.874482, 32.635200]).addTo(map);
+  new maplibregl.Marker({element:wtEl,anchor:'bottom'}).setLngLat([-96.874889, 32.634593]).addTo(map);
 
   // ── PARCEL CLICK HANDLERS ── tap fill to get a visual info card
   const parcelInfo = {
@@ -1211,9 +1211,9 @@ map.on('load', () => {
     },
     'wt-fill': {
       title: 'Water Tower — City of DeSoto Deal',
-      sub: '4 acres · SE corner · 150 ft inland setback · Deal Pending',
+      sub: '4 acres · 150 ft back from Danieldale · No road frontage · Deal Pending',
       color: '#B45309',
-      desc: 'City of DeSoto agreed to purchase this 4-acre parcel for a municipal water tower. Land sits 150 ft back from the eastern boundary of the subject property. Priced at $6.00/sqft ($285,120/acre), totaling ~$1.04M gross. Price agreed — paperwork pending.',
+      desc: 'City of DeSoto agreed to purchase this 4-acre inland parcel for a municipal water tower. Located 150 ft back from Danieldale Rd on the east side of the property — no road frontage. Priced at $6.00/sqft ($285,120/acre), totaling ~$1.04M gross. Price agreed — paperwork pending.',
       img: null,
       action: null
     }
@@ -1224,8 +1224,8 @@ map.on('load', () => {
       <div style="background:#B45309;height:6px;border-radius:4px 4px 0 0;"></div>
       <div style="padding:10px 12px 10px">
         <div style="font-size:11.5px;font-weight:800;color:#0F172A;margin-bottom:2px">🏗 Water Tower — City of DeSoto</div>
-        <div style="font-size:9.5px;font-weight:700;color:#B45309;margin-bottom:7px">4 acres · SE corner · 150 ft setback · Deal Pending</div>
-        <div style="font-size:10px;color:#475569;line-height:1.6;margin-bottom:8px">4-acre inland parcel agreed for sale to the City of DeSoto for a municipal water tower. Located 150 ft from the east boundary of the subject property. Price agreed — paperwork pending.</div>
+        <div style="font-size:9.5px;font-weight:700;color:#B45309;margin-bottom:7px">4 acres · 150 ft back from Danieldale Rd · No road frontage · Deal Pending</div>
+        <div style="font-size:10px;color:#475569;line-height:1.6;margin-bottom:8px">4-acre inland parcel, 150 ft north of Danieldale Rd on the east side — no road frontage. Agreed for sale to City of DeSoto for a municipal water tower. Price agreed — paperwork pending.</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
           <div style="background:#FEF3C7;border:1px solid #FCD34D;border-radius:5px;padding:4px 8px;font-size:9px;color:#92400E;"><strong>$6.00/sqft</strong></div>
           <div style="background:#FEF3C7;border:1px solid #FCD34D;border-radius:5px;padding:4px 8px;font-size:9px;color:#92400E;"><strong>$285K/acre</strong></div>
