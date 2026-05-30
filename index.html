@@ -370,14 +370,81 @@ window.addEventListener('DOMContentLoaded', () => {
   <div class="main">
     <div class="sidebar">
       <div class="tabs">
-        <button class="tab on" onclick="switchTab('projects',this)">Projects</button>
+        <button class="tab on" onclick="switchTab('summary',this)">Summary</button>
+        <button class="tab" onclick="switchTab('projects',this)">Projects</button>
         <button class="tab" onclick="switchTab('timeline',this)">City & Council</button>
         <button class="tab" onclick="switchTab('comps',this)">Comps & HBU</button>
         <button class="tab" onclick="switchTab('updates',this)">Updates</button>
       </div>
 
+      <!-- SUMMARY / OVERVIEW (plain-English, parent-friendly) -->
+      <div class="panel on pb" id="tab-summary">
+
+        <!-- Welcome -->
+        <div style="background:#003366;color:#fff;border-radius:10px;padding:13px 15px;margin-bottom:13px">
+          <div style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.7;margin-bottom:4px">The Family Property · Updated May 2026</div>
+          <div style="font-size:15px;font-weight:800;line-height:1.3;margin-bottom:5px">1400 Bolton Boone Dr, DeSoto TX</div>
+          <div style="font-size:11px;line-height:1.6;opacity:.92">We own about <strong>55 acres</strong> here. It's listed for sale, the city is buying a small 4-acre piece for a water tower, and several big projects nearby are making the area — and our land — more valuable. Here's where things stand.</div>
+        </div>
+
+        <!-- LAND AT A GLANCE -->
+        <div class="slbl" style="margin-top:0">The Land at a Glance</div>
+        <div style="background:white;border:1.5px solid var(--bdr);border-radius:9px;padding:13px 14px;margin-bottom:14px">
+
+          <!-- proportional bar: ~51 ac remaining vs 4 ac pending -->
+          <div style="display:flex;height:30px;border-radius:6px;overflow:hidden;margin-bottom:12px">
+            <div style="flex:51;background:#003366;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9.5px;font-weight:700">~51 acres remaining</div>
+            <div style="flex:5;background:#D97706;display:flex;align-items:center;justify-content:center;color:#fff;font-size:8px;font-weight:700;min-width:40px;text-align:center;line-height:1.1">4 ac</div>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bg)">
+            <div style="display:flex;align-items:center;gap:8px"><div style="width:11px;height:11px;border-radius:3px;background:#64748B;flex-shrink:0"></div><div><div style="font-size:11px;font-weight:700;color:var(--sl)">Total land we own</div><div style="font-size:9px;color:var(--slm)">Per county records (DCAD)</div></div></div>
+            <div style="font-size:13px;font-weight:800;color:var(--sl);white-space:nowrap">55.1 ac</div>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bg)">
+            <div style="display:flex;align-items:center;gap:8px"><div style="width:11px;height:11px;border-radius:3px;background:#D97706;flex-shrink:0"></div><div><div style="font-size:11px;font-weight:700;color:var(--sl)">Pending sale → City of DeSoto</div><div style="font-size:9px;color:var(--slm)">4-acre water tower piece · paperwork in progress</div></div></div>
+            <div style="text-align:right;white-space:nowrap"><div style="font-size:13px;font-weight:800;color:#B45309">−4 ac</div><div style="font-size:9px;color:#B45309;font-weight:700">~$1.04M</div></div>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0">
+            <div style="display:flex;align-items:center;gap:8px"><div style="width:11px;height:11px;border-radius:3px;background:#003366;flex-shrink:0"></div><div><div style="font-size:11px;font-weight:700;color:var(--sl)">Remaining — still for sale</div><div style="font-size:9px;color:var(--slm)">Listed · Destination Mixed-Use zoning</div></div></div>
+            <div style="text-align:right;white-space:nowrap"><div style="font-size:13px;font-weight:800;color:#003366">~51 ac</div><div style="font-size:9px;color:var(--slm);font-weight:700">est. $285K+/ac</div></div>
+          </div>
+        </div>
+
+        <!-- WHAT'S NEW -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div class="slbl" style="margin:0">What's New</div>
+          <div style="font-size:9px;font-weight:700;color:var(--sll);text-transform:uppercase;letter-spacing:.05em">May 2026</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px">
+          <div style="background:white;border:1.5px solid #BFDBFE;border-radius:8px;padding:10px 12px">
+            <div style="font-size:11px;font-weight:700;color:var(--sl);margin-bottom:2px">🚧 The road out front is moving forward</div>
+            <div style="font-size:10px;color:var(--slm);line-height:1.55">Danieldale Rd is being widened to 4 lanes, with a new traffic light planned right at our corner. Construction is expected to begin this spring — a real boost to how usable and valuable our frontage is.</div>
+          </div>
+          <div style="background:white;border:1.5px solid #BBF7D0;border-radius:8px;padding:10px 12px">
+            <div style="font-size:11px;font-weight:700;color:var(--sl);margin-bottom:2px">🏙 Two major nearby projects added</div>
+            <div style="font-size:10px;color:var(--slm);line-height:1.55">We added <strong>RedBird</strong> (a $160M+ redevelopment ~3 miles north) and <strong>University Hills</strong> (a 270-acre community by D.R. Horton + Lennar ~5 miles east) to the map. Both show the whole area is growing fast.</div>
+          </div>
+          <div style="background:white;border:1.5px solid var(--bdr);border-radius:8px;padding:10px 12px">
+            <div style="font-size:11px;font-weight:700;color:var(--sl);margin-bottom:2px">🏗 Neighboring developments still on track</div>
+            <div style="font-size:10px;color:var(--slm);line-height:1.55">The apartment and townhome projects next door are still working through city approvals (no construction yet). We corrected a few builder names and prices during this refresh.</div>
+          </div>
+        </div>
+
+        <!-- Links to detail -->
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button onclick="goTab('updates')" style="flex:1;min-width:130px;background:#003366;color:#fff;border:none;border-radius:7px;padding:9px 12px;font-family:inherit;font-size:10.5px;font-weight:700;cursor:pointer">See all updates →</button>
+          <button onclick="goTab('projects')" style="flex:1;min-width:130px;background:white;color:#003366;border:1.5px solid #003366;border-radius:7px;padding:9px 12px;font-family:inherit;font-size:10.5px;font-weight:700;cursor:pointer">View the map →</button>
+        </div>
+
+        <div style="font-size:9px;color:var(--sll);line-height:1.6;margin-top:11px">Want more detail on anything above? Tap <strong>Updates</strong> for the full change log, or <strong>Projects</strong> to see each development on the map.</div>
+      </div>
+
       <!-- PROJECTS -->
-      <div class="panel on pb" id="tab-projects">
+      <div class="panel pb" id="tab-projects">
         <div class="subj">
           <div class="subj-lbl">Subject Property</div>
           <div class="subj-name">1400 Bolton Boone Dr</div>
@@ -1421,9 +1488,15 @@ function switchTab(name, btn) {
   if (showComps) {
     // Zoom out to show both subject + Wintergreen comps ~1.5 mi north
     map.flyTo({center:[-96.876, 32.644], zoom:13.2, duration:900});
-  } else if (name === 'projects') {
+  } else if (name === 'projects' || name === 'summary') {
     map.flyTo({center:[-96.878, 32.6355], zoom:15.0, duration:800});
   }
+}
+
+// Jump to another tab from a link/button (finds the matching tab button)
+function goTab(name) {
+  const btn = document.querySelector('.tab[onclick*="\'' + name + '\'"]');
+  if (btn) switchTab(name, btn);
 }
 
 // ── CITY & COUNCIL TIMELINE ──
