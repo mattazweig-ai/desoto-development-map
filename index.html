@@ -297,6 +297,7 @@ window.addEventListener('DOMContentLoaded', () => {
     <div class="sidebar">
       <div class="tabs">
         <button class="tab on" onclick="switchTab('projects',this)">Projects</button>
+        <button class="tab" onclick="switchTab('updates',this)">Updates ●</button>
         <button class="tab" onclick="switchTab('timeline',this)">Timeline</button>
         <button class="tab" onclick="switchTab('comps',this)">Comps & HBU</button>
       </div>
@@ -489,6 +490,101 @@ window.addEventListener('DOMContentLoaded', () => {
             <div class="cfoot"><span class="cfdate">April 2026 · Annual symposium</span></div>
           </div></div>
         </div>
+
+        <div class="slbl" style="margin-top:6px">Regional Context — Major Nearby Developments</div>
+
+        <!-- REDBIRD (regional anchor) -->
+        <div class="card" id="card-5" onclick="toggleCard(5)">
+          <div class="ctop">
+            <div class="cdot" style="color:#BE123C;background:#BE123C;"></div>
+            <div class="ctxt"><div class="cname">RedBird (The Shops at RedBird)</div><div class="csub">Camp Wisdom Rd & US-67 · ~3 mi N</div></div>
+            <div class="cbadge" style="background:#FFE4E6;color:#9F1239;">Regional Anchor</div>
+            <div class="cchev">▼</div>
+          </div>
+          <div class="cbody"><div class="cinner">
+            <div class="cdesc"><strong>Peter Brodsky's redevelopment of the former Red Bird Mall</strong> into a live-work-play district. The ownership group controls ~78–100 acres and has invested $160M+ across phases, adding medical, retail, office, hospitality and residential. A new grocery (Sprouts) opened in 2025 and the <strong>next phase was teased in Oct 2025</strong>. ~3 mi north of the subject — a proof point that Southern Dallas County mixed-use demand is real and deepening.</div>
+            <div class="cgrid">
+              <div class="ckv"><div class="ck">Developer</div><div class="cv">Peter Brodsky</div></div>
+              <div class="ckv"><div class="ck">Size</div><div class="cv">~78–100 acres</div></div>
+              <div class="ckv"><div class="ck">Uses</div><div class="cv">Retail · Medical · Office · MF · Hotel</div></div>
+              <div class="ckv"><div class="ck">Distance</div><div class="cv">~3 mi N of subject</div></div>
+              <div class="ckv"><div class="ck">Status</div><div class="cv">Operating + expanding</div></div>
+              <div class="ckv"><div class="ck">Next Phase</div><div class="cv">Teased Oct 2025</div></div>
+            </div>
+            <div class="cds">
+              <div class="cdt">Why It Matters for Your Land</div>
+              <div class="cdd">RedBird is the marquee evidence that institutional and retail capital will commit to Southern Dallas County. Its momentum supports the same demand thesis underpinning the Bolton Boone/Danieldale corridor, even though it sits ~3 miles north.</div>
+            </div>
+            <div class="ctags"><span class="ctag">Regional Anchor</span><span class="ctag">Mixed-Use</span><span class="ctag">~100 Acres</span></div>
+            <div class="cfoot">
+              <span class="cfdate">Ongoing · Phase expansion</span>
+              <a class="clink" href="https://www.bisnow.com/dallas-ft-worth/news/mixed-use/growth-engine-for-the-city-redbird-redevelopment-sparks-turnaround-for-historically-overlooked-southern-dallas-129744" target="_blank">Bisnow ↗</a>
+            </div>
+          </div></div>
+        </div>
+
+        <!-- UNIVERSITY HILLS (regional context) -->
+        <div class="card" id="card-6" onclick="toggleCard(6)">
+          <div class="ctop">
+            <div class="cdot" style="color:#0891B2;background:#0891B2;"></div>
+            <div class="ctxt"><div class="cname">University Hills</div><div class="csub">By UNT Dallas · ~270 ac · ~5 mi E</div></div>
+            <div class="cbadge" style="background:#CFFAFE;color:#155E75;">Under Construction</div>
+            <div class="cchev">▼</div>
+          </div>
+          <div class="cbody"><div class="cinner">
+            <div class="cdesc"><strong>270-acre master-planned community next to UNT Dallas</strong>, developed by Hoque Global. Broke ground May 2025. Plan calls for ~1,500 apartments, hundreds of single-family homes (D.R. Horton + Lennar bought ~580 lots), ~1.5M SF of commercial space and 50+ acres of open space, with first residents expected around 2026. The largest nearby greenfield mixed-use project — it validates regional demand from the same buyer pool you'd target.</div>
+            <div class="cgrid">
+              <div class="ckv"><div class="ck">Developer</div><div class="cv">Hoque Global</div></div>
+              <div class="ckv"><div class="ck">Builders</div><div class="cv">D.R. Horton + Lennar</div></div>
+              <div class="ckv"><div class="ck">Size</div><div class="cv">~270 acres</div></div>
+              <div class="ckv"><div class="ck">Homes</div><div class="cv">$300K–$500K</div></div>
+              <div class="ckv"><div class="ck">Commercial</div><div class="cv">~1.5M SF</div></div>
+              <div class="ckv"><div class="ck">Broke Ground</div><div class="cv">May 2025</div></div>
+            </div>
+            <div class="cds">
+              <div class="cdt">Why It Matters for Your Land</div>
+              <div class="cdd">University Hills shows national builders (D.R. Horton, Lennar) actively buying lots at scale in Southern Dallas County — exactly the buyer profile most likely to pursue a master-planned program on the subject site.</div>
+            </div>
+            <div class="ctags"><span class="ctag">Master-Planned</span><span class="ctag">270 Acres</span><span class="ctag">DR Horton + Lennar</span></div>
+            <div class="cfoot">
+              <span class="cfdate">Groundbreaking May 2025</span>
+              <a class="clink" href="https://dallasexpress.com/realestate/massive-mixed-use-development-in-southern-dallas-moves-forward/" target="_blank">Dallas Express ↗</a>
+            </div>
+          </div></div>
+        </div>
+      </div>
+
+      <!-- UPDATES / WHAT'S NEW -->
+      <div class="panel pb" id="tab-updates">
+        <div class="slbl" style="margin-top:0">What's New</div>
+        <div style="background:#EFF6FF;border:1.5px solid #93C5FD;border-radius:8px;padding:9px 11px;margin-bottom:12px">
+          <div style="font-size:11px;font-weight:800;color:#1D4ED8">Last updated May 30, 2026</div>
+          <div style="font-size:9.5px;color:#1E40AF;margin-top:2px">Full corridor data refresh + new regional-context developments. Items below are grouped by what was added, corrected, and re-verified.</div>
+        </div>
+
+        <div class="slbl">🆕 Added This Update</div>
+        <div style="background:white;border:1.5px solid #BBF7D0;border-radius:8px;padding:10px 11px;font-size:10.5px;color:var(--slm);line-height:1.7;margin-bottom:10px">
+          • <strong>RedBird (The Shops at RedBird)</strong> added as a regional anchor pin — Peter Brodsky's ~100-acre redevelopment ~3 mi north.<br>
+          • <strong>University Hills</strong> added — 270-acre master-planned community by UNT Dallas (Hoque Global; D.R. Horton + Lennar), ~5 mi east.<br>
+          • <strong>This "Updates" tab</strong> — so you can always see what changed at a glance.
+        </div>
+
+        <div class="slbl">✏️ Corrected</div>
+        <div style="background:white;border:1.5px solid #FCD34D;border-radius:8px;padding:10px 11px;font-size:10.5px;color:#92400E;line-height:1.7;margin-bottom:10px">
+          • <strong>Homestead at Daniel Farms</strong> — builder corrected from “M/I Homes” to <strong>Bloomfield Homes</strong>; pricing updated (Phase 1 from $405,990, Phase 2 from $466,990; actively selling, not sold out).<br>
+          • <strong>Affordable housing (121 S. Elerson / 911 N. Hampton)</strong> — corrected the framing: the City of DeSoto has <strong>NOT</strong> endorsed either project (no Resolution of Support; Hampton got an unfavorable answer). These are developer-driven TDHCA 9% applications, not city-backed.
+        </div>
+
+        <div class="slbl">🔄 Re-verified to May 2026</div>
+        <div style="background:white;border:1.5px solid var(--bdr);border-radius:8px;padding:10px 11px;font-size:10.5px;color:var(--slm);line-height:1.7;margin-bottom:10px">
+          • <strong>Danieldale widening</strong> — per the City's Projects-Status page (Jan 2026): bid advertised Oct 2025, award targeted Jan 2026, <strong>construction anticipated Spring 2026</strong>. Bolton Boone signal planned, not yet built. Status badge changed to “Pre-Construction.”<br>
+          • <strong>Red Sea (Z-1543-25)</strong> — City Council met Jan 6, 2026 but the case is absent from the published recap; <strong>final disposition still unconfirmed</strong>.<br>
+          • <strong>Parc at Daniel Farms (PD-121)</strong> — amendment re-recommended late 2025, moving toward construction; <strong>still no permits / groundbreaking found</strong>.<br>
+          • <strong>2400 Bolton Boone ZVLs</strong> — no fourth ZVL or sale found in the public record since Feb 2, 2026.<br>
+          • <strong>TDHCA 9% awards</strong> — not decided until the July 2026 board; nothing awarded yet.
+        </div>
+
+        <div style="font-size:9px;color:var(--sll);line-height:1.6;margin-bottom:6px">Note: most DeSoto primary-source pages block automated access. Items marked “unconfirmed” could not be re-verified against a primary record and are flagged rather than assumed to have advanced. See the Timeline tab for full detail and sources.</div>
       </div>
 
       <!-- TIMELINE -->
@@ -684,6 +780,8 @@ window.addEventListener('DOMContentLoaded', () => {
         <div class="lgi"><div class="lgd" style="background:#1D4ED8;"></div>P — Parc at Daniel Farms (9100 Bolton Boone)</div>
         <div class="lgi"><div class="lgd" style="background:#15803D;"></div>H — Homestead at Daniel Farms</div>
         <div class="lgi"><div class="lgd" style="background:#0F766E;"></div>Z — ZVL Buyer DD (2400 Bolton Boone)</div>
+        <div class="lgi"><div class="lgd" style="background:#BE123C;"></div>B — RedBird (Camp Wisdom & US-67, ~3 mi N)</div>
+        <div class="lgi"><div class="lgd" style="background:#0891B2;"></div>U — University Hills (UNT Dallas, ~5 mi E)</div>
         <div class="lgi"><div style="width:20px;height:2px;border-top:2.5px dashed #7C3AED;flex-shrink:0;"></div>Danieldale Rd Widening corridor</div>
         <div class="lgi"><div class="lgd" style="background:#6366F1;border-radius:2px;"></div>◆ Land sale comps</div>
       </div>
@@ -778,6 +876,16 @@ const projects = [
     coords:[-96.880, 32.6450],
     rows:[['Builder','Bloomfield Homes'],['Type','Master-planned SF'],['Phase 1','From $405,990'],['Phase 2','From $466,990'],['Size','~1,500–4,400+ SF'],['Status','Actively selling']],
     url:null },
+  { id:5, label:'B', color:'#BE123C', badgeBg:'#FFE4E6', badgeColor:'#9F1239', status:'Regional Anchor',
+    name:'RedBird (The Shops at RedBird)', sub:'Camp Wisdom Rd & US-67 · ~3 mi N',
+    coords:[-96.8616, 32.6842],
+    rows:[['Developer','Peter Brodsky'],['Size','~78–100 acres'],['Uses','Retail · Medical · Office · MF · Hotel'],['Distance','~3 mi N of subject'],['Status','Operating + expanding'],['Next phase','Teased Oct 2025']],
+    url:'https://www.bisnow.com/dallas-ft-worth/news/mixed-use/growth-engine-for-the-city-redbird-redevelopment-sparks-turnaround-for-historically-overlooked-southern-dallas-129744' },
+  { id:6, label:'U', color:'#0891B2', badgeBg:'#CFFAFE', badgeColor:'#155E75', status:'Under Construction',
+    name:'University Hills', sub:'By UNT Dallas · ~270 ac · ~5 mi E',
+    coords:[-96.8030, 32.6386],
+    rows:[['Developer','Hoque Global'],['Builders','D.R. Horton + Lennar'],['Size','~270 acres'],['Homes','$300K–$500K'],['Commercial','~1.5M SF'],['Broke ground','May 2025']],
+    url:'https://dallasexpress.com/realestate/massive-mixed-use-development-in-southern-dallas-moves-forward/' },
 ];
 
 // Subject star
