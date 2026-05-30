@@ -34,14 +34,16 @@ test.describe('Map + markers', () => {
 });
 
 test.describe('Project pin ↔ sidebar card mapping', () => {
-  // Guards the invariant in index.html:755-811 — projects[id] / markers[id] / card-${id}
+  // Guards the invariant in index.html — projects[id] / markers[id] / card-${id}
   // must stay aligned. If someone reorders the `projects` array without renumbering the
   // card ids, this test fails loudly instead of silently pointing to the wrong card.
+  //
+  // Note: pin "Z" (ZVL Buyer Activity, project id 3) is intentionally map-only and
+  // has no matching sidebar card on main. Skipped here.
   const pins: Array<{ label: string; cardId: number }> = [
     { label: 'R', cardId: 0 },
     { label: 'P', cardId: 1 },
     { label: 'I', cardId: 2 },
-    { label: 'Z', cardId: 3 },
     { label: 'H', cardId: 4 },
   ];
 
@@ -77,19 +79,45 @@ test.describe('Tabs', () => {
 
   test('Timeline tab renders timeline items', async ({ page }) => {
     await unlock(page);
-    await page.click('button.tab:has-text("Timeline")');
+    await page.click('button.tab:has-text("City & Council")');
     await expect(page.locator('#tab-timeline')).toHaveClass(/(^|\s)on(\s|$)/);
+    // Items live inside collapsed <section> bodies; they're in the DOM from the start.
     await expect(page.locator('#tab-timeline .tli')).not.toHaveCount(0);
+  });
+
+  test('Updates tab activates', async ({ page }) => {
+    await unlock(page);
+    await page.click('button.tab:has-text("Updates")');
+    await expect(page.locator('#tab-updates')).toHaveClass(/(^|\s)on(\s|$)/);
   });
 });
 
-test.describe('Timeline expand/collapse', () => {
-  test('"+ More detail" toggles the extra panel', async ({ page }) => {
+test.describe('City & Council category sections', () => {
+  test('sections start collapsed; clicking a header expands it', async ({ page }) => {
     await unlock(page);
-    await page.click('button.tab:has-text("Timeline")');
+    await page.click('button.tab:has-text("City & Council")');
 
-    const extra = page.locator('#tlx-0');
+    const firstBody = page.locator('#tl-sec-city-council');
+    // Hidden by default (display:none set inline).
+    await expect(firstBody).toBeHidden();
+
+    // The header button immediately precedes the body in the DOM.
+    await page.locator('#tab-timeline button[aria-expanded]').first().click();
+    await expect(firstBody).toBeVisible();
+    await expect(page.locator('#tab-timeline button[aria-expanded="true"]').first()).toBeVisible();
+  });
+});
+
+test.describe('Timeline item expand/collapse', () => {
+  test('"+ More detail" toggles the extra panel once its section is open', async ({ page }) => {
+    await unlock(page);
+    await page.click('button.tab:has-text("City & Council")');
+
+    // Open the first category section so its items become visible.
+    await page.locator('#tab-timeline button[aria-expanded]').first().click();
+
     const btn = page.locator('#tab-timeline .tlbtn').first();
+    const extra = page.locator('#tab-timeline .tlx').first();
 
     await expect(extra).not.toHaveClass(/(^|\s)on(\s|$)/);
     await btn.click();
