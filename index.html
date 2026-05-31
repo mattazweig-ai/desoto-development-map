@@ -1344,12 +1344,12 @@ map.on('load', () => {
   map.addSource('watertower',{type:'geojson',data:{type:'Feature',geometry:{type:'Polygon',
     coordinates:[[[-96.875542,32.633695],[-96.874237,32.633695],[-96.874237,32.634892],[-96.875542,32.634892],[-96.875542,32.633695]]]
   }}});
-  map.addLayer({id:'wt-fill',type:'fill',source:'watertower',paint:{'fill-color':'#F59E0B','fill-opacity':0.32}});
-  map.addLayer({id:'wt-out',type:'line',source:'watertower',paint:{'line-color':'#B45309','line-width':2,'line-dasharray':[3,2]}});
+  map.addLayer({id:'wt-fill',type:'fill',source:'watertower',paint:{'fill-color':'#F59E0B','fill-opacity':0.18}});
+  map.addLayer({id:'wt-out',type:'line',source:'watertower',paint:{'line-color':'#B45309','line-width':1.6,'line-dasharray':[3,2]}});
 
   // Water tower label marker
   const wtEl = document.createElement('div');
-  wtEl.innerHTML = '🏗 Water Tower';
+  wtEl.innerHTML = '🏗 Water Tower · 4 ac';
   wtEl.style.cssText = 'background:#B45309;color:white;font-size:8px;font-weight:800;letter-spacing:.04em;padding:3px 7px;border-radius:4px;text-transform:uppercase;box-shadow:0 2px 8px rgba(0,0,0,.25);white-space:nowrap;cursor:pointer;pointer-events:auto;';
   wtEl.addEventListener('click', () => {
     new maplibregl.Popup({maxWidth:'260px',offset:10})
